@@ -11,22 +11,25 @@ public class Character {
     private String name;
     private int positionX;
     private int positionY;
-    private int width;
     private int height;
+    private int width;
     private String attack;
+    private boolean alive;
 
     // BUILDER
-    public Character(Texture image, String name, int positionX, int positionY, int width, int height, String attack) {
+    public Character(Texture image, String name, int positionX, int positionY, int height, int width, String attack, boolean alive) {
         this.image = image;
         this.name = name;
         this.positionX = positionX;
         this.positionY = positionY;
-        this.width = width;
         this.height = height;
+        this.width = width;
         this.attack = attack;
+        this.alive = true;
     }
 
-    // SETTERS AND GETTERS
+  
+	// SETTERS AND GETTERS
     public Texture getImage(){
         return image;
     }
@@ -89,6 +92,15 @@ public class Character {
 
     public void setAttack(String attack) {
         this.attack = attack;
+    }
+    
+
+    public boolean getgetAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     // FUNCTIONS

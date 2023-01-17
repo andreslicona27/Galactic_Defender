@@ -1,6 +1,7 @@
 package com.myfirstgdx.gdgame;
 
 import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.myfirstgdx.gdgame.GDGame;
@@ -11,6 +12,8 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setTitle("Galactic-Defender");
+		config.setResizable(false);
+		
 		new Lwjgl3Application(new GDGame(), config);
 	}
 }

@@ -1,4 +1,4 @@
-package com.myfirstgdx.gdgame;
+package Characters_Classes;
 
 
 import com.badlogic.gdx.graphics.Texture;

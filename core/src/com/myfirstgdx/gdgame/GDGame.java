@@ -1,8 +1,8 @@
 package com.myfirstgdx.gdgame;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -13,28 +13,35 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import Utilities.JoyStick;
 
-public class GDGame extends ApplicationAdapter {
+public class GDGame extends Game{
 	SpriteBatch batch;
 	Texture rocket;
+	
+	// BACKGROUN PROPERTIES
 	Texture gameBG;
 	Sprite spriteGameBG;
 
+	// JOY STICK PROPERTIES
 	OrthographicCamera camera;
 	JoyStick joystick;
 	ShapeRenderer sr;
 	Vector3 mouse;
 	float positionX;
 	float positionY;
+	
+	private Music bgMusic;
 
-	int cont;
 
 	public void StartGame() {
-		this.cont = 0;
+		
 	}
 
 	// It runs ones, when it create the project
 	@Override
 	public void create() {
+		Gdx.graphics.setForegroundFPS(100);
+		bgMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/BackGround.mp3"));
+		
 		// ITs draws the background of the game
 		this.gameBG = new Texture("Backgrounds/gameBG.jpg");
 		this.spriteGameBG = new Sprite(gameBG);
@@ -58,6 +65,31 @@ public class GDGame extends ApplicationAdapter {
 		this.positionY = Gdx.graphics.getWidth() / 2;
 	}
 
+	// It runs a lot of times
+	@Override
+	public void render() {
+		update();
+		ScreenUtils.clear(0,0,0,1);
+		this.batch.begin();
+		bgMusic.play();
+		bgMusic.setLooping(true);
+		this.spriteGameBG.draw(batch);
+		this.batch.draw(this.rocket, positionX, positionY);
+		this.batch.end();
+
+		// Joy stick code
+		joystick.render(sr);
+
+	}
+
+	// Runs only when the screen is closed
+	@Override
+	public void dispose() {
+		super.dispose();
+		sr.dispose();
+		bgMusic.dispose();
+	}
+
 	public void update() {
 		// Joy stick code, for it to update
 		camera.unproject(mouse.set(Gdx.input.getX(), Gdx.input.getY(), 0));
@@ -79,32 +111,7 @@ public class GDGame extends ApplicationAdapter {
 			break;
 		}
 	}
-
-	// It runs a lot of times
-	@Override
-	public void render() {
-		update();
-		ScreenUtils.clear(0,0,0,1);
-		this.batch.begin();
-		// this.spriteGameBG.draw(batch);
-		this.batch.draw(this.rocket, positionX, positionY);
-		this.batch.end();
-
-		// Joystick code
-		joystick.render(sr);
-
-	}
-
-	// Runs only when the screen is closed
-	@Override
-	public void dispose() {
-		super.dispose();
-		sr.dispose();
-	}
-
-	private void print(String text) {
-		System.out.println(text);
-	}
+	
 
 	public void resize(int width, int height) {
 		spriteGameBG.setSize(width, height);

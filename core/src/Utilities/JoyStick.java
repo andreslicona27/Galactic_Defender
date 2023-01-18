@@ -8,62 +8,63 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class JoyStick extends Actor{
-	Circle circle;
-	Circle circle2;
+	Circle externalCircle;
+	Circle internalCircle;
 	
 	public JoyStick(float x, float y, float radius){
-		circle = new Circle(x, y, radius);
-		circle2 = new Circle(x, y, radius/2);
+		externalCircle = new Circle(x, y, radius);
+		internalCircle = new Circle(x, y, radius/2);
 	}
 	
 	
 	public void update(float x, float y) {
 		if (Gdx.input.isTouched()) {
-			if (circle2.contains(x, y)) {
-				circle2.setPosition(x,y);
+			if (internalCircle.contains(x, y)) {
+				internalCircle.setPosition(x,y);
 			
-				if (circle2.x > circle.x + circle.radius) {
-					circle2.x = circle.x + circle.radius;
+				if (internalCircle.x > externalCircle.x + externalCircle.radius) {
+					internalCircle.x = externalCircle.x + externalCircle.radius;
 				} 
-				if (circle2.y > circle.y + circle.radius) {
-					circle2.y = circle.y + circle.radius;
+				if (internalCircle.y > externalCircle.y + externalCircle.radius) {
+					internalCircle.y = externalCircle.y + externalCircle.radius;
 				}
-				if (circle2.x < circle.x - circle.radius) {
-					circle2.x = circle.x - circle.radius;
+				if (internalCircle.x < externalCircle.x - externalCircle.radius) {
+					internalCircle.x = externalCircle.x - externalCircle.radius;
 				}
-				if (circle2.y < circle.y - circle.radius) {
-					circle2.y = circle.y - circle.radius;
+				if (internalCircle.y < externalCircle.y - externalCircle.radius) {
+					internalCircle.y = externalCircle.y - externalCircle.radius;
 				}
 			}
 		} else {
-			circle2.setPosition(circle.x,circle.y);
+			internalCircle.setPosition(externalCircle.x,externalCircle.y);
 		}
 	}
 	
 	public int getState() {
-		if (circle2.x > circle.x) {
+		if (internalCircle.x > externalCircle.x) {
 			return 1;
 		}
-		else if (circle2.y > circle.y) {
+		else if (internalCircle.y > externalCircle.y) {
 			return 2;
 		} 
-		else if (circle2.x < circle.x) {
+		else if (internalCircle.x < externalCircle.x) {
 			return 3;
 		}
-		else if (circle2.y < circle.y) {
+		else if (internalCircle.y < externalCircle.y) {
 			return 4;
 		}
 		return 0;
 	}
 	
 	public void render(ShapeRenderer renderer) {
-		renderer.setColor(Color.GREEN);
+		renderer.setColor(Color.WHITE);
+		
 		renderer.begin(ShapeRenderer.ShapeType.Line);
-		renderer.circle(circle.x, circle.y, circle.radius);
+		renderer.circle(externalCircle.x, externalCircle.y, externalCircle.radius);
 		renderer.end();
 		
 		renderer.begin(ShapeRenderer.ShapeType.Filled);
-		renderer.circle(circle2.x,  circle2.y,  circle2.radius);
+		renderer.circle(internalCircle.x,  internalCircle.y,  internalCircle.radius);
 		renderer.end();
 	}
 	

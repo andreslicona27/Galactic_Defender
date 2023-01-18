@@ -13,7 +13,7 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setTitle("Galactic-Defender");
 		config.setResizable(false);
-		
+		config.setWindowedMode(1000, 700);
 		new Lwjgl3Application(new GDGame(), config);
 	}
 }

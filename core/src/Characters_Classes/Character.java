@@ -9,15 +9,15 @@ public class Character {
     private Texture image;
     private Sprite sprite;
     private String name;
-    private int positionX;
-    private int positionY;
+    private float positionX;
+    private float positionY;
     private int height;
     private int width;
     private boolean alive;
     private int numLives;
 
     // BUILDER
-    public Character(Texture image, String name, int positionX, int positionY, int height, int width, boolean alive, int numLives) {
+    public Character(Texture image, String name, float positionX, float positionY, int height, int width, boolean alive, int numLives) {
         this.image = image;
         this.name = name;
         this.positionX = positionX;
@@ -46,19 +46,19 @@ public class Character {
         this.name = name;
     }
 
-    public int getPositionX() {
+    public float getPositionX() {
         return positionX;
     }
 
-    public void setPositionX(int positionX) {
+    public void setPositionX(float positionX) {
         this.positionX = positionX;
     }
 
-    public int getPositionY() {
+    public float getPositionY() {
         return positionY;
     }
 
-    public void setPositionY(int positionY) {
+    public void setPositionY(float positionY) {
         this.positionY = positionY;
     }
 

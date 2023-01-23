@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.ScreenUtils;
 
 import Utilities.JoyStick;
 
@@ -17,6 +16,7 @@ public class GDGame extends Game{
 	// ROCKET PROPERTIES
 	SpriteBatch batch;
 	Texture rocket;
+	Character rocket2;
 	
 	// BACKGROUND PROPERTIES
 	Texture gameBG;
@@ -42,20 +42,21 @@ public class GDGame extends Game{
 	@Override
 	public void create() {
 		Gdx.graphics.setForegroundFPS(100);
+		//Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		// Addition of the music 
 		bgMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/BackGround.mp3"));
 		
 		// ITs draws the background of the game
-		this.gameBG = new Texture("Backgrounds/gameBG.jpg");
+		this.gameBG = new Texture("Backgrounds/gameBG2.jpg");
 		this.spriteGameBG = new Sprite(gameBG);
 		spriteGameBG.setSize(Gdx.graphics.getHeight(), Gdx.graphics.getWidth());
 		spriteGameBG.setPosition(0, 0);
 
 		// creation of the joy stick
-		camera = new OrthographicCamera(1000, 500);
+		camera = new OrthographicCamera(1000, 1000);
 		camera.setToOrtho(false, 500, 250);
 
-		joystick = new JoyStick(40, 40, 25);
+		joystick = new JoyStick(30, 30, 20);
 		sr = new ShapeRenderer();
 		sr.setProjectionMatrix(camera.combined);
 
@@ -64,8 +65,10 @@ public class GDGame extends Game{
 		// Creation of the rocket
 		this.batch = new SpriteBatch();
 		this.rocket = new Texture("Characters/rocket.png");
-		this.positionX = Gdx.graphics.getHeight() / 2;
-		this.positionY = Gdx.graphics.getWidth() / 2;
+		this.positionX = Gdx.graphics.getWidth() / 2 - this.rocket.getWidth() / 2;
+		this.positionY = Gdx.graphics.getHeight() / 2 - this.rocket.getHeight() / 2;
+		
+	
 	}
 
 	// It runs a lot of times
@@ -73,7 +76,7 @@ public class GDGame extends Game{
 	public void render() {
 		// Joy Stick movement code
 		update();
-		ScreenUtils.clear(0,0,0,1);
+		//ScreenUtils.clear(0,0,0,1);
 		
 		this.batch.begin();
 		
@@ -105,19 +108,25 @@ public class GDGame extends Game{
 		camera.unproject(mouse.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 		joystick.update(mouse.x, mouse.y);
 
+		int estado = joystick.getState();
+		System.out.println(estado);
 		// Code for the rocket to move around the screen
 		switch (joystick.getState()) {
 		case 1:
 			positionX += 1;
+			System.out.println("derecha");
 			break;
 		case 2:
 			positionY += 1;
+			System.out.println("arriba");
 			break;
 		case 3:
 			positionX -= 1;
+			System.out.println("izquierda");
 			break;
 		case 4:
 			positionY -= 1;
+			System.out.println("abajo");
 			break;
 		}
 	}

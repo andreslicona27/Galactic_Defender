@@ -12,7 +12,7 @@ public class JoyStick extends Actor{
 	Circle externalCircle;
 	Circle internalCircle;
 	
-	// BUILDER 
+	// BUILDER |
 	public JoyStick(float x, float y, float radius){
 		externalCircle = new Circle(x, y, radius);
 		internalCircle = new Circle(x, y, radius/2);
@@ -43,19 +43,23 @@ public class JoyStick extends Actor{
 	}
 	
 	public int getState() {
-		if (internalCircle.x > externalCircle.x) {
+		
+		if (internalCircle.x > externalCircle.x + 10) {
 			return 1;
 		}
-		else if (internalCircle.y > externalCircle.y) {
+		else if (internalCircle.y > externalCircle.y + 10) {
 			return 2;
 		} 
-		else if (internalCircle.x < externalCircle.x) {
+		else if (internalCircle.x + 10 < externalCircle.x) {
 			return 3;
 		}
-		else if (internalCircle.y < externalCircle.y) {
+		else if (internalCircle.y + 10 < externalCircle.y) {
+			
 			return 4;
 		}
-		return 0;
+		else {
+			return 0;
+		}
 	}
 	
 	

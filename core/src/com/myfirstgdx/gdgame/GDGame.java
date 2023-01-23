@@ -14,10 +14,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import Utilities.JoyStick;
 
 public class GDGame extends Game{
+	// ROCKET PROPERTIES
 	SpriteBatch batch;
 	Texture rocket;
 	
-	// BACKGROUN PROPERTIES
+	// BACKGROUND PROPERTIES
 	Texture gameBG;
 	Sprite spriteGameBG;
 
@@ -29,6 +30,7 @@ public class GDGame extends Game{
 	float positionX;
 	float positionY;
 	
+	// MUSIC PROPERTIES
 	private Music bgMusic;
 
 
@@ -40,6 +42,7 @@ public class GDGame extends Game{
 	@Override
 	public void create() {
 		Gdx.graphics.setForegroundFPS(100);
+		// Addition of the music 
 		bgMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/BackGround.mp3"));
 		
 		// ITs draws the background of the game
@@ -68,13 +71,20 @@ public class GDGame extends Game{
 	// It runs a lot of times
 	@Override
 	public void render() {
+		// Joy Stick movement code
 		update();
 		ScreenUtils.clear(0,0,0,1);
+		
 		this.batch.begin();
+		
+		// Music and background code
 		bgMusic.play();
 		bgMusic.setLooping(true);
 		this.spriteGameBG.draw(batch);
+		
+		// rocket code 
 		this.batch.draw(this.rocket, positionX, positionY);
+		
 		this.batch.end();
 
 		// Joy stick code

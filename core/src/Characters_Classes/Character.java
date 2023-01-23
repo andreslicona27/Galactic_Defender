@@ -13,19 +13,19 @@ public class Character {
     private int positionY;
     private int height;
     private int width;
-    private String attack;
     private boolean alive;
+    private int numLives;
 
     // BUILDER
-    public Character(Texture image, String name, int positionX, int positionY, int height, int width, String attack, boolean alive) {
+    public Character(Texture image, String name, int positionX, int positionY, int height, int width, boolean alive, int numLives) {
         this.image = image;
         this.name = name;
         this.positionX = positionX;
         this.positionY = positionY;
         this.height = height;
         this.width = width;
-        this.attack = attack;
         this.alive = true;
+        this.numLives = numLives;
     }
 
   
@@ -85,14 +85,6 @@ public class Character {
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
     }
-
-    public String getAttack() {
-        return attack;
-    }
-
-    public void setAttack(String attack) {
-        this.attack = attack;
-    }
     
 
     public boolean getgetAlive() {
@@ -104,4 +96,21 @@ public class Character {
     }
 
     // FUNCTIONS
+    /* Function that would be resting on life of the characters
+     * If the lives are less then 0 it change the boolean to false 
+     * so the character its dead 
+     * */
+    public void dead() {
+    	numLives--;
+    	if(numLives < 0) {
+    		alive = false;
+    	}
+    }
+    
+    /* Function that would be use in some characters to define the way in which 
+     * they would be attacking 
+     * */
+    public void attack() {
+    	
+    }
 }

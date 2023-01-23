@@ -8,15 +8,17 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class JoyStick extends Actor{
+	// PROPERTIES
 	Circle externalCircle;
 	Circle internalCircle;
 	
+	// BUILDER 
 	public JoyStick(float x, float y, float radius){
 		externalCircle = new Circle(x, y, radius);
 		internalCircle = new Circle(x, y, radius/2);
 	}
 	
-	
+	// FUNCTIONS 
 	public void update(float x, float y) {
 		if (Gdx.input.isTouched()) {
 			if (internalCircle.contains(x, y)) {
@@ -26,7 +28,7 @@ public class JoyStick extends Actor{
 					internalCircle.x = externalCircle.x + externalCircle.radius;
 				} 
 				if (internalCircle.y > externalCircle.y + externalCircle.radius) {
-					internalCircle.y = externalCircle.y + externalCircle.radius;
+					internalCircle.y = externalCircle.y + externalCircle.radius;	
 				}
 				if (internalCircle.x < externalCircle.x - externalCircle.radius) {
 					internalCircle.x = externalCircle.x - externalCircle.radius;
@@ -55,6 +57,7 @@ public class JoyStick extends Actor{
 		}
 		return 0;
 	}
+	
 	
 	public void render(ShapeRenderer renderer) {
 		renderer.setColor(Color.WHITE);

@@ -87,7 +87,7 @@ public class Character {
     }
     
 
-    public boolean getgetAlive() {
+    public boolean getAlive() {
         return alive;
     }
 

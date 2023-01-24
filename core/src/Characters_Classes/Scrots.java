@@ -9,7 +9,7 @@ public class Scrots extends Character{
 	private int apeaedAt;
 		
 	// BUILDER
-	public Scrots(Texture image, String name, int positionX, int positionY, int height, int width,
+	public Scrots(Texture image, String name, float positionX, float positionY, int height, int width,
 			boolean alive, int numLives) {
 		super(image, name, positionX, positionY, height, width, alive, lives);
 		

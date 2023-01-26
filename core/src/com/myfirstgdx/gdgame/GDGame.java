@@ -11,7 +11,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import Characters_Classes.Scrots;
+import Screens.MainMenu;
+import Utilities.Assets;
 import Utilities.JoyStick;
 import Utilities.Laser;
 
@@ -25,7 +26,6 @@ public class GDGame extends Game{
 	// ALIENS PROPERTIES
 	SpriteBatch alienBatch;
 	Texture scrotImage;
-	Scrots scrot;
 	
 	// BACKGROUND PROPERTIES
 	Stage stage;
@@ -55,6 +55,10 @@ public class GDGame extends Game{
 	// It runs ones, when it create the project
 	@Override
 	public void create() {
+		// Screen code
+		Assets.load();
+		setScreen(new MainMenu(this));
+		
 		// Utilities code
 		//Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		Gdx.graphics.setForegroundFPS(100);
@@ -77,7 +81,6 @@ public class GDGame extends Game{
 		// Creation of alien 
 		this.alienBatch = new SpriteBatch(); 
 		scrotImage = new Texture("Characters/aliens/scrot1.png");
-		this.scrot = new Scrots(scrotImage, "scrot1", randomPositionX, randomPositionY, 50, 50, true, 1);
 	
 	}
 
@@ -103,7 +106,6 @@ public class GDGame extends Game{
 		this.rocketBatch.end();
 		
 		this.alienBatch.begin();
-		this.alienBatch.draw(this.scrot.getImage(),this.scrot.getPositionX(),this.scrot.getPositionY());
 		this.alienBatch.end();
 		
 
@@ -170,6 +172,9 @@ public class GDGame extends Game{
 		mouse = new Vector3();
 	}
 	
+	/*
+	 * Function that instances all the needed code for the fire button
+	 * */
 	public void ButtonCreation() {
 		cameraButton = new OrthographicCamera(1000, 1000);
 		cameraButton.setToOrtho(false, 500, 250);

@@ -15,7 +15,7 @@ public class JoyStick extends Actor{
 	// BUILDER |
 	public JoyStick(float x, float y, float radius){
 		externalCircle = new Circle(x, y, radius);
-		internalCircle = new Circle(x, y, radius/2);
+		internalCircle = new Circle(x, y, radius / 2);
 	}
 	
 	// FUNCTIONS 

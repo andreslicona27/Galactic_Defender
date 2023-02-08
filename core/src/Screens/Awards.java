@@ -1,13 +1,10 @@
-package Utilities;
+package Screens;
 
 import com.myfirstgdx.gdgame.GDGame;
 
-import Screens.Screens;
+public class Awards extends Screens{
 
-public class Learn1 extends Screens{
-
-	
-	public Learn1(GDGame game) {
+	public Awards(GDGame game) {
 		super(game);
 		// TODO Auto-generated constructor stub
 	}

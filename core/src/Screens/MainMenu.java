@@ -1,5 +1,8 @@
 package Screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -8,12 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.myfirstgdx.gdgame.GDGame;
 
 import Utilities.Assets;
-import Utilities.Learn;
-import Utilities.Learn1;
+import Utilities.Display;
 
 public class MainMenu extends Screens{
 
+	// Font Properties
+	BitmapFont font;
 	ScrollPane scroll;
+	// Music properties
+	Music bgMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/BackGround.mp3"));
 	
 	public MainMenu(GDGame game) {
 		super(game);
@@ -22,30 +28,45 @@ public class MainMenu extends Screens{
 		menu.setFillParent(true);
 		menu.defaults().uniform().fillY();
 		
-		for (final Learn learn : Learn.values()) {
-			TextButton bt = new TextButton(learn.name, Assets.txButtonStyle);
-			bt.addListener(new ClickListener(){
+		for (final Display display : Display.values()) {
+			TextButton textButton = new TextButton(display.name, Assets.txButtonStyle);
+			textButton.addListener(new ClickListener(){
 				@Override
 				public void clicked(InputEvent event, float x, float y) {
-					MainMenu.this.game.setScreen(getScreen(learn));
+					MainMenu.this.game.setScreen(getScreen(display));
 				}
 			});
 			
-			menu.row().padTop(20).height(50);
-			menu.add(bt).fillX();
+			menu.row().padTop(10).height(40);
+			menu.row().padRight(0).width(200);
+			menu.add(textButton).fillX();
 		}
 		
 		scroll = new ScrollPane(menu, Assets.scrollPaneStyle);
-		scroll.setSize(500, 150);
-		scroll.setPosition(159, 0);
+		scroll.setSize(500, SCREEN_HEIGHT);
+		scroll.setPosition(350, 0);
 		stage.addActor(scroll);
+		
+		// Addition of the music 
+		bgMusic.play();
+		bgMusic.setLooping(true);
 	}
 
 
-	private Screens getScreen(Learn learn) {
-		switch(learn) {
+	private Screens getScreen(Display display) {
+		switch(display) {
+		case DISPLAY_1:
+			return new Game(game);
+		case DISPLAY_2: 
+			return new HowToPlay(game);
+		case DISPLAY_3:
+			return new Awards(game);
+		case DISPLAY_4:
+			return new Credits(game);
+		case DISPLAY_5:
+			return new Settings(game);
 		default:
-			return new Learn1(game);
+			return new Game(game);
 		}
 	}
 	

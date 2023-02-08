@@ -2,7 +2,6 @@ package Utilities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane.ScrollPaneStyle;
@@ -17,7 +16,7 @@ public class Assets {
 	
 	public static void load() {
 		font =new BitmapFont();
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data.ui.txt"));
+		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/ui.txt"));
 		
 		NinePatchDrawable bt = new NinePatchDrawable(atlas.createPatch("bt"));
 		NinePatchDrawable btDown = new NinePatchDrawable(atlas.createPatch("btDown"));

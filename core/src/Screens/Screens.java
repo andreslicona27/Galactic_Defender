@@ -66,7 +66,7 @@ public abstract class Screens extends InputAdapter implements Screen{
 	
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO: implemented with buttons and not keycodes
+		// TODO: implemented with buttons and not key codes
 		if(keycode == Input.Keys.ESCAPE || keycode == Input.Keys.BACK) {
 			if(this instanceof MainMenu) {
 				Gdx.app.exit();

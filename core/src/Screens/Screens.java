@@ -31,12 +31,14 @@ public abstract class Screens extends InputAdapter implements Screen{
 		this.game = game;
 		stage = new Stage(new StretchViewport(Screens.SCREEN_WIDTH, Screens.SCREEN_HEIGHT));
 		
+		// Initialization of camaras
 		oCamUI = new OrthographicCamera(SCREEN_WIDTH, SCREEN_HEIGHT);
 		oCamUI.position.set(SCREEN_WIDTH / 2f, SCREEN_HEIGHT / 2f, 0);
 		
 		oCamBox2D = new OrthographicCamera(WORLD_WIDTH, WORLD_HEIGHT);
 		oCamBox2D.position.set(WORLD_WIDTH / 2f, WORLD_HEIGHT / 2f, 0);
 		
+		// 
 		InputMultiplexer input = new InputMultiplexer(this, stage);
 		Gdx.input.setInputProcessor(input);
 		
@@ -109,5 +111,6 @@ public abstract class Screens extends InputAdapter implements Screen{
 		// TODO Auto-generated method stub
 		
 	}
+
 		
 }

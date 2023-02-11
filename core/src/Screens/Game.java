@@ -5,16 +5,22 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.myfirstgdx.gdgame.GDGame;
 
+import Utilities.Assets;
 import Utilities.JoyStick;
 import Utilities.Laser;
 
 public class Game extends Screens{
+	// WORLD PROPERTIES 	
+	World world; 
+	Box2DDebugRenderer renderer;
+	
 	// ROCKET PROPERTIES
 	SpriteBatch rocketBatch;
 	Texture rocket;
@@ -48,26 +54,34 @@ public class Game extends Screens{
 		super(game);
 		
 		// Utilities code
-		Gdx.graphics.setForegroundFPS(100);
+		Gdx.graphics.setForegroundFPS(60);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // For it to clean the screen while drawing the new position
 		this.randomPositionX =  (float)(Math.random()*Gdx.graphics.getWidth()+1);
 		this.randomPositionY =  (float)(Math.random()*Gdx.graphics.getHeight()+1);
+		
+		Vector2 gravity = new Vector2(0, 0);
+		world = new World(gravity, true);
+		renderer = new Box2DDebugRenderer();
+		
+		// Joy Stick and fire button creation
+		JoyStickCreation();
+		joystick.drawShapeRenderer(srJoyStick);
+		ButtonCreation();
+		laserButton.drawShapeRenderer(srButton);
+		
 	}
 
 	@Override
 	public void draw(float delta) {
-		// Joy stick and button creation
-		JoyStickCreation();
-		ButtonCreation();
-		joystick.render(srJoyStick);
-		laserButton.render(srButton);
+		oCamUI.update();
+		spriteBatch.setProjectionMatrix(oCamUI.combined);
 		
-		joystick.addListener(new ClickListener() {
-			  @Override
-			  public void clicked(InputEvent event, float x, float y) {
-				  updateJoyStick();
-			  }
-		});
+		spriteBatch.begin();
+		Assets.font.draw(spriteBatch, "Fps" + Gdx.graphics.getFramesPerSecond(), 0, 20);
+		spriteBatch.end();
+		
+		oCamBox2D.update();
+		renderer.render(world, oCamBox2D.combined);
 		
 		// Rocket creation 
 		this.rocketBatch = new SpriteBatch();
@@ -86,14 +100,20 @@ public class Game extends Screens{
 		this.alienBatch.begin();
 		this.alienBatch.draw(this.scrotImage, randomPositionX, randomPositionY);
 		this.alienBatch.end();
-		
-		
 	}
 
 	@Override
 	public void update(float delta) {
-		
+		world.step(delta, 8, 6);
 	}
+	
+	@Override 
+	public void render(float delta) {
+//		updateJoyStick();
+//		joystick.render(srJoyStick);
+//		laserButton.render(srButton);
+	}
+	
 
 	/*
 	 * Function that updates the movement or the joy stick by getting its state and implementing that movement to the rocket
@@ -157,4 +177,5 @@ public class Game extends Screens{
 		srButton = new ShapeRenderer();
 		srButton.setProjectionMatrix(cameraButton.combined);
 	}
+
 }

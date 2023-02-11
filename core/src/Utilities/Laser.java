@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -81,7 +80,7 @@ public class Laser extends Button {
 		}
 	}
 
-	public void render(ShapeRenderer renderer) {
+	public void drawShapeRenderer(ShapeRenderer renderer) {
 		renderer.setColor(Color.WHITE);
 
 		renderer.begin(ShapeRenderer.ShapeType.Filled);

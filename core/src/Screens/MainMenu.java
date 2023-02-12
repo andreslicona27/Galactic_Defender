@@ -26,8 +26,8 @@ public class MainMenu extends Screens {
 	Sprite sImage;
 
 	// MUSIC PROPERTIES
-	Music bgMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/BackGround.mp3"));
-	Boolean musicOn;
+//	Music bgMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/BackGround.mp3"));
+//	Boolean musicOn;
 
 	public MainMenu(GDGame game) {
 		super(game);
@@ -58,8 +58,11 @@ public class MainMenu extends Screens {
 		stage.addActor(scroll);
 
 		// Addition of the music
-		bgMusic.play();
-		bgMusic.setLooping(true);
+		if (musicOn) {
+			bgMusic.play();
+			bgMusic.setLooping(true);
+			musicOn = false;
+		}
 	}
 
 	private Screens getScreen(Display display) {

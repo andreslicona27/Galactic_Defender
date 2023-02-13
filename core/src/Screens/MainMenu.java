@@ -1,7 +1,6 @@
 package Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -25,9 +24,6 @@ public class MainMenu extends Screens {
 	Texture image;
 	Sprite sImage;
 
-	// MUSIC PROPERTIES
-//	Music bgMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/BackGround.mp3"));
-//	Boolean musicOn;
 
 	public MainMenu(GDGame game) {
 		super(game);
@@ -68,7 +64,7 @@ public class MainMenu extends Screens {
 	private Screens getScreen(Display display) {
 		switch (display) {
 		case DISPLAY_1:
-			return new Game(game);
+			return new Game2(game);
 		case DISPLAY_2:
 			return new HowToPlay(game);
 		case DISPLAY_3:
@@ -78,7 +74,7 @@ public class MainMenu extends Screens {
 		case DISPLAY_5:
 			return new Settings(game);
 		default:
-			return new Game(game);
+			return new MainMenu(game);
 		}
 	}
 

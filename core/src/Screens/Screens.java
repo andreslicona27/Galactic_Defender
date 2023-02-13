@@ -39,9 +39,11 @@ public abstract class Screens extends InputAdapter implements Screen {
 	public SpriteBatch spriteBatch;
 	public Stage stage;
 	
-	// MUSIC PROPERTIES 
+	// MUSIC  AND SOUND PROPERTIES 
 	static Music bgMusic = Gdx.audio.newMusic(Gdx.files.internal("Audio/BackGround.mp3"));
 	static Boolean musicOn = true;
+	static Boolean soundOn = true;
+	static Boolean english = true;
 
 	public Screens(GDGame game) {
 		this.game = game;

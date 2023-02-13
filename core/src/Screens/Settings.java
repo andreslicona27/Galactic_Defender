@@ -17,6 +17,20 @@ public class Settings extends Screens{
 		SpriteBatch batch;
 		BitmapFont font;
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/Russo_One.ttf"));
+		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		
+		// MUSIC ICON PROPERTIES 
+		TextureRegionDrawable musicImage = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/music.png")));
+		ImageButton music = new ImageButton(musicImage);
+		
+		// SOUNDS ICON PROPERTIES
+		TextureRegionDrawable soundImage = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/sound.png")));
+		ImageButton sound = new ImageButton(soundImage);
+		
+		// LANGUAGE ICON PROPERTIES 
+		TextureRegionDrawable languageImage = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/en.png")));
+		ImageButton language = new ImageButton(languageImage);
+		
 		
 	public Settings(final GDGame game) {
 		super(game);
@@ -27,72 +41,81 @@ public class Settings extends Screens{
 	@Override
 	public void draw(float delta) {
 		batch = new SpriteBatch();
-		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = 48;
 		font = generator.generateFont(parameter);
 		
 		batch.begin();
 		font.draw(batch, "Settings", (float) (SCREEN_WIDTH * 0.1), (float) (SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.02)));
 		batch.end();
+		
+		parameter.size = 24;
+		font = generator.generateFont(parameter);
+		batch.begin();
+		font.draw(batch, "music", (float) (SCREEN_WIDTH / 4), (float) (SCREEN_HEIGHT / 2));
+		batch.end();
+		batch.begin();
+		font.draw(batch, "sound", (float) (SCREEN_WIDTH / 4), (float) (SCREEN_HEIGHT / 2));
+		batch.end();
+		batch.begin();
+		font.draw(batch, "language", (float) (SCREEN_WIDTH / 4), (float) (SCREEN_HEIGHT / 2));
+		batch.end();
 	}
 
+
 	public void controls() {
-//		Table menu = new Table();
-//		menu.setFillParent(true);
-//		menu.defaults().uniform().fillY();
-//		
-//		
-//		
-//		menu.row().padTop(10).height(40);
-//		menu.row().padRight(0).width(200);
-//		menu.add(imageButton).fillX();
 		
-		TextureRegionDrawable musicImage = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/music.png")));
-		ImageButton music = new ImageButton(musicImage);
-		
-		music.setPosition((float) (SCREEN_WIDTH / 2)  - (musicImage.getMinWidth()/2), (float) (SCREEN_HEIGHT / 2 + 20));
+		music.setPosition((float) (SCREEN_WIDTH / 2) - (musicImage.getMinWidth() / 2), (float) (SCREEN_HEIGHT / 2 + 80));
 		music.setSize(50, 50);
 		music.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				
+				if (bgMusic.isPlaying()) {
+					bgMusic.stop();
+					music.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/no_music.png")));
+				} else {
+					bgMusic.play();
+					music.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/music.png")));
+				}
 			}
 		});
-		stage.addActor(music);
 		
-		TextureRegionDrawable soundImage = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/sounds.png")));
-		ImageButton sound = new ImageButton(soundImage);
-		
-		sound.setPosition((float) (SCREEN_WIDTH / 2)  - (soundImage.getMinWidth()/2), (float) (SCREEN_HEIGHT / 2));
+		sound.setPosition((float) (SCREEN_WIDTH / 2) - (soundImage.getMinWidth() / 2), (float) (SCREEN_HEIGHT / 2));
 		sound.setSize(50, 50);
 		sound.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.setScreen(new MainMenu(game));
+				if (soundOn == false) {
+					soundOn = true;
+					sound.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/sound.png")));
+				} else {
+					soundOn = false;
+					sound.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/no_sound.png")));
+				}
 			}
 		});
-		stage.addActor(music);
 		
-		TextureRegionDrawable languageImage = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/BackArrow.png")));
-		ImageButton language = new ImageButton(languageImage);
-		
-		language.setPosition((float) (SCREEN_WIDTH / 2) - (languageImage.getMinWidth()/2), (float) (SCREEN_HEIGHT / 2 - 20));
+		language.setPosition((float) (SCREEN_WIDTH / 2) - (languageImage.getMinWidth() / 2), (float) (SCREEN_HEIGHT / 2 - 80));
 		language.setSize(50, 50);
 		language.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				game.setScreen(new MainMenu(game));
+				if (english = false) {
+					english = true;
+					language.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/en.png")));
+				} else {
+					english = false;
+					language.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/es.png")));
+				}
 			}
 		});
+		
 		stage.addActor(music);
+		stage.addActor(sound);
+		stage.addActor(language);
 	}
 	@Override
 	public void update(float delta) {
-		// TODO Auto-generated method stub
 		
 	}
 
-	/*
-	 * Adds all the properties and information of the components
-	 * */
 }

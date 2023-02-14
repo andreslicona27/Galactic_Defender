@@ -12,8 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.myfirstgdx.gdgame.GDGame;
 
+import java.util.Locale;
+
 public class Settings extends Screens{
-	// FONT PROPERTIES 
+		Locale locale = Locale.getDefault();
+		// FONT PROPERTIES
 		SpriteBatch batch;
 		BitmapFont font;
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/Russo_One.ttf"));
@@ -99,11 +102,11 @@ public class Settings extends Screens{
 		language.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				if (english = false) {
-					english = true;
+				if (locale.getLanguage().equals(("es"))) {
+					Locale.setDefault(Locale.ENGLISH);
 					language.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/en.png")));
 				} else {
-					english = false;
+					//Locale.setDefault(Locale.);
 					language.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/es.png")));
 				}
 			}

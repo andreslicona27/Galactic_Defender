@@ -11,7 +11,7 @@ public class JoyStick extends Actor {
 	Circle externalCircle;
 	Circle internalCircle;
 
-	// BUILDER |
+	// BUILDER
 	public JoyStick(float x, float y, float radius) {
 		externalCircle = new Circle(x, y, radius);
 		internalCircle = new Circle(x, y, radius / 2);
@@ -41,6 +41,12 @@ public class JoyStick extends Actor {
 		}
 	}
 
+	/**
+	 * Function that returns a int depending on the direction in which the internal circle
+	 * is touching with the external circle
+	 *
+	 * @return 1 if its on the right, 2 it its up, 3 if its on the left and 4 if its down
+	 * */
 	public int getState() {
 
 		if (internalCircle.x > externalCircle.x + 10) {
@@ -50,13 +56,15 @@ public class JoyStick extends Actor {
 		} else if (internalCircle.x + 10 < externalCircle.x) {
 			return 3;
 		} else if (internalCircle.y + 10 < externalCircle.y) {
-
 			return 4;
 		} else {
 			return 0;
 		}
 	}
 
+	/**
+	 * For it to draw the necessary code of the shaperender of the joystick
+	 * */
 	public void drawShapeRenderer(ShapeRenderer renderer) {
 		renderer.setColor(Color.WHITE);
 

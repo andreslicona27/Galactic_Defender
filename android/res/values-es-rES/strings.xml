@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Galactic-Defender</string>
+
+    <string name="btn_one">Jugar</string>
+    <string name="btn_two">Como jugar</string>
+    <string name="btn_three">Logros</string>
+    <string name="btn_four">Creditos</string>
+    <string name="btn_five">Ajustes</string>
+
+    <string name="txt_two">Como jugar</string>
+    <string name="txt_three">Logros</string>
+    <string name="txt_four">Creditos</string>
+    <string name="txt_five">Ajustes</string>
+
+    <string name="Sbtn_one">Musica</string>
+    <string name="Sbtn_two">Sonido</string>
+    <string name="Sbtn_hree">Idioma</string>
+</resources>

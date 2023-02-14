@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">Galactic-Defender</string>
 
+    <string name="btn_one">Play</string>
+    <string name="btn_two">How to play</string>
+    <string name="btn_three">Awards</string>
+    <string name="btn_four">Credits</string>
+    <string name="btn_five">Settings</string>
+
+    <string name="txt_two">How to play</string>
+    <string name="txt_three">Awards</string>
+    <string name="txt_four">Credits</string>
+    <string name="txt_five">Settings</string>
+
+    <string name="Sbtn_one">Music</string>
+    <string name="Sbtn_two">Sound</string>
+    <string name="Sbtn_hree">Language</string>
 </resources>

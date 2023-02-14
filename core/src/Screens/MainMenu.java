@@ -64,7 +64,7 @@ public class MainMenu extends Screens {
 	private Screens getScreen(Display display) {
 		switch (display) {
 		case DISPLAY_1:
-			return new Game2(game);
+			return new Game(game);
 		case DISPLAY_2:
 			return new HowToPlay(game);
 		case DISPLAY_3:

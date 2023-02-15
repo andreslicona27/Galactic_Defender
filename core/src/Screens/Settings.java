@@ -8,9 +8,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.myfirstgdx.gdgame.GDGame;
+
+import Utilities.Assets;
 
 import java.util.Locale;
 
@@ -22,18 +26,18 @@ public class Settings extends Screens{
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/Russo_One.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		
-		// MUSIC ICON PROPERTIES 
+		// ICONS PROPERTIES 
 		TextureRegionDrawable musicImage = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/music.png")));
 		ImageButton music = new ImageButton(musicImage);
 		
-		// SOUNDS ICON PROPERTIES
 		TextureRegionDrawable soundImage = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/sound.png")));
 		ImageButton sound = new ImageButton(soundImage);
 		
-		// LANGUAGE ICON PROPERTIES 
 		TextureRegionDrawable languageImage = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/en.png")));
 		ImageButton language = new ImageButton(languageImage);
 		
+		ScrollPane scroll;
+
 		
 	public Settings(final GDGame game) {
 		super(game);
@@ -49,23 +53,14 @@ public class Settings extends Screens{
 		
 		batch.begin();
 		font.draw(batch, "Settings", (float) (SCREEN_WIDTH * 0.1), (float) (SCREEN_HEIGHT - (SCREEN_HEIGHT * 0.02)));
-		batch.end();
-		
-		parameter.size = 24;
-		font = generator.generateFont(parameter);
-		batch.begin();
-		font.draw(batch, "music", (float) (SCREEN_WIDTH / 4), (float) (SCREEN_HEIGHT / 2));
-		batch.end();
-		batch.begin();
-		font.draw(batch, "sound", (float) (SCREEN_WIDTH / 4), (float) (SCREEN_HEIGHT / 2));
-		batch.end();
-		batch.begin();
-		font.draw(batch, "language", (float) (SCREEN_WIDTH / 4), (float) (SCREEN_HEIGHT / 2));
-		batch.end();
+		batch.end();	
 	}
 
 
 	public void controls() {
+		Table table = new Table();
+		table.setFillParent(true);
+		table.defaults().uniform().fillY();
 		
 		music.setPosition((float) (SCREEN_WIDTH / 2) - (musicImage.getMinWidth() / 2), (float) (SCREEN_HEIGHT / 2 + 80));
 		music.setSize(50, 50);
@@ -112,9 +107,17 @@ public class Settings extends Screens{
 			}
 		});
 		
-		stage.addActor(music);
-		stage.addActor(sound);
-		stage.addActor(language);
+		table.row().padTop(10).height(40);
+		table.row().padRight(0).width(200);
+		
+		table.add(music).fillX();
+		table.add(sound).fillX();
+		table.add(language).fillX();
+		
+		scroll = new ScrollPane(table, Assets.scrollPaneStyle);
+		scroll.setSize(500, SCREEN_HEIGHT);
+		scroll.setPosition(SCREEN_WIDTH / 6, 0);
+		stage.addActor(scroll);
 	}
 	@Override
 	public void update(float delta) {

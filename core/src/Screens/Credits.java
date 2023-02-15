@@ -31,7 +31,6 @@ public class Credits extends Screens{
 
 	@Override
 	public void update(float delta) {
-		// TODO Auto-generated method stub
 		
 	}
 

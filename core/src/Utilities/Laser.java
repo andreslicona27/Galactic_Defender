@@ -1,91 +1,34 @@
 package Utilities;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-public class Laser extends Button {
-	// PROPERTIES
-	private Vector2 position;
-	private Texture image;
-	private boolean alive;
-	Circle laserButton;
-	Button laser = new Button();
+public class Laser {
+	 private static final float VELOCIDAD_BALA = 500; // Speed of the laser in pixels per second
+	    private TextureRegion buttonImage;
+	    private Vector2 position;
+	    private Vector2 speed;
+	    
 
-	// BUILDER
-	// additional code for trying if it work to have a button  
-	public Laser() {
-		super(new ButtonStyle());
-		this.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				// handle the button click here
-			}
-		});
-	}
-	
-	public Laser(float x, float y, float radius) {
-		laserButton = new Circle(x, y, radius);
-	}
+	    public Laser(float x, float y) {
+	        this.buttonImage = new TextureRegion(new Texture("Utilities/Laser.png"));
+	        this.position = new Vector2(x - buttonImage.getRegionWidth() / 2, y);
+	        this.speed = new Vector2(0, VELOCIDAD_BALA);
+	    }
 
-	public Laser(Vector2 initialPosition, Texture image) {
-		this.position = initialPosition;
-		this.image = image;
-		this.alive = true;
-	}
+	    public void UpdateLaser(float delta) {
+	        position.mulAdd(speed, delta);
+	    }
 
-	
-	// SETTERS / GETTERS
-	public Vector2 getPosition() {
-		return position;
-	}
+	    public void DrawLaser(SpriteBatch batch) {
+	    	batch.begin();
+	        batch.draw(buttonImage, position.x, position.y);
+	        batch.end();
+	    }
 
-	public void setPosition(Vector2 position) {
-		this.position = position;
-	}
-
-	public Texture getImage() {
-		return image;
-	}
-
-	public void setImage(Texture image) {
-		this.image = image;
-	}
-
-	public boolean isAlive() {
-		return alive;
-	}
-
-	public void setAlive(boolean alive) {
-		this.alive = alive;
-	}
-
-	// FUNCTIONS
-	public void updateLaser() {
-		if (position.y + image.getHeight() < 0) {
-			alive = false;
-		}
-
-		if (position.y > 600) {
-			alive = false;
-		}
-
-		if (alive) {
-			position.y -= 10;
-		}
-	}
-
-	public void drawShapeRenderer(ShapeRenderer renderer) {
-		renderer.setColor(Color.WHITE);
-
-		renderer.begin(ShapeRenderer.ShapeType.Filled);
-		renderer.circle(laserButton.x, laserButton.y, laserButton.radius);
-		renderer.end();
-	}
-
+	    public Vector2 getPosicion() {
+	        return position;
+	    }
 }

@@ -9,20 +9,23 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Timer;
 import com.myfirstgdx.gdgame.GDGame;
 
 import Characters_Classes.Character;
+import Characters_Classes.EnemyGroup;
 import Characters_Classes.Rocket;
 import Utilities.JoyStick;
 import Utilities.Laser;
@@ -33,7 +36,6 @@ public class Game extends Screens {
 	Box2DDebugRenderer renderer;
 
 	// BACKGROUND PROPERTIES
-	private Stage stage;
 
 	// CHARACTERS PROPERTIES
 	ArrayList<Character> enemies = new ArrayList<Character>();
@@ -43,12 +45,15 @@ public class Game extends Screens {
 	Texture rocketImage;
 	float positionX;
 	float positionY;
+	Vector2 rocketPosition;
 
+	EnemyGroup enemies2;
 	Texture scrotImage;
 	float randomPositionX;
 	float randomPositionY;
 
 	// GAME PROPERTIES
+	Timer timer;
 	int points;
 
 	// JOY STICK PROPERTIES
@@ -64,7 +69,6 @@ public class Game extends Screens {
 
 	public Game(final GDGame game) {
 		super(game);
-		this.stage = stage;
 		Vector2 gravity = new Vector2(0, 0);
 		world = new World(gravity, true);
 		renderer = new Box2DDebugRenderer();
@@ -72,20 +76,29 @@ public class Game extends Screens {
 		// Joy Stick and fire button creation
 		JoyStickCreation();
 		joystick.drawShapeRenderer(srJoyStick);
-		ButtonCreation();
+//		ButtonCreation();
 //		laserButton.drawShapeRenderer(srButton);
 
 		// Rocket and alien creation
 		rocketImage = new Texture("Characters/Rocket/rocketU.png");
-		positionX = Gdx.graphics.getWidth() / 2 - rocketImage.getWidth() / 2;
-		positionY = Gdx.graphics.getHeight() / 2 - rocketImage.getHeight() / 2;
+//		positionX = Gdx.graphics.getWidth() / 2 - rocketImage.getWidth() / 2;
+//		positionY = Gdx.graphics.getHeight() / 2 - rocketImage.getHeight() / 2;
+		rocketPosition = new Vector2(positionX, positionY);
 
-		rocket = new Rocket(new Texture("Characters/Rocket/rocketU.png"), "rocket", positionX, positionY, true, 1);
-		EnemiesCreation();
+		rocket = new Rocket(new Texture("Characters/Rocket/rocketU.png"), "rocket",
+				Gdx.graphics.getWidth() / 2 - rocketImage.getWidth() / 2,
+				Gdx.graphics.getHeight() / 2 - rocketImage.getHeight() / 2, true, 1);
+
+		timer = new Timer();
+		timer.scheduleTask(new Timer.Task() {
+			@Override
+			public void run() {
+				EnemiesCreation();
+//				enemies2 = new EnemyGroup();
+			}
+		}, 1, 1);
 
 	}
-	
-
 
 	@Override
 	public void draw(float delta) {
@@ -101,6 +114,9 @@ public class Game extends Screens {
 		DrawRocket();
 		DrawAliens();
 
+		stage.act();
+		stage.draw();
+
 	}
 
 	@Override
@@ -109,21 +125,25 @@ public class Game extends Screens {
 		updateJoyStick();
 		joystick.drawShapeRenderer(srJoyStick);
 		DrawAliens();
+//		
+//		rocketPosition.x = rocket.getX();
+//		rocketPosition.y = rocket.getY();
+//		enemies2.setPlayerPosition(rocketPosition);
 
-		// Actualiza la nave y los láseres
-		float delta2 = Gdx.graphics.getDeltaTime();
-		rocket.update(delta);
-
-		// Dibuja la nave y los láseres
-		SpriteBatch batch = (SpriteBatch) stage.getBatch();
-		batch.begin();
-		DrawRocket();
-		rocket.DrawLasers(batch);
-		batch.end();
-
-		// Dibuja el Stage
-		stage.act(delta);
-		stage.draw();
+//		// Actualiza la nave y los láseres
+//		float delta2 = Gdx.graphics.getDeltaTime();
+//		rocket.update(delta);
+//
+//		// Dibuja la nave y los láseres
+//		SpriteBatch batch = (SpriteBatch) stage.getBatch();
+//		batch.begin();
+//		DrawRocket();
+//		rocket.DrawLasers(batch);
+//		batch.end();
+//
+//		// Dibuja el Stage
+//		stage.act(delta);
+//		stage.draw();
 	}
 
 	@Override
@@ -131,26 +151,38 @@ public class Game extends Screens {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		world.step(delta, 8, 6);
 		updateJoyStick();
+
 	}
 
 	/**
 	 *
 	 * */
 	public void EnemiesCreation() {
-		for (int i = 0; i < 10; i++) {
-			randomPositionX = (float) (Math.random() * Gdx.graphics.getWidth() + 1);
-			randomPositionY = (float) (Math.random() * Gdx.graphics.getHeight() + 1);
+		randomPositionX = (float) (Math.random() * Gdx.graphics.getWidth() + 1);
+		randomPositionY = (float) (Math.random() * Gdx.graphics.getHeight() + 1);
 
-			Character alien = new Character(new Texture("Characters/aliens/scrot1.png"), "alien", randomPositionX,
-					randomPositionY, true, 1);
-			enemies.add(alien);
-			group.addActor(alien);
+		Character alien = new Character(new Texture("Characters/aliens/scrot1.png"), "alien",
+				MathUtils.random(Gdx.graphics.getWidth()), 
+				MathUtils.random(Gdx.graphics.getHeight()), true, 1);
+		enemies.add(alien);
+		group.addActor(alien);
+//
+//		MoveToAction action = new MoveToAction();
+//		action.setPosition(alien.getX(), alien.getY());
+//		action.setDuration(1f);
+//
+//		alien.addAction(action);
 
-			MoveToAction action = new MoveToAction();
-			action.setPosition(alien.getX(), alien.getY());
-			action.setDuration(1f);
+		for (Actor actor : group.getChildren()) {
+			if (actor instanceof Character) {
+				alien = (Character) actor;
 
-			alien.addAction(action);
+				// Configurar una acción de movimiento aleatorio
+				MoveToAction action = new MoveToAction();
+				action.setPosition(rocket.getPositionX(), rocket.getPositionY());
+				action.setDuration(1f);
+				alien.addAction(action);
+			}
 		}
 	}
 
@@ -224,7 +256,7 @@ public class Game extends Screens {
 
 	/**
 	 * Function that instance all the needed code for the joy stick Code like the
-	 * camera, shaperender and the projection matrix
+	 * camera, shape render and the projection matrix
 	 */
 	public void JoyStickCreation() {
 		cameraJoyStick = new OrthographicCamera(1000, 1000);
@@ -239,7 +271,7 @@ public class Game extends Screens {
 
 	/**
 	 * Function that instances all the needed code for the fire button Code like the
-	 * camera, the shaperender and the projection matrix
+	 * camera, the shape render and the projection matrix
 	 */
 	public void ButtonCreation() {
 		buttonImage = new TextureRegionDrawable(new TextureRegion(new Texture("Utilities/fireButton.png")));

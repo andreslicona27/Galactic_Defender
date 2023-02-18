@@ -62,6 +62,7 @@ public class JoyStick extends Actor {
 		}
 	}
 
+
 	/**
 	 * For it to draw the necessary code of the shaperender of the joystick
 	 * */

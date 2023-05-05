@@ -23,25 +23,24 @@ public class SceneMenu extends Scene{
         this.screen_width = screen_width;
 
         paint = new Paint();
-        records_button = new Rect(screen_width/3, screen_height/10*2, screen_width/3*2, screen_height/10*3);
-        play_button = new Rect(screen_width/3, screen_height/10*4, screen_width/3*2,
-                screen_height/10*5);
-        credits_button = new Rect(screen_width/3, screen_height/10*6, screen_width/3*2,
-                screen_height/10*7);
-        settings_button = new Rect(screen_width/3, screen_height/10*8, screen_width/3*2,
-                screen_height/10*9);
+        records_button = new Rect(screen_width/3, screen_height/5, screen_width/3*2,
+                screen_height/5+200);
+        play_button = new Rect(screen_width/4*2, screen_height/5, screen_width/4+200,
+                screen_height/5+200);
+        credits_button = new Rect(screen_width/5*4, screen_height/5, screen_width/5+200,
+                screen_height/5+200);
+        settings_button = new Rect(screen_width/10*15, screen_height/35, screen_width/10*17,
+                screen_height/35*4);
     }
 
     public void Draw(Canvas canvas){
         super.Draw(canvas);
-        canvas.drawColor(Color.RED);
+        canvas.drawColor(Color.GREEN);
 
         canvas.drawRect(records_button,paint);
         canvas.drawRect(play_button,paint);
         canvas.drawRect(credits_button,paint);
         canvas.drawRect(settings_button,paint);
-
-        canvas.drawText("Menu",screen_width / 2, screen_height / 10, paint);
     }
 
     public int onTouchEvent(MotionEvent event){

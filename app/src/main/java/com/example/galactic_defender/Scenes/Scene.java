@@ -17,7 +17,7 @@ public class Scene {
     Context context;
     Paint paint;
     Rect back_button;
-    Bitmap button_image;
+    Bitmap back_button_image;
     public int scene_number = -1;
     int screen_height, screen_width;
 
@@ -32,14 +32,14 @@ public class Scene {
         paint.setColor(Color.WHITE);
         paint.setTextAlign(Paint.Align.CENTER);
 
+        this.back_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.home_icon);
         this.back_button = new Rect(screen_width - screen_width / 8, screen_height - screen_width / 8, screen_width, screen_height);
-//        button_image = BitmapFactory.decodeResource(getResources(), R.drawable);
-//        button_image = BitmapFactory.decodeResource();
     }
 
     public void Draw(Canvas canvas) {
         if (scene_number != 1 && scene_number != 3) {
-            canvas.drawRect(back_button, paint);
+//            canvas.drawRect(back_button, paint);
+            canvas.drawBitmap(back_button_image, null, back_button, paint);
         }
     }
 

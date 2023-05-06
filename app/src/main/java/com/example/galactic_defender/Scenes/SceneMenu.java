@@ -1,6 +1,8 @@
 package com.example.galactic_defender.Scenes;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,34 +15,45 @@ public class SceneMenu extends Scene{
 
     Paint paint;
     Rect records_button, play_button,credits_button,settings_button;
+    Bitmap records_button_image, play_button_image, credits_button_image, settings_button_image;
     int scene_number = 1;
     int screen_height, screen_width;
+    int BACKGROUND = Color.parseColor("#2E5266");
 
     public SceneMenu(Context context, int screen_height, int screen_width, int scene_number) {
         super(context, screen_height, screen_width, scene_number);
         this.scene_number = scene_number;
         this.screen_height = screen_height;
         this.screen_width = screen_width;
-
         paint = new Paint();
-        records_button = new Rect(screen_width/3, screen_height/5, screen_width/3*2,
+
+        this.records_button_image = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.trophy_icon);
+        this.play_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.play_icon);
+        this.credits_button_image = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.credits_icon);
+        this.settings_button_image = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.settings_icon);
+
+        this.records_button = new Rect(screen_width/3, screen_height/5, screen_width/3*2,
                 screen_height/5+200);
-        play_button = new Rect(screen_width/4*2, screen_height/5, screen_width/4+200,
+        this.play_button = new Rect(screen_width/5, screen_height/5, screen_width/5*2,
                 screen_height/5+200);
-        credits_button = new Rect(screen_width/5*4, screen_height/5, screen_width/5+200,
+        this.credits_button = new Rect(screen_width/7, screen_height/5, screen_width/7*2,
                 screen_height/5+200);
-        settings_button = new Rect(screen_width/10*15, screen_height/35, screen_width/10*17,
+        this.settings_button = new Rect(screen_width/15*15, screen_height/35, screen_width/15*17,
                 screen_height/35*4);
     }
 
     public void Draw(Canvas canvas){
         super.Draw(canvas);
-        canvas.drawColor(Color.GREEN);
+        canvas.drawColor(BACKGROUND);
 
-        canvas.drawRect(records_button,paint);
-        canvas.drawRect(play_button,paint);
-        canvas.drawRect(credits_button,paint);
-        canvas.drawRect(settings_button,paint);
+        canvas.drawBitmap(records_button_image, null, records_button, null);
+        canvas.drawBitmap(play_button_image, null, play_button, null);
+        canvas.drawBitmap(credits_button_image, null, credits_button, null);
+        canvas.drawBitmap(settings_button_image, null, settings_button, null);
+
     }
 
     public int onTouchEvent(MotionEvent event){

@@ -35,14 +35,15 @@ public class SceneMenu extends Scene{
         this.settings_button_image = BitmapFactory.decodeResource(context.getResources(),
                 R.drawable.settings_icon);
 
-        this.records_button = new Rect(screen_width/3, screen_height/5, screen_width/3*2,
-                screen_height/5+200);
-        this.play_button = new Rect(screen_width/5, screen_height/5, screen_width/5*2,
-                screen_height/5+200);
-        this.credits_button = new Rect(screen_width/7, screen_height/5, screen_width/7*2,
-                screen_height/5+200);
-        this.settings_button = new Rect(screen_width/15*15, screen_height/35, screen_width/15*17,
-                screen_height/35*4);
+        this.records_button = new Rect(screen_width/11*2, screen_height/6, screen_width/11*3,
+                screen_height/6*2);
+        this.play_button = new Rect(screen_width/11*4, screen_height/6, screen_width/11*5,
+                screen_height/6*2);
+        this.credits_button = new Rect(screen_width/11*6, screen_height/6, screen_width/11*7,
+                screen_height/6*2);
+        this.settings_button = new Rect(screen_width/11*8, screen_height/6, screen_width/11*9,
+                screen_height/6*2);
+
     }
 
     public void Draw(Canvas canvas){

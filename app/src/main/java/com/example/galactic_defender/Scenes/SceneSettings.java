@@ -7,13 +7,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.view.MotionEvent;
 
 import com.example.galactic_defender.R;
 
-public class SceneSettings extends Scene{
+public class SceneSettings extends Scene {
 
     Paint paint;
-    Rect sounds_button, music_button,language_button;
+    Rect sounds_button, music_button, language_button;
     Bitmap sounds_button_image, music_button_image, language_button_image;
     int scene_number = 5;
     int screen_height, screen_width;
@@ -33,19 +34,52 @@ public class SceneSettings extends Scene{
         this.language_button_image = BitmapFactory.decodeResource(context.getResources(),
                 R.drawable.spanish_icon);
 
-        this.sounds_button = new Rect(screen_width/10*2, screen_height/5, screen_width/10*3,
-                screen_height/5*2);
-        this.music_button = new Rect(screen_width/10*4, screen_height/5, screen_width/10*5,
-                screen_height/5*2);
-        this.language_button = new Rect(screen_width/10*6, screen_height/5, screen_width/10*7,
-                screen_height/5*2);
+        this.sounds_button = new Rect(screen_width / 10 * 2, screen_height / 5, screen_width / 10 * 3,
+                screen_height / 5 * 2);
+        this.music_button = new Rect(screen_width / 10 * 4, screen_height / 5, screen_width / 10 * 5,
+                screen_height / 5 * 2);
+        this.language_button = new Rect(screen_width / 10 * 6, screen_height / 5, screen_width / 10 * 7,
+                screen_height / 5 * 2);
     }
 
-    public void Draw(Canvas canvas){
+    public void Draw(Canvas canvas) {
+        canvas.drawColor(BACKGROUND);
         super.Draw(canvas);
 
         canvas.drawBitmap(sounds_button_image, null, sounds_button, null);
         canvas.drawBitmap(music_button_image, null, music_button, null);
         canvas.drawBitmap(language_button_image, null, language_button, null);
+    }
+
+    public int onTouchEvent(MotionEvent event) {
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        int aux = (int) super.onTouchEvent(event);
+
+        if (aux != scene_number && aux != -1) {
+            return aux;
+        }
+
+        if (sounds_button.contains(x, y)) {
+            sounds_button_image = (sounds_button_image.equals(BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.sound_on_icon))) ? BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.sound_on_icon) : BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.sound_off_icon);
+
+        } else if (music_button.contains(x, y)) {
+            music_button_image = (music_button_image.equals(BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.music_on_icon))) ? BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.music_on_icon) : BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.music_off_icon);
+
+        } else if (language_button.contains(x, y)) {
+            language_button_image =
+                    (language_button_image.equals(BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.spanish_icon))) ? BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.spanish_icon) : BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.english_icon);
+        }
+
+        return this.scene_number;
     }
 }

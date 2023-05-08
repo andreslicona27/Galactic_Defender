@@ -33,14 +33,15 @@ public class Scene {
         paint.setTextAlign(Paint.Align.CENTER);
 
         this.back_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.home_icon);
-        this.back_button = new Rect(screen_width/10, screen_height/35, screen_width/10*2
-                , screen_height/35*2);
+        this.back_button = new Rect(screen_width/10, screen_height/10, screen_width/10*2
+                , screen_height/10*2);
     }
 
     public void Draw(Canvas canvas) {
         if (scene_number != 1 && scene_number != 3) {
-            canvas.drawBitmap(back_button_image, null, back_button, paint);
+            canvas.drawBitmap(back_button_image, null, back_button, null);
         }
+
     }
 
     public void UpdatePhysics() {

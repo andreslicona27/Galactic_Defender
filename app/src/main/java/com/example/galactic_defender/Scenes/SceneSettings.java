@@ -19,12 +19,8 @@ public class SceneSettings extends Scene {
     Bitmap music_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on_icon);
     Bitmap language_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.spanish_icon);
 
-    Bitmap sounds_on_icon;
-    Bitmap sounds_off_icon;
-    Bitmap music_on_icon;
-    Bitmap music_off_icon;
-    Bitmap spanish_icon;
-    Bitmap english_icon;
+    Bitmap sounds_on_icon, sounds_off_icon, music_on_icon, music_off_icon, spanish_icon,
+            english_icon;
 
     int scene_number = 5;
     int screen_height, screen_width;

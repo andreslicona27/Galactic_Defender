@@ -22,6 +22,9 @@ public class SceneSettings extends Scene {
     Bitmap sounds_on_icon, sounds_off_icon, music_on_icon, music_off_icon, spanish_icon,
             english_icon;
 
+    Bitmap scale_sounds_on_image, scale_sounds_off_image, scale_music_on_image,
+            scale_music_off_image, scale_spanish_image, scale_english_image;
+
     int scene_number = 5;
     int screen_height, screen_width;
     int BACKGROUND = Color.parseColor("#2E5266");
@@ -33,16 +36,41 @@ public class SceneSettings extends Scene {
         this.screen_width = screen_width;
         paint = new Paint();
 
-        sounds_on_icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.sound_on_icon);
-        sounds_off_icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.sound_off_icon);
-        music_on_icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on_icon);
-        music_off_icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_off_icon);
-        spanish_icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.spanish_icon);
-        english_icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.english_icon);
+        // Button Images
+        this.sounds_on_icon = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.sound_on_icon);
+        this.sounds_off_icon = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.sound_off_icon);
+        this.music_on_icon = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.music_on_icon);
+        this.music_off_icon = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.music_off_icon);
+        this.spanish_icon = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.spanish_icon);
+        this.english_icon = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.english_icon);
 
-        this.sounds_button = new Rect(screen_width / 10 * 2, screen_height / 5, screen_width / 10 * 3, screen_height / 5 * 2);
-        this.music_button = new Rect(screen_width / 10 * 4, screen_height / 5, screen_width / 10 * 5, screen_height / 5 * 2);
-        this.language_button = new Rect(screen_width / 10 * 6, screen_height / 5, screen_width / 10 * 7, screen_height / 5 * 2);
+        // Button scale images
+        this.scale_sounds_on_image = Bitmap.createScaledBitmap(this.sounds_on_icon,
+                screen_width/8, screen_width/8, true);
+        this.scale_sounds_off_image = Bitmap.createScaledBitmap(this.sounds_off_icon,
+                screen_width/8, screen_width/8, true);
+        this.scale_music_on_image = Bitmap.createScaledBitmap(this.music_on_icon,
+                screen_width/8, screen_width/8, true);
+        this.scale_music_off_image = Bitmap.createScaledBitmap(this.music_off_icon,
+                screen_width/8, screen_width/8, true);
+        this.scale_spanish_image = Bitmap.createScaledBitmap(this.spanish_icon,
+                screen_width/8, screen_width/8, true);
+        this.scale_english_image = Bitmap.createScaledBitmap(this.english_icon,
+                screen_width/8, screen_width/8, true);
+
+        // Button rectangles
+        this.sounds_button = new Rect(screen_width/11*3, screen_height/6*2,
+                screen_width/11*4, screen_height/6*3);
+        this.music_button = new Rect(screen_width/11*5, screen_height/6*2, screen_width/11*6,
+                screen_height/6*3);
+        this.language_button = new Rect(screen_width/11*7, screen_height/6*2,
+                screen_width/11*8, screen_height/6*3);
     }
 
     public void Draw(Canvas canvas) {

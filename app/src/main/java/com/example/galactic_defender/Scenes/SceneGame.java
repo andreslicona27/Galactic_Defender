@@ -91,25 +91,18 @@ public class SceneGame extends Scene{
 
     @Override
     public int onTouchEvent(MotionEvent event) {
+        int action = event.getActionMasked();
         int pointerIndex = event.getActionIndex();
         int pointerID = event.getPointerId(pointerIndex);
-        int action = event.getActionMasked();
         int x = (int) event.getX();
         int y = (int) event.getY();
         joystick.TouchEvent(event);
 
-//        int pointerIndex = event.getActionIndex(); obtiene el índice del puntero (dedo) que realizó la acción táctil.
-//                Si el usuario toca la pantalla con un dedo, el índice del puntero será 0.
-//        Si el usuario toca la pantalla con dos dedos, el índice del primer dedo será 0 y el índice del segundo dedo será 1.
-
-//        int pointerID = event.getPointerId(pointerIndex); obtiene el ID del puntero (dedo) que realizó la acción táctil.
-//                El ID del puntero puede ser utilizado para realizar un seguimiento del movimiento del dedo en la pantalla a medida que se mueve.
-
         if(pause_button.contains(x, y)){
             return 6;
         }
-//        return joystick.TouchEvent(event);
-        return super.onTouchEvent(event);
+        return joystick.TouchEvent(event);
+//        return super.onTouchEvent(event);
     }
 
 

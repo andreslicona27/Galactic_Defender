@@ -18,6 +18,7 @@ public class Scene {
     Paint paint;
     Rect back_button;
     Bitmap back_button_image;
+    Bitmap scale_button_image;
     public int scene_number = -1;
     int screen_height, screen_width;
 
@@ -33,15 +34,16 @@ public class Scene {
         paint.setTextAlign(Paint.Align.CENTER);
 
         this.back_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.home_icon);
-        this.back_button = new Rect(screen_width/10, screen_height/10, screen_width/10*2
-                , screen_height/10*2);
+        this.scale_button_image = Bitmap.createScaledBitmap(this.back_button_image,
+                screen_width/8, screen_width/8, true);
+        this.back_button = new Rect(screen_width/11*2, screen_height/6, screen_width/11*3
+                , screen_height/6+2);
     }
 
     public void Draw(Canvas canvas) {
         if (scene_number != 1 && scene_number != 3) {
-            canvas.drawBitmap(back_button_image, null, back_button, null);
+            canvas.drawBitmap(scale_button_image, null, back_button, null);
         }
-
     }
 
     public void UpdatePhysics() {
@@ -51,13 +53,11 @@ public class Scene {
     public int onTouchEvent(MotionEvent event) {
         int x = (int) event.getX();
         int y = (int) event.getY();
-
         if(scene_number != 1 && scene_number != 3){
             if(back_button.contains(x, y)){
                 return 1;
             }
         }
-
         return -1;
     }
 }

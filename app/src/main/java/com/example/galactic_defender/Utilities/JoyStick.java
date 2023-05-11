@@ -39,7 +39,7 @@ public class JoyStick {
                 paint);
     }
 
-    public void TouchEvent(MotionEvent event){
+    public int TouchEvent(MotionEvent event){
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
                 float x = event.getX();
@@ -71,6 +71,7 @@ public class JoyStick {
                 this.scene_game.SetPlayerMoveFalse();
 
         }
+        return 0;
     }
 
 

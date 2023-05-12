@@ -21,6 +21,10 @@ public class Scene {
     Bitmap scale_button_image;
     public int scene_number = -1;
     int screen_height, screen_width;
+    int BACKGROUND = Color.parseColor("#2E5266");
+    int TITLE_COLOR = Color.parseColor("#D3D0CB");
+
+
 
     public Scene(Context context, int screen_height, int screen_width, int scene_number) {
         this.context = context;
@@ -28,19 +32,22 @@ public class Scene {
         this.screen_height = screen_height;
         this.screen_width = screen_width;
 
-        paint = new Paint();
-        paint.setTextSize(screen_height / 10);
-        paint.setColor(Color.WHITE);
-        paint.setTextAlign(Paint.Align.CENTER);
+        this.paint = new Paint();
+        this.paint.setAlpha(240);
+        this.paint.setTextSize(screen_height/10);
+        this.paint.setAntiAlias(true);
+        this.paint.setTextAlign(Paint.Align.CENTER);
+        this.paint.setColor(TITLE_COLOR);
 
         this.back_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.home_icon);
         this.scale_button_image = Bitmap.createScaledBitmap(this.back_button_image,
                 screen_width/8, screen_width/8, true);
-        this.back_button = new Rect(screen_width/11*2, screen_height/6, screen_width/11*3
-                , screen_height/6+2);
+        this.back_button = new Rect(screen_width/20, screen_height/12, screen_width/20+50
+                , screen_height/12+50);
     }
 
     public void Draw(Canvas canvas) {
+        canvas.drawColor(BACKGROUND);
         if (scene_number != 1 && scene_number != 3) {
             canvas.drawBitmap(scale_button_image, null, back_button, null);
         }

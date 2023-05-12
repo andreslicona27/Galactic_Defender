@@ -21,7 +21,6 @@ public class Enemy {
     public int direction_x, direction_y;
     int screen_width, screen_height;
     public int pos_x, pos_y;
-    public int enemy_velocity = 2;
 
     // BUILDER
     public Enemy(Context context, int screen_width, int screen_height) {
@@ -45,7 +44,6 @@ public class Enemy {
     public int GetEnemyWidth(){
         return this.scale_enemy.getWidth();
     }
-
     public int GetEnemyHeight(){
         return this.scale_enemy.getHeight();
     }
@@ -54,8 +52,8 @@ public class Enemy {
     // FUNCTIONS
 
     public void MoveEnemy(int screen_height, int screen_width, int velocity){
-        int posX = this.position.x + (enemy_velocity * this.direction_x);
-        int posY = this.position.y + (enemy_velocity * this.direction_y);
+        int posX = this.position.x + (velocity * this.direction_x);
+        int posY = this.position.y + (velocity * this.direction_y);
         this.position = new Point(posX, posY);
 
         if (this.position.x + this.scale_enemy.getWidth() >= screen_width || this.position.x <= 0 ) {
@@ -102,7 +100,6 @@ public class Enemy {
                 this.pos_y = 0;
                 break;
         }
-        Log.d(TAG, pos_x  + ":" + pos_y);
         this.position = new Point(pos_x, pos_y);
     }
 }

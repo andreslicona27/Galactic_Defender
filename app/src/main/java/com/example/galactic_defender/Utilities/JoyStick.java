@@ -12,12 +12,14 @@ import com.example.galactic_defender.Scenes.SceneGame;
 public class JoyStick {
 
     SceneGame scene_game;
-    Paint paint;
+    Paint outer_paint, inner_paint;
     float center_x;
     float center_y;
-    float radius = 100;
+    float outer_radius = 100;
+    float inner_radius = 50;
     float touch_x, touch_y;
     int screen_width, screen_height;
+    int palette_color = Color.parseColor("#F2C055");
     boolean touch_down;
 
     // BUILDER
@@ -26,17 +28,20 @@ public class JoyStick {
         this.screen_width = screen_width;
         this.screen_height = screen_height;
 
-        this.paint = new Paint();
-        this.paint.setStyle(Paint.Style.STROKE);
-        this.paint.setStrokeWidth(5);
-        this.paint.setColor(Color.WHITE);
+        this.outer_paint = new Paint();
+        this.outer_paint.setStyle(Paint.Style.STROKE);
+        this.outer_paint.setStrokeWidth(5);
+        this.outer_paint.setColor(palette_color);
+
+        this.inner_paint = new Paint();
+        this.inner_paint.setColor(palette_color);
     }
 
     // FUNCTIONS
     public void DrawJoystick(Canvas canvas) {
+        canvas.drawCircle((float)this.screen_width/20*2, (float)this.screen_height/20*16, outer_radius, outer_paint);
         canvas.drawCircle((float)this.screen_width/20*2, (float)this.screen_height/20*16,
-                radius,
-                paint);
+                inner_radius, inner_paint);
     }
 
     public int TouchEvent(MotionEvent event){
@@ -50,7 +55,7 @@ public class JoyStick {
                 float side_b = Math.abs(y - center_y);
                 float c = (float)Math.hypot(side_a, side_b);
 
-                if(c <= radius){
+                if(c <= outer_radius){
                     touch_down = true;
                     touch_x = x;
                     touch_y = y;

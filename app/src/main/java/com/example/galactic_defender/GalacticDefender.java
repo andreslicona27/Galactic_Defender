@@ -2,10 +2,7 @@ package com.example.galactic_defender;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Build;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -14,21 +11,15 @@ import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
-import com.example.galactic_defender.Characters.Enemy;
-import com.example.galactic_defender.Characters.Rocket;
 import com.example.galactic_defender.Scenes.Scene;
 import com.example.galactic_defender.Scenes.SceneCredits;
 import com.example.galactic_defender.Scenes.SceneGame;
 import com.example.galactic_defender.Scenes.SceneGameOver;
+import com.example.galactic_defender.Scenes.SceneInformation;
 import com.example.galactic_defender.Scenes.SceneMenu;
 import com.example.galactic_defender.Scenes.ScenePause;
 import com.example.galactic_defender.Scenes.SceneRecords;
 import com.example.galactic_defender.Scenes.SceneSettings;
-import com.example.galactic_defender.Utilities.Explosion;
-import com.example.galactic_defender.Utilities.Shot;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -57,14 +48,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-//        canvas = surface_holder.lockCanvas();
-//        canvas.drawText("Pt: " + points, 0, TEXT_SIZE, score_paint);
-//
-//         // see if I really need this
-////        if (!playing) {
-////            handler.postDelayed(runnable, UPDATE_MILLIS);
-////        }
-//        surface_holder.unlockCanvasAndPost(canvas);
+
     }
 
     @Override
@@ -133,6 +117,8 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
                 case 7:
                     current_scene = new SceneGameOver(context, screen_height, screen_width, 7);
                     break;
+                case 8:
+                    current_scene = new SceneInformation(context, screen_height, screen_width, 8);
             }
         }
     }

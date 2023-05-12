@@ -40,7 +40,6 @@ public class Rocket {
     public int GetRocketWidth(){
         return rocket.getWidth();
     }
-
     public int GetRocketHeight(){
         return rocket.getHeight();
     }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 
+import com.example.galactic_defender.R;
+
 public class SceneInformation extends Scene{
 
     int scene_number = 8;
@@ -13,6 +15,6 @@ public class SceneInformation extends Scene{
 
     public void Draw(Canvas canvas){
         super.Draw(canvas);
-        canvas.drawText("How To Play", screen_width/10*5, screen_height/6, paint);
+        canvas.drawText(context.getString(R.string.information_title), screen_width/10*5, screen_height/6, paint);
     }
 }

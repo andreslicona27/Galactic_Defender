@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
+import com.example.galactic_defender.R;
+
 public class SceneCredits extends Scene{
 
     int scene_number = 4;
@@ -16,6 +18,6 @@ public class SceneCredits extends Scene{
 
     public void Draw(Canvas canvas){
         super.Draw(canvas);
-        canvas.drawText("Credits", screen_width/10*5, screen_height/6, paint);
+        canvas.drawText(context.getString(R.string.credits_title), screen_width/10*5, screen_height/6, paint);
     }
 }

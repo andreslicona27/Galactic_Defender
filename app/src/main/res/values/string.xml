@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Galactic_Defender</string>
+    <string name="credits_title">Créditos</string>
+    <string name="gameOver_title">Fin Del Juego</string>
+    <string name="information_title">Como Jugar</string>
+    <string name="pause_title">Pausa</string>
+    <string name="records_title">Registros</string>
+    <string name="settings_title">Ajustes</string>
+</resources>

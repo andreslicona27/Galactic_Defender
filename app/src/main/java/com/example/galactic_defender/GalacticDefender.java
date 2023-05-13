@@ -1,10 +1,13 @@
 package com.example.galactic_defender;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Handler;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -20,6 +23,8 @@ import com.example.galactic_defender.Scenes.SceneMenu;
 import com.example.galactic_defender.Scenes.ScenePause;
 import com.example.galactic_defender.Scenes.SceneRecords;
 import com.example.galactic_defender.Scenes.SceneSettings;
+
+import java.util.Locale;
 
 public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -43,12 +48,19 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         this.context = context;
         this.game_thread = new Hilo();
         this.handler = new Handler();
+        ChangeLanguage("en");
     }
 
 
+    ////////////////////////////  OVERRIDE FUNCTIONS  ////////////////////////////
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-
+//        game_thread.SetWorking(true);
+//        if (game_thread.getState() == Thread.State.NEW) game_thread.start();
+//        if (game_thread.getState() == Thread.State.TERMINATED) {
+//            game_thread = new Hilo();
+//            game_thread.start();
+//        }
     }
 
     @Override
@@ -93,6 +105,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
     }
 
 
+    ////////////////////////////  EXTRA FUNCTIONS  ////////////////////////////
     public void ChangeScene(int change_scene) {
         if (current_scene.scene_number != change_scene) {
             switch (change_scene) {
@@ -123,6 +136,20 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         }
     }
 
+    /**
+     * Sets the language of the system
+     * @param cod_language code of the new language
+     */
+    public void ChangeLanguage(String cod_language) {
+        Log.i("TAG", "we change the language");
+        Resources res=context.getResources();
+        DisplayMetrics dm=res.getDisplayMetrics();
+        android.content.res.Configuration conf=res.getConfiguration();
+        conf.locale=new Locale(cod_language.toLowerCase());
+        res.updateConfiguration(conf, dm);
+    }
+
+    //////////////////////////// THREAD CLASS ////////////////////////////
     public class Hilo extends Thread {
         @Override
         public void run() {
@@ -151,6 +178,9 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
                     }
                 }
             }
+        }
+        public void SetWorking(boolean flag) {
+            thread_working = flag;
         }
     }
 }

@@ -4,15 +4,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
+import com.example.galactic_defender.GalacticDefender;
 import com.example.galactic_defender.R;
 
 public class SceneSettings extends Scene {
 
+    GalacticDefender language_manager;
     Rect sounds_button, music_button, language_button;
     Bitmap sounds_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.sound_on_icon);
     Bitmap music_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on_icon);
@@ -32,6 +32,7 @@ public class SceneSettings extends Scene {
         this.scene_number = scene_number;
         this.screen_height = screen_height;
         this.screen_width = screen_width;
+        this.language_manager = new GalacticDefender(context);
 
         // Button Images
         this.sounds_on_icon = BitmapFactory.decodeResource(context.getResources(),
@@ -72,7 +73,8 @@ public class SceneSettings extends Scene {
 
     public void Draw(Canvas canvas) {
         super.Draw(canvas);
-        canvas.drawText("Settings", screen_width/10*5, screen_height/6, paint);
+        canvas.drawText(context.getString(R.string.settings_title), screen_width/10*5, screen_height/6,
+                paint);
 
         canvas.drawBitmap(sounds_button_image, null, sounds_button, null);
         canvas.drawBitmap(music_button_image, null, music_button, null);
@@ -97,7 +99,14 @@ public class SceneSettings extends Scene {
 
         }
         if (language_button.contains(x, y)) {
-            language_button_image = (language_button_image.equals(spanish_icon) ? english_icon : spanish_icon);
+            if(language_button_image.equals(spanish_icon)){
+                language_button_image = english_icon;
+                language_manager.ChangeLanguage("es");
+            } else {
+                language_button_image = spanish_icon;
+                language_manager.ChangeLanguage("en");
+            }
+
         }
 
         return this.scene_number;

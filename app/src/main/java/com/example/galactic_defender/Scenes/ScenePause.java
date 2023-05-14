@@ -2,7 +2,6 @@ package com.example.galactic_defender.Scenes;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 
 import com.example.galactic_defender.R;
 
@@ -16,6 +15,6 @@ public class ScenePause extends Scene {
 
     public void Draw(Canvas canvas){
         super.Draw(canvas);
-        canvas.drawText(context.getString(R.string.pause_title), screen_width/10*5, screen_height/6, paint);
+        canvas.drawText(context.getString(R.string.pause_title), screen_width/10*5, screen_height/6, title_paint);
     }
 }

@@ -3,7 +3,9 @@ package com.example.galactic_defender;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -30,16 +32,19 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
 
     SurfaceHolder surface_holder;
     Context context;
+    public MediaPlayer background_music;
     Scene current_scene;
     Hilo game_thread;
-    Bitmap background;
     Handler handler;
-    Canvas canvas;
-    long UPDATE_MILLIS = 30;
     int screen_height, screen_width;
     int new_scene;
     boolean playing = true;
     boolean thread_working = false; // Control of the thread
+
+    /////////////// OTHER CLASSES USES /////////////////
+    public Bitmap sounds_button_image;
+    public Bitmap music_button_image;
+    public Bitmap language_button_image;
 
     public GalacticDefender(Context context) {
         super(context);
@@ -48,7 +53,14 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         this.context = context;
         this.game_thread = new Hilo();
         this.handler = new Handler();
-        ChangeLanguage("en");
+        this.background_music = MediaPlayer.create(this.getContext(), R.raw.background_music);
+        this.background_music.setLooping(true);
+        this.background_music.start();
+
+        this.sounds_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.sound_on_icon);
+        this.music_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on_icon);
+        this.language_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.spanish_icon);
+//        ChangeLanguage("en");
     }
 
 
@@ -81,6 +93,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         this.playing = false;
+        this.background_music.stop();
         try {
             game_thread.join();
         } catch (InterruptedException e) {
@@ -138,7 +151,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
 
     /**
      * Sets the language of the system
-     * @param cod_language code of the new language
+     * @param cod_language identification code of the new language
      */
     public void ChangeLanguage(String cod_language) {
         Log.i("TAG", "we change the language");

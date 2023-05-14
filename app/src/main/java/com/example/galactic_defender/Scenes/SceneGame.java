@@ -12,7 +12,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.galactic_defender.Characters.Enemy;
-import com.example.galactic_defender.Characters.Rocket;
+import com.example.galactic_defender.Characters.Spaceship;
 import com.example.galactic_defender.MainActivity;
 import com.example.galactic_defender.R;
 import com.example.galactic_defender.Utilities.Explosion;
@@ -35,16 +35,17 @@ public class SceneGame extends Scene {
     Random random;
     JoyStick joystick;
     FireButton fire_button;
-    Rocket rocket;
+    Spaceship spaceship;
     Explosion explosion;
     ArrayList<Enemy> enemies;
-    ArrayList<FireButton> rocket_shots;
+    ArrayList<FireButton> spaceship_shots;
     ArrayList<Explosion> explosions;
     int time_per_enemy = 5000;
     int scene_number = 3;
     int points = 0;
     boolean enemy_explosion = false;
-    boolean move_player;
+    boolean move_player = false;
+    boolean shot_fired = false;
 
 
     public SceneGame(Context context, int screen_height, int screen_width, int scene_number) {
@@ -52,12 +53,12 @@ public class SceneGame extends Scene {
         this.random = new Random();
         this.vibrator = new MainActivity();
         this.joystick = new JoyStick(this, screen_width, screen_height);
-        this.fire_button = new FireButton(context, screen_width, screen_height);
+        this.fire_button = new FireButton(this, context, screen_width, screen_height);
 
-        this.rocket_shots = new ArrayList<>();
+        this.spaceship_shots = new ArrayList<>();
         this.explosions = new ArrayList<>();
         this.enemies = new ArrayList<>();
-        this.rocket = new Rocket(context, screen_width, screen_height);
+        this.spaceship = new Spaceship(context, screen_width, screen_height);
 
         // Timer Properties
         this.enemy_timer = new Timer();
@@ -72,8 +73,8 @@ public class SceneGame extends Scene {
         // Pause Button
         this.pause_button_image = BitmapFactory.decodeResource(context.getResources(),
                 R.drawable.pause_icon);
-        this.pause_button = new Rect(screen_width/15*13, screen_height/10, screen_width/15*14
-                , screen_height/10+50);
+        this.pause_button = new Rect(screen_width / 15 * 13, screen_height / 10, screen_width / 15 * 14
+                , screen_height / 10 + 50);
 
 
     }
@@ -82,11 +83,10 @@ public class SceneGame extends Scene {
         super.Draw(canvas);
         this.canvas = canvas;
 
-        this.rocket.DrawRocket(canvas);
+        this.spaceship.DrawSpaceship(canvas);
         DrawEnemies();
         PlayerMovement();
         RocketShotsManagement(canvas);
-        ExplosionsManagement(canvas);
 
         this.joystick.DrawJoystick(canvas);
         this.fire_button.DrawFireButton(canvas);
@@ -100,13 +100,25 @@ public class SceneGame extends Scene {
         int pointerID = event.getPointerId(pointerIndex);
         int x = (int) event.getX();
         int y = (int) event.getY();
-        joystick.TouchEvent(event);
 
         if (pause_button.contains(x, y)) {
             return 6;
         }
-        return joystick.TouchEvent(event);
-//        return super.onTouchEvent(event);
+
+        if (this.joystick.TouchEvent(event)) {
+            Log.i("TAG", "we try to move");
+            this.move_player = true;
+        }
+
+        if (this.fire_button.TouchEvent(event)) {
+            Log.i("TAG", "we try to fire");
+            this.fire_button.FireShot(this.canvas, this.spaceship.position,
+                    this.spaceship.GetSpaceshipWidth(),
+                    this.spaceship.GetSpaceshipHeight());
+        }
+
+
+        return super.onTouchEvent(event);
     }
 
 
@@ -116,12 +128,20 @@ public class SceneGame extends Scene {
         if (!move_player) {
             return;
         }
+        Log.i("TAG", "we are moving");
 
         float ratio = Math.abs(last_touch_difference.x) / Math.abs(last_touch_difference.y);
         double angle = Math.atan(ratio);  // return the value in radians
 
         float speed_x = (float) Math.cos(angle);
         float speed_y = (float) Math.sin(angle);
+
+
+        // try this to rotate the image
+//        Matrix matrix = new Matrix();
+//        matrix.postRotate((float) Math.toDegrees(angle));
+//        Bitmap rotatedBitmap = Bitmap.createBitmap(this.rocket.GetRocketImage(), 0, 0, this.rocket.GetRocketWidth(),
+//                this.rocket.GetRocketHeight(), matrix, true);
 
         // Changing image
         if (speed_x > speed_y) {
@@ -144,11 +164,8 @@ public class SceneGame extends Scene {
         if (last_touch_difference.y < 0) {
             speed_y *= -1;
         }
-        // multiply the rocket speed by something that would become delta that i don´t know what
-        // it can be
-        this.rocket.position.x += speed_x + this.rocket.rocket_velocity;
-        this.rocket.position.y += speed_y + this.rocket.rocket_velocity;
-
+        this.spaceship.position.x += speed_x * this.spaceship.velocity;
+        this.spaceship.position.y += speed_y * this.spaceship.velocity;
     }
 
     public void SetPlayerMoveTrue(PointF last_touch_difference) {
@@ -160,9 +177,10 @@ public class SceneGame extends Scene {
         move_player = false;
     }
 
+
     public void RocketShotsManagement(Canvas canvas) {
-        for (int i = 0; i < rocket_shots.size(); i++) {
-            FireButton rocket_shot = rocket_shots.get(i);
+        for (int i = 0; i < spaceship_shots.size(); i++) {
+            FireButton rocket_shot = spaceship_shots.get(i);
             rocket_shot.position.y -= 15;
             canvas.drawBitmap(rocket_shot.getShot(), rocket_shot.position.x, rocket_shot.position.y,
                     null);
@@ -172,11 +190,11 @@ public class SceneGame extends Scene {
                         && (rocket_shot.position.y <= enemy.GetEnemyHeight())
                         && (rocket_shot.position.y >= enemy.direction_y)) {
                     points++;
-                    rocket_shots.remove(i);
+                    spaceship_shots.remove(i);
                     explosion = new Explosion(context, enemy.direction_x, enemy.direction_y);
                     explosions.add(explosion);
-                } else if (rocket_shots.get(i).position.y <= 0) {
-                    rocket_shots.remove(i);
+                } else if (spaceship_shots.get(i).position.y <= 0) {
+                    spaceship_shots.remove(i);
                 }
             }
         }
@@ -191,7 +209,6 @@ public class SceneGame extends Scene {
     }
 
     private void AddEnemy(Canvas canvas) {
-        // TODO add the control of addition depending of the amount of points
         Enemy enemy = new Enemy(context, screen_width, screen_height);
         enemies.add(enemy);
     }
@@ -210,13 +227,13 @@ public class SceneGame extends Scene {
             for (Enemy enemy : enemies) {
                 enemy.MoveEnemy(screen_height, screen_width, 2);
 
-                if(RocketAndEnemyCollision(enemy.position.x, enemy.position.y, enemy.GetEnemyImage(), rocket.position.x, rocket.position.y, rocket.GetRocketImage())){
+                if (RocketAndEnemyCollision(enemy.position.x, enemy.position.y, enemy.GetEnemyImage(), spaceship.position.x, spaceship.position.y, spaceship.GetSpaceshipImage())) {
                     Log.i("TAG", "we have collision");
                     this.vibrator.Vibrate();
                 }
 
                 // TODO create the collision of aliens with the rocket shots
-                if(ShotsAndEnemyCollision(enemy.position.x, enemy.position.y, enemy.GetEnemyImage())){
+                if (ShotsAndEnemyCollision(enemy.position.x, enemy.position.y, enemy.GetEnemyImage())) {
                     Log.i("TAG", "we have shot the enemy");
                 }
             }
@@ -224,42 +241,27 @@ public class SceneGame extends Scene {
     }
 
     private boolean RocketAndEnemyCollision(int enemy_x, int enemy_y, Bitmap enemy, int rocket_x,
-     int rocket_y, Bitmap rocket) {
+                                            int rocket_y, Bitmap rocket) {
         Rect rect1 = new Rect(enemy_x, enemy_y, enemy_x + enemy.getWidth(), enemy_y + enemy.getHeight());
         Rect rect2 = new Rect(rocket_x, rocket_y, rocket_x + rocket.getWidth(),
                 rocket_y + rocket.getHeight());
 
         return Rect.intersects(rect1, rect2);
     }
-        //////////////////////////// GENERAL FUNCTIONS ////////////////////////////
+    //////////////////////////// GENERAL FUNCTIONS ////////////////////////////
 
-        public void ExplosionsManagement (Canvas canvas){
-            if (explosions.size() > 1) {
-                for (int i = 0; i < explosions.size(); i++) {
-                    if (canvas != null) {
-                        canvas.drawBitmap(explosions.get(i).getExplosion(explosions.get(i).explosion_frame),
-                                explosions.get(i).explosionX, explosions.get(i).explosionY, null);
-                    }
-                    explosions.get(i).explosion_frame++;
-                    if (explosions.get(i).explosion_frame > 8) {
-                        explosions.remove(i);
-                    }
-                }
-            }
+    private boolean ShotsAndEnemyCollision(int enemy_x, int enemy_y, Bitmap enemy) {
+        for (FireButton shot : spaceship_shots) {
+            Rect rect1 = new Rect(enemy_x, enemy_y, enemy_x + enemy.getWidth(), enemy_y + enemy.getHeight());
+            Rect rect2 = new Rect(shot.position.x, shot.position.y,
+                    shot.position.x + shot.GetShotWidth(),
+                    shot.position.y + shot.GetShotHeight());
+            // TODO add the code for it no eliminate the enemy and eliminate the shot of the
+            //  scene
+            return Rect.intersects(rect1, rect2);
         }
-
-        private boolean ShotsAndEnemyCollision(int enemy_x, int enemy_y, Bitmap enemy){
-            for(FireButton shot : rocket_shots){
-                Rect rect1 = new Rect(enemy_x, enemy_y, enemy_x + enemy.getWidth(), enemy_y + enemy.getHeight());
-                Rect rect2 = new Rect(shot.position.x, shot.position.y,
-                        shot.position.x + shot.GetShotWidth(),
-                        shot.position.y + shot.GetShotHeight());
-                // TODO add the code for it no eliminate the enemy and eliminate the shot of the
-                //  scene
-                return Rect.intersects(rect1, rect2);
-            }
-            return false;
-        }
-
-
+        return false;
     }
+}
+
+

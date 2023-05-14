@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
@@ -13,7 +12,9 @@ import com.example.galactic_defender.R;
 
 public class SceneMenu extends Scene{
 
-    Paint paint;
+    Bitmap logo;
+    Bitmap scale_logo;
+    Rect logo_rect;
     Rect records_button, information_button, play_button,credits_button,settings_button;
     Bitmap records_image, information_image, play_image, credits_image,
             settings_image;
@@ -27,7 +28,13 @@ public class SceneMenu extends Scene{
         this.scene_number = scene_number;
         this.screen_height = screen_height;
         this.screen_width = screen_width;
-        paint = new Paint();
+
+        // Logo
+        this.logo = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo_icon);
+        this.scale_logo = Bitmap.createScaledBitmap(this.logo, screen_width/5, screen_width/5,
+                true);
+        this.logo_rect = new Rect(screen_width/8, screen_height/7, screen_width/8*3,
+                screen_height/7*4);
 
         // Button images
         this.records_image = BitmapFactory.decodeResource(context.getResources(),
@@ -68,12 +75,18 @@ public class SceneMenu extends Scene{
 
     public void Draw(Canvas canvas){
         super.Draw(canvas);
+        canvas.drawBitmap(scale_logo, null, logo_rect, null);
+        title_paint.setTextSize(screen_height/6);
+        canvas.drawText("Galactic", screen_width/8*5, screen_height/7*2, title_paint);
+        canvas.drawText("Defender", screen_width/8*5, screen_height/7*3+50, title_paint);
 
         canvas.drawBitmap(scale_records_image, null, records_button, null);
         canvas.drawBitmap(scale_information_image, null, information_button, null);
         canvas.drawBitmap(scale_play_image, null, play_button, null);
         canvas.drawBitmap(scale_credits_image, null, credits_button, null);
         canvas.drawBitmap(scale_settings_image, null, settings_button, null);
+
+
     }
 
     public int onTouchEvent(MotionEvent event){

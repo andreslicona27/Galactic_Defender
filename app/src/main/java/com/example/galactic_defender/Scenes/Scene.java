@@ -12,10 +12,9 @@ import android.view.MotionEvent;
 import com.example.galactic_defender.R;
 
 public class Scene {
-    // TODO add media player in here for me to have access to it from the other scenes and pause it
 
     Context context;
-    Paint paint;
+    Paint title_paint;
     Rect back_button;
     Bitmap back_button_image;
     Bitmap scale_button_image;
@@ -32,12 +31,12 @@ public class Scene {
         this.screen_height = screen_height;
         this.screen_width = screen_width;
 
-        this.paint = new Paint();
-        this.paint.setAlpha(240);
-        this.paint.setTextSize(screen_height/10);
-        this.paint.setAntiAlias(true);
-        this.paint.setTextAlign(Paint.Align.CENTER);
-        this.paint.setColor(TITLE_COLOR);
+        this.title_paint = new Paint();
+        this.title_paint.setAlpha(240);
+        this.title_paint.setTextSize(screen_height/10);
+        this.title_paint.setAntiAlias(true);
+        this.title_paint.setTextAlign(Paint.Align.CENTER);
+        this.title_paint.setColor(Color.WHITE);
 
         this.back_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.home_icon);
         this.scale_button_image = Bitmap.createScaledBitmap(this.back_button_image,

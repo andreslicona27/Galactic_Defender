@@ -12,11 +12,11 @@ import com.example.galactic_defender.R;
 
 public class SceneSettings extends Scene {
 
-    GalacticDefender language_manager;
+    GalacticDefender gd_manager;
     Rect sounds_button, music_button, language_button;
-    Bitmap sounds_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.sound_on_icon);
-    Bitmap music_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on_icon);
-    Bitmap language_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.spanish_icon);
+//    Bitmap sounds_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.sound_on_icon);
+//    Bitmap music_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on_icon);
+//    Bitmap language_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.spanish_icon);
 
     Bitmap sounds_on_icon, sounds_off_icon, music_on_icon, music_off_icon, spanish_icon,
             english_icon;
@@ -32,7 +32,7 @@ public class SceneSettings extends Scene {
         this.scene_number = scene_number;
         this.screen_height = screen_height;
         this.screen_width = screen_width;
-        this.language_manager = new GalacticDefender(context);
+        this.gd_manager = new GalacticDefender(context);
 
         // Button Images
         this.sounds_on_icon = BitmapFactory.decodeResource(context.getResources(),
@@ -74,11 +74,11 @@ public class SceneSettings extends Scene {
     public void Draw(Canvas canvas) {
         super.Draw(canvas);
         canvas.drawText(context.getString(R.string.settings_title), screen_width/10*5, screen_height/6,
-                paint);
+                title_paint);
 
-        canvas.drawBitmap(sounds_button_image, null, sounds_button, null);
-        canvas.drawBitmap(music_button_image, null, music_button, null);
-        canvas.drawBitmap(language_button_image, null, language_button, null);
+        canvas.drawBitmap(gd_manager.sounds_button_image, null, sounds_button, null);
+        canvas.drawBitmap(gd_manager.music_button_image, null, music_button, null);
+        canvas.drawBitmap(gd_manager.language_button_image, null, language_button, null);
     }
 
     public int onTouchEvent(MotionEvent event) {
@@ -91,20 +91,26 @@ public class SceneSettings extends Scene {
         }
 
         if (sounds_button.contains(x, y)) {
-            sounds_button_image = (sounds_button_image.equals(sounds_on_icon) ? sounds_off_icon : sounds_on_icon);
+            gd_manager.sounds_button_image = (gd_manager.sounds_button_image.equals(sounds_on_icon) ? sounds_off_icon
+                    : sounds_on_icon);
 
         }
         if (music_button.contains(x, y)) {
-            music_button_image = (music_button_image.equals(music_on_icon) ? music_off_icon : music_on_icon);
-
+            if(gd_manager.music_button_image.equals(music_on_icon)){
+                gd_manager.music_button_image = music_off_icon;
+                gd_manager.background_music.stop();
+            } else {
+                gd_manager.music_button_image = music_on_icon;
+                gd_manager.background_music.start();
+            }
         }
         if (language_button.contains(x, y)) {
-            if(language_button_image.equals(spanish_icon)){
-                language_button_image = english_icon;
-                language_manager.ChangeLanguage("es");
+            if(gd_manager.language_button_image.equals(spanish_icon)){
+                gd_manager.language_button_image = english_icon;
+                gd_manager.ChangeLanguage("es");
             } else {
-                language_button_image = spanish_icon;
-                language_manager.ChangeLanguage("en");
+                gd_manager.language_button_image = spanish_icon;
+                gd_manager.ChangeLanguage("en");
             }
 
         }

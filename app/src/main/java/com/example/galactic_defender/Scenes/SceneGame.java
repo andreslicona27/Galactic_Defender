@@ -10,6 +10,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.example.galactic_defender.Characters.Enemy;
 import com.example.galactic_defender.Characters.Spaceship;
@@ -26,7 +27,7 @@ import java.util.Timer;
 public class SceneGame extends Scene {
 
     MainActivity vibrator;
-    Canvas canvas; //  we need for the creation of enemies in the timer
+    Canvas canvas;
     Bitmap pause_button_image;
     Rect pause_button;
     Paint score_paint;
@@ -48,6 +49,14 @@ public class SceneGame extends Scene {
     boolean shot_fired = false;
 
 
+    /**
+     * Constructs an instance of the SceneGame class.
+     *
+     * @param context The context of the application.
+     * @param screen_height The height of the screen.
+     * @param screen_width The width of the screen.
+     * @param scene_number The number identifying the scene.
+     */
     public SceneGame(Context context, int screen_height, int screen_width, int scene_number) {
         super(context, screen_height, screen_width, scene_number);
         this.random = new Random();
@@ -79,6 +88,11 @@ public class SceneGame extends Scene {
 
     }
 
+    /**
+     * Draws the scene on the canvas.
+     *
+     * @param canvas The canvas on which the scene should be drawn.
+     */
     public void Draw(Canvas canvas) {
         super.Draw(canvas);
         this.canvas = canvas;
@@ -108,6 +122,8 @@ public class SceneGame extends Scene {
         if (this.joystick.TouchEvent(event)) {
             Log.i("TAG", "we try to move");
             this.move_player = true;
+        } else {
+            this.move_player = false;
         }
 
         if (this.fire_button.TouchEvent(event)) {

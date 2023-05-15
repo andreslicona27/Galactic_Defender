@@ -10,6 +10,16 @@ import android.view.MotionEvent;
 
 import com.example.galactic_defender.R;
 
+/**
+ * The SceneMenu class represents the menu scene in the game.
+ * It extends the Scene class and adds functionality specific to the menu scene.
+ * The menu scene displays the game logo, title, and various buttons for different actions.
+ * It inherits the drawing and touch event handling from the parent class.
+ *
+ * @author [Andres Licona]
+ * @version [1.0]
+ * @since [05-04-2023]
+ */
 public class SceneMenu extends Scene{
 
     Bitmap logo;
@@ -23,6 +33,14 @@ public class SceneMenu extends Scene{
     int scene_number = 1;
     int screen_height, screen_width;
 
+    /**
+     * Constructs an instance of the SceneMenu class.
+     *
+     * @param context The context of the application.
+     * @param screen_height The height of the screen.
+     * @param screen_width The width of the screen.
+     * @param scene_number The number identifying the scene.
+     */
     public SceneMenu(Context context, int screen_height, int screen_width, int scene_number) {
         super(context, screen_height, screen_width, scene_number);
         this.scene_number = scene_number;
@@ -73,6 +91,11 @@ public class SceneMenu extends Scene{
 
     }
 
+    /**
+     * Draws the scene on the canvas.
+     *
+     * @param canvas The canvas on which the scene should be drawn.
+     */
     public void Draw(Canvas canvas){
         super.Draw(canvas);
         canvas.drawBitmap(scale_logo, null, logo_rect, null);
@@ -89,6 +112,14 @@ public class SceneMenu extends Scene{
 
     }
 
+    /**
+     * Handles touch events on the scene.
+     *
+     * @param event The MotionEvent representing the touch event.
+     * @return The result of the touch event handling.
+     *         Returns the corresponding scene number based on the touched button or the result from the super class's onTouchEvent.
+     *         Returns -1 if no button was touched and no result was obtained from the super class's onTouchEvent.
+     */
     public int onTouchEvent(MotionEvent event){
         int x = (int) event.getX();
         int y = (int) event.getY();

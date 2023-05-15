@@ -27,12 +27,7 @@ public class JoyStick {
 
     // BUILDER
 
-    /**
-     *
-     * @param scene_game
-     * @param screen_width
-     * @param screen_height
-     */
+
     public JoyStick(SceneGame scene_game, int screen_width, int screen_height) {
         this.scene_game = scene_game;
         this.screen_width = screen_width;

@@ -8,9 +8,21 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.example.galactic_defender.R;
 
+/**
+ * The Scene class represents a scene in the game.
+ * It encapsulates the scene's graphics, touch event handling, and physics update.
+ * Each scene has a unique scene number and can be drawn on a canvas.
+ * The scene can also handle touch events and provide information about the touch event handling
+ * result.
+ *
+ * @author [Andres Licona]
+ * @version [1.0]
+ * @since [05-04-2023]
+ */
 public class Scene {
 
     Context context;
@@ -21,10 +33,15 @@ public class Scene {
     public int scene_number = -1;
     int screen_height, screen_width;
     int BACKGROUND = Color.parseColor("#2E5266");
-    int TITLE_COLOR = Color.parseColor("#D3D0CB");
 
-
-
+    /**
+     * Constructs an instance of the Scene class.
+     *
+     * @param context The context of the application.
+     * @param screen_height The height of the screen.
+     * @param screen_width The width of the screen.
+     * @param scene_number The number identifying the scene.
+     */
     public Scene(Context context, int screen_height, int screen_width, int scene_number) {
         this.context = context;
         this.scene_number = scene_number;
@@ -45,6 +62,11 @@ public class Scene {
                 , screen_height/12+50);
     }
 
+    /**
+     * Draws the scene on the canvas.
+     *
+     * @param canvas The canvas on which the scene should be drawn.
+     */
     public void Draw(Canvas canvas) {
         canvas.drawColor(BACKGROUND);
         if (scene_number != 1 && scene_number != 3) {
@@ -52,10 +74,22 @@ public class Scene {
         }
     }
 
+    /**
+     * Updates the physics of the scene.
+     * This function is responsible for handling the physics calculations and updating the scene accordingly.
+     * Add any physics-related logic or calculations within this function.
+     */
     public void UpdatePhysics() {
 
     }
 
+    /**
+     * Handles the touch events on the scene.
+     *
+     * @param event The MotionEvent representing the touch event.
+     * @return The result of the touch event handling.
+     *         Returns 1 if the back button was touched (in scenes other than 1 and 3), otherwise returns -1.
+     */
     public int onTouchEvent(MotionEvent event) {
         int x = (int) event.getX();
         int y = (int) event.getY();

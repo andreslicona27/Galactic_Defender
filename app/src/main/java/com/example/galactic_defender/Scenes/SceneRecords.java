@@ -9,10 +9,23 @@ public class SceneRecords extends Scene{
 
     int scene_number = 2;
 
+    /**
+     * Constructs an instance of the SceneRecords class.
+     *
+     * @param context The context of the application.
+     * @param screen_height The height of the screen.
+     * @param screen_width The width of the screen.
+     * @param scene_number The number identifying the scene.
+     */
     public SceneRecords(Context context, int screen_height, int screen_width, int scene_number) {
         super(context, screen_height, screen_width, scene_number);
     }
 
+    /**
+     * Draws the scene on the canvas.
+     *
+     * @param canvas The canvas on which the scene should be drawn.
+     */
     public void Draw(Canvas canvas){
         super.Draw(canvas);
         canvas.drawText(context.getString(R.string.records_title), screen_width/10*5, screen_height/6, title_paint);

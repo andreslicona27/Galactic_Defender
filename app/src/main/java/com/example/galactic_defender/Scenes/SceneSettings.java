@@ -14,9 +14,6 @@ public class SceneSettings extends Scene {
 
     GalacticDefender gd_manager;
     Rect sounds_button, music_button, language_button;
-//    Bitmap sounds_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.sound_on_icon);
-//    Bitmap music_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on_icon);
-//    Bitmap language_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.spanish_icon);
 
     Bitmap sounds_on_icon, sounds_off_icon, music_on_icon, music_off_icon, spanish_icon,
             english_icon;
@@ -27,6 +24,14 @@ public class SceneSettings extends Scene {
     int scene_number = 5;
     int screen_height, screen_width;
 
+    /**
+     * Constructs an instance of the SceneSettings class.
+     *
+     * @param context The context of the application.
+     * @param screen_height The height of the screen.
+     * @param screen_width The width of the screen.
+     * @param scene_number The number identifying the scene.
+     */
     public SceneSettings(Context context, int screen_height, int screen_width, int scene_number) {
         super(context, screen_height, screen_width, scene_number);
         this.scene_number = scene_number;
@@ -71,6 +76,11 @@ public class SceneSettings extends Scene {
                 screen_width/13*9, screen_height/6*4);
     }
 
+    /**
+     * Draws the scene on the canvas.
+     *
+     * @param canvas The canvas on which the scene should be drawn.
+     */
     public void Draw(Canvas canvas) {
         super.Draw(canvas);
         canvas.drawText(context.getString(R.string.settings_title), screen_width/10*5, screen_height/6,
@@ -81,6 +91,15 @@ public class SceneSettings extends Scene {
         canvas.drawBitmap(gd_manager.language_button_image, null, language_button, null);
     }
 
+
+    /**
+     * Handles touch events on the scene.
+     *
+     * @param event The MotionEvent representing the touch event.
+     * @return The result of the touch event handling.
+     *         Returns the corresponding scene number based on the touched button or the result from the super class's onTouchEvent.
+     *         Returns the current scene number if no button was touched.
+     */
     public int onTouchEvent(MotionEvent event) {
         int x = (int) event.getX();
         int y = (int) event.getY();
@@ -91,30 +110,28 @@ public class SceneSettings extends Scene {
         }
 
         if (sounds_button.contains(x, y)) {
-            gd_manager.sounds_button_image = (gd_manager.sounds_button_image.equals(sounds_on_icon) ? sounds_off_icon
+            GalacticDefender.sounds_button_image = (GalacticDefender.sounds_button_image.equals(sounds_on_icon) ? sounds_off_icon
                     : sounds_on_icon);
 
         }
         if (music_button.contains(x, y)) {
-            if(gd_manager.music_button_image.equals(music_on_icon)){
-                gd_manager.music_button_image = music_off_icon;
-                gd_manager.background_music.stop();
+            if(GalacticDefender.music_button_image.equals(music_on_icon)){
+                GalacticDefender.music_button_image = music_off_icon;
+                GalacticDefender.background_music.stop();
             } else {
-                gd_manager.music_button_image = music_on_icon;
-                gd_manager.background_music.start();
+                GalacticDefender.music_button_image = music_on_icon;
+                GalacticDefender.background_music.start();
             }
         }
         if (language_button.contains(x, y)) {
-            if(gd_manager.language_button_image.equals(spanish_icon)){
-                gd_manager.language_button_image = english_icon;
+            if(GalacticDefender.language_button_image.equals(spanish_icon)){
+                GalacticDefender.language_button_image = english_icon;
                 gd_manager.ChangeLanguage("es");
             } else {
-                gd_manager.language_button_image = spanish_icon;
+                GalacticDefender.language_button_image = spanish_icon;
                 gd_manager.ChangeLanguage("en");
             }
-
         }
-
         return this.scene_number;
     }
 }

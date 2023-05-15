@@ -32,7 +32,6 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
 
     SurfaceHolder surface_holder;
     Context context;
-    public MediaPlayer background_music;
     Scene current_scene;
     Hilo game_thread;
     Handler handler;
@@ -42,10 +41,17 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
     boolean thread_working = false; // Control of the thread
 
     /////////////// OTHER CLASSES USES /////////////////
-    public Bitmap sounds_button_image;
-    public Bitmap music_button_image;
-    public Bitmap language_button_image;
+    public static MediaPlayer background_music;
+    public static Bitmap sounds_button_image;
+    public static Bitmap music_button_image;
+    public static Bitmap language_button_image;
 
+
+    /**
+     * Constructs an instance of the SceneSettings class.
+     *
+     * @param context The context of the application.
+     */
     public GalacticDefender(Context context) {
         super(context);
         this.surface_holder = getHolder();
@@ -53,26 +59,23 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         this.context = context;
         this.game_thread = new Hilo();
         this.handler = new Handler();
-        this.background_music = MediaPlayer.create(this.getContext(), R.raw.background_music);
-        this.background_music.setLooping(true);
-        this.background_music.start();
 
-        this.sounds_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.sound_on_icon);
-        this.music_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on_icon);
-        this.language_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.spanish_icon);
-//        ChangeLanguage("en");
+        // Background Music
+        background_music = MediaPlayer.create(this.getContext(), R.raw.background_music);
+        background_music.setLooping(true);
+        background_music.start();
+
+        sounds_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.sound_on_icon);
+        music_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on_icon);
+        language_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.spanish_icon);
+        ChangeLanguage("en");
     }
 
 
     ////////////////////////////  OVERRIDE FUNCTIONS  ////////////////////////////
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-//        game_thread.SetWorking(true);
-//        if (game_thread.getState() == Thread.State.NEW) game_thread.start();
-//        if (game_thread.getState() == Thread.State.TERMINATED) {
-//            game_thread = new Hilo();
-//            game_thread.start();
-//        }
+
     }
 
     @Override
@@ -93,7 +96,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         this.playing = false;
-        this.background_music.stop();
+        background_music.stop();
         try {
             game_thread.join();
         } catch (InterruptedException e) {
@@ -151,7 +154,8 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
 
     /**
      * Sets the language of the system
-     * @param cod_language identification code of the new language
+     *
+     * @param cod_language Identification code of the new language
      */
     public void ChangeLanguage(String cod_language) {
         Log.i("TAG", "we change the language");

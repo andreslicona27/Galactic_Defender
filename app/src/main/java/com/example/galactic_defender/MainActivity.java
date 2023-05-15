@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Vibrate() {
-        Log.i("tag", "we have a null vibrate");
+        Log.i("tag", "null vibrate");
         if (vibrator != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 this.vibrator.vibrate(VibrationEffect.createOneShot(300,

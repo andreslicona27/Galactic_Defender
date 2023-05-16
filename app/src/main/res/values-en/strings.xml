@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Galactic_Defender</string>
+    <string name="app_name">GD</string>
     <string name="credits_title">Credits</string>
     <string name="gameOver_title">Game Over</string>
     <string name="information_title">How To Play</string>

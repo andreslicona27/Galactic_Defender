@@ -81,14 +81,14 @@ public class SceneSettings extends Scene {
      *
      * @param canvas The canvas on which the scene should be drawn.
      */
-    public void Draw(Canvas canvas) {
-        super.Draw(canvas);
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
         canvas.drawText(context.getString(R.string.settings_title), screen_width/10*5, screen_height/6,
                 title_paint);
 
-        canvas.drawBitmap(gd_manager.sounds_button_image, null, sounds_button, null);
-        canvas.drawBitmap(gd_manager.music_button_image, null, music_button, null);
-        canvas.drawBitmap(gd_manager.language_button_image, null, language_button, null);
+        canvas.drawBitmap(GalacticDefender.sounds_button_image, null, sounds_button, null);
+        canvas.drawBitmap(GalacticDefender.music_button_image, null, music_button, null);
+        canvas.drawBitmap(GalacticDefender.language_button_image, null, language_button, null);
     }
 
 
@@ -126,10 +126,10 @@ public class SceneSettings extends Scene {
         if (language_button.contains(x, y)) {
             if(GalacticDefender.language_button_image.equals(spanish_icon)){
                 GalacticDefender.language_button_image = english_icon;
-                gd_manager.ChangeLanguage("es");
+                gd_manager.changeLanguage("es");
             } else {
                 GalacticDefender.language_button_image = spanish_icon;
-                gd_manager.ChangeLanguage("en");
+                gd_manager.changeLanguage("en");
             }
         }
         return this.scene_number;

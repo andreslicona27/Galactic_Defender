@@ -7,8 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.view.MotionEvent;
-import android.view.View;
 
 import com.example.galactic_defender.R;
 
@@ -26,6 +26,7 @@ import com.example.galactic_defender.R;
 public class Scene {
 
     Context context;
+    Typeface font;
     Paint title_paint;
     Rect back_button;
     Bitmap back_button_image;
@@ -48,12 +49,14 @@ public class Scene {
         this.screen_height = screen_height;
         this.screen_width = screen_width;
 
+        this.font = Typeface.createFromAsset(context.getAssets(), "font/russo_one.ttf");
         this.title_paint = new Paint();
         this.title_paint.setAlpha(240);
-        this.title_paint.setTextSize(screen_height/10);
+        this.title_paint.setTypeface(font);
         this.title_paint.setAntiAlias(true);
-        this.title_paint.setTextAlign(Paint.Align.CENTER);
         this.title_paint.setColor(Color.WHITE);
+        this.title_paint.setTextSize(screen_height/10);
+        this.title_paint.setTextAlign(Paint.Align.CENTER);
 
         this.back_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.home_icon);
         this.scale_button_image = Bitmap.createScaledBitmap(this.back_button_image,
@@ -67,7 +70,7 @@ public class Scene {
      *
      * @param canvas The canvas on which the scene should be drawn.
      */
-    public void Draw(Canvas canvas) {
+    public void draw(Canvas canvas) {
         canvas.drawColor(BACKGROUND);
         if (scene_number != 1 && scene_number != 3) {
             canvas.drawBitmap(scale_button_image, null, back_button, null);
@@ -79,7 +82,7 @@ public class Scene {
      * This function is responsible for handling the physics calculations and updating the scene accordingly.
      * Add any physics-related logic or calculations within this function.
      */
-    public void UpdatePhysics() {
+    public void updatePhysics() {
 
     }
 

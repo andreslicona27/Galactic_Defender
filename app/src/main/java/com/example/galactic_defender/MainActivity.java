@@ -8,13 +8,13 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
-import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.view.WindowManager;
+import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,22 +55,4 @@ public class MainActivity extends AppCompatActivity {
         galactic_defender.setKeepScreenOn(true);
         setContentView(galactic_defender);
     }
-
-    public void Vibrate() {
-        Log.i("tag", "null vibrate");
-        if (vibrator != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                this.vibrator.vibrate(VibrationEffect.createOneShot(300,
-                        VibrationEffect.DEFAULT_AMPLITUDE));
-
-                Log.i("tag", "we vibrate");
-            } else {
-                this.vibrator.vibrate(500);
-                Log.i("tag", "you vibrate");
-            }
-        }
-    }
-
-
-
 }

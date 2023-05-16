@@ -9,7 +9,6 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -68,7 +67,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         sounds_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.sound_on_icon);
         music_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on_icon);
         language_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.spanish_icon);
-        ChangeLanguage("en");
+        changeLanguage("en");
     }
 
 
@@ -114,7 +113,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
 
         if (action == MotionEvent.ACTION_DOWN) {
             new_scene = current_scene.onTouchEvent(event);
-            ChangeScene(new_scene);
+            changeScene(new_scene);
             return true;
         }
         return super.onTouchEvent(event);
@@ -122,7 +121,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
 
 
     ////////////////////////////  EXTRA FUNCTIONS  ////////////////////////////
-    public void ChangeScene(int change_scene) {
+    public void changeScene(int change_scene) {
         if (current_scene.scene_number != change_scene) {
             switch (change_scene) {
                 case 1:
@@ -157,8 +156,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
      *
      * @param cod_language Identification code of the new language
      */
-    public void ChangeLanguage(String cod_language) {
-        Log.i("TAG", "we change the language");
+    public void changeLanguage(String cod_language) {
         Resources res=context.getResources();
         DisplayMetrics dm=res.getDisplayMetrics();
         android.content.res.Configuration conf=res.getConfiguration();
@@ -182,8 +180,8 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
                     if (canvas == null) canvas = surface_holder.lockCanvas();
 
                     synchronized (surface_holder) {
-                        current_scene.UpdatePhysics();
-                        current_scene.Draw(canvas);
+                        current_scene.updatePhysics();
+                        current_scene.draw(canvas);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

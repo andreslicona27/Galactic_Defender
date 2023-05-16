@@ -52,26 +52,26 @@ public class FireButton {
     public Bitmap getShot(){
         return this.scale_shot_image;
     }
-    public int GetShotWidth(){
+    public int getShotWidth(){
         return this.scale_shot_image.getWidth();
     }
-    public int GetShotHeight(){
+    public int getShotHeight(){
         return this.scale_shot_image.getHeight();
     }
 
     // FUNCTIONS
-    public void DrawFireButton(Canvas canvas){
+    public void drawFireButton(Canvas canvas){
         canvas.drawCircle((float)this.screen_width/20*18, (float)this.screen_height/20*16, radius
                 , this.paint);
     }
 
-    public void FireShot(Canvas canvas, Point ship_position, int ship_width, int ship_height){
+    public void fireShot(Canvas canvas, Point ship_position, int ship_width, int ship_height){
         int pos_x = ship_position.x - ship_width/2 - this.scale_shot_image.getWidth();
         int pos_y = ship_position.y + ship_height + this.scale_shot_image.getHeight();
         canvas.drawBitmap(this.scale_shot_image, pos_x, pos_y, null);
     }
 
-    public boolean TouchEvent(MotionEvent event){
+    public boolean touchEvent(MotionEvent event){
         if(event.getAction() == MotionEvent.ACTION_DOWN){
             float x = event.getRawX();
             float y = event.getRawY();

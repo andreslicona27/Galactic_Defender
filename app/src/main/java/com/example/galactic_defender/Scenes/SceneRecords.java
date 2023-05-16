@@ -26,8 +26,8 @@ public class SceneRecords extends Scene{
      *
      * @param canvas The canvas on which the scene should be drawn.
      */
-    public void Draw(Canvas canvas){
-        super.Draw(canvas);
+    public void draw(Canvas canvas){
+        super.draw(canvas);
         canvas.drawText(context.getString(R.string.records_title), screen_width/10*5, screen_height/6, title_paint);
     }
 }

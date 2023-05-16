@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Galactic_Defender</string>
+    <string name="app_name">GD</string>
     <string name="credits_title">Créditos</string>
     <string name="gameOver_title">Fin Del Juego</string>
     <string name="information_title">Como Jugar</string>

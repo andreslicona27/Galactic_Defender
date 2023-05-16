@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
@@ -96,8 +95,8 @@ public class SceneMenu extends Scene{
      *
      * @param canvas The canvas on which the scene should be drawn.
      */
-    public void Draw(Canvas canvas){
-        super.Draw(canvas);
+    public void draw(Canvas canvas){
+        super.draw(canvas);
         canvas.drawBitmap(scale_logo, null, logo_rect, null);
         title_paint.setTextSize(screen_height/6);
         canvas.drawText("Galactic", screen_width/8*5, screen_height/7*2, title_paint);

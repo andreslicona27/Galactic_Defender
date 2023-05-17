@@ -1,14 +1,21 @@
 package com.example.galactic_defender.Characters;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+
+import java.io.InputStream;
 
 public class Character {
 
     Context context;
+    InputStream input_stream;
+    AssetManager assets_manager;
+    Matrix matrix;
     Paint border_paint;
     int screen_width, screen_height;
 
@@ -16,6 +23,7 @@ public class Character {
         this.context = context;
         this.screen_width = screen_width;
         this.screen_height = screen_height;
+        this.assets_manager = context.getAssets();
 
         this.border_paint = new Paint();
         this.border_paint.setColor(Color.RED);
@@ -31,5 +39,9 @@ public class Character {
 
     public boolean collision(Rect hide_box){
         return false;
+    }
+
+    public void updateAnimation(){
+
     }
 }

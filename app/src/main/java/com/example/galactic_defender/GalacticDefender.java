@@ -1,6 +1,7 @@
 package com.example.galactic_defender;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,6 +10,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -25,12 +27,16 @@ import com.example.galactic_defender.Scenes.ScenePause;
 import com.example.galactic_defender.Scenes.SceneRecords;
 import com.example.galactic_defender.Scenes.SceneSettings;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
 
 public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callback {
 
     SurfaceHolder surface_holder;
     Context context;
+    InputStream input_stream;
+    AssetManager assets_manager;
     Scene current_scene;
     Hilo game_thread;
     Handler handler;
@@ -64,9 +70,22 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         background_music.setLooping(true);
         background_music.start();
 
-        sounds_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.sound_on_icon);
-        music_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.music_on_icon);
-        language_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.spanish_icon);
+        try{
+            this.assets_manager = context.getAssets();
+            this.input_stream = assets_manager.open("button_icons/sound_on_icon.png");
+            sounds_button_image = BitmapFactory.decodeStream(input_stream);
+
+            this.input_stream = assets_manager.open("button_icons/music_on_icon.png");
+            music_button_image = BitmapFactory.decodeStream(input_stream);
+
+            this.input_stream = assets_manager.open("button_icons/english_icon.png");
+            language_button_image = BitmapFactory.decodeStream(input_stream);
+
+        } catch (IOException e) {
+            Log.i("assets", "problem getting the asset");
+            throw new RuntimeException(e);
+        }
+
         changeLanguage("en");
     }
 

@@ -1,6 +1,7 @@
 package com.example.galactic_defender.Scenes;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,9 +9,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.MotionEvent;
 
+import androidx.core.content.ContextCompat;
+
 import com.example.galactic_defender.R;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * The Scene class represents a scene in the game.
@@ -26,6 +33,8 @@ import com.example.galactic_defender.R;
 public class Scene {
 
     Context context;
+    InputStream input_stream;
+    AssetManager assets_manager;
     Typeface font;
     Paint title_paint;
     Rect back_button;
@@ -33,7 +42,6 @@ public class Scene {
     Bitmap scale_button_image;
     public int scene_number = -1;
     int screen_height, screen_width;
-    int BACKGROUND = Color.parseColor("#2E5266");
 
     /**
      * Constructs an instance of the Scene class.
@@ -55,10 +63,19 @@ public class Scene {
         this.title_paint.setTypeface(font);
         this.title_paint.setAntiAlias(true);
         this.title_paint.setColor(Color.WHITE);
-        this.title_paint.setTextSize(screen_height/10);
+        this.title_paint.setTextSize((float)screen_height/10);
         this.title_paint.setTextAlign(Paint.Align.CENTER);
 
-        this.back_button_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.home_icon);
+        try{
+            this.assets_manager = context.getAssets();
+            this.input_stream = assets_manager.open("button_icons/home_icon.png");
+            this.back_button_image = BitmapFactory.decodeStream(input_stream);
+
+        } catch (IOException e) {
+            Log.i("assets", "problem getting the asset");
+            throw new RuntimeException(e);
+        }
+
         this.scale_button_image = Bitmap.createScaledBitmap(this.back_button_image,
                 screen_width/8, screen_width/8, true);
         this.back_button = new Rect(screen_width/20, screen_height/12, screen_width/20+50
@@ -71,7 +88,7 @@ public class Scene {
      * @param canvas The canvas on which the scene should be drawn.
      */
     public void draw(Canvas canvas) {
-        canvas.drawColor(BACKGROUND);
+        canvas.drawColor(ContextCompat.getColor(context, R.color.main_blue));
         if (scene_number != 1 && scene_number != 3) {
             canvas.drawBitmap(scale_button_image, null, back_button, null);
         }

@@ -5,9 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.galactic_defender.R;
+
+import java.io.IOException;
 
 /**
  * The SceneMenu class represents the menu scene in the game.
@@ -54,15 +57,26 @@ public class SceneMenu extends Scene{
                 screen_height/7*4);
 
         // Button images
-        this.records_image = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.trophy_icon);
-        this.information_image = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.information_icon);
-        this.play_image = BitmapFactory.decodeResource(context.getResources(), R.drawable.play_icon);
-        this.credits_image = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.credits_icon);
-        this.settings_image = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.settings_icon);
+        try{
+            this.input_stream = assets_manager.open("button_icons/records_icon.png");
+            this.records_image = BitmapFactory.decodeStream(input_stream);
+
+            this.input_stream = assets_manager.open("button_icons/information_icon.png");
+            this.information_image = BitmapFactory.decodeStream(input_stream);
+
+            this.input_stream = assets_manager.open("button_icons/play_icon.png");
+            this.play_image = BitmapFactory.decodeStream(input_stream);
+
+            this.input_stream = assets_manager.open("button_icons/credits_icon.png");
+            this.credits_image = BitmapFactory.decodeStream(input_stream);
+
+            this.input_stream = assets_manager.open("button_icons/settings_icon.png");
+            this.settings_image = BitmapFactory.decodeStream(input_stream);
+
+        } catch (IOException e) {
+            Log.i("assets", "problem getting the asset");
+            throw new RuntimeException(e);
+        }
 
         // Button scale images
         this.scale_records_image = Bitmap.createScaledBitmap(this.records_image,
@@ -98,9 +112,9 @@ public class SceneMenu extends Scene{
     public void draw(Canvas canvas){
         super.draw(canvas);
         canvas.drawBitmap(scale_logo, null, logo_rect, null);
-        title_paint.setTextSize(screen_height/6);
-        canvas.drawText("Galactic", screen_width/8*5, screen_height/7*2, title_paint);
-        canvas.drawText("Defender", screen_width/8*5, screen_height/7*3+50, title_paint);
+        title_paint.setTextSize((float) screen_height/6);
+        canvas.drawText("Galactic", (float) screen_width/8*5, (float) screen_height/7*2, title_paint);
+        canvas.drawText("Defender", (float) screen_width/8*5, (float) screen_height/7*3+50, title_paint);
 
         canvas.drawBitmap(scale_records_image, null, records_button, null);
         canvas.drawBitmap(scale_information_image, null, information_button, null);

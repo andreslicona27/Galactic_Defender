@@ -5,10 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.galactic_defender.GalacticDefender;
 import com.example.galactic_defender.R;
+
+import java.io.IOException;
 
 public class SceneSettings extends Scene {
 
@@ -40,18 +43,29 @@ public class SceneSettings extends Scene {
         this.gd_manager = new GalacticDefender(context);
 
         // Button Images
-        this.sounds_on_icon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.sound_on_icon);
-        this.sounds_off_icon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.sound_off_icon);
-        this.music_on_icon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.music_on_icon);
-        this.music_off_icon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.music_off_icon);
-        this.spanish_icon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.spanish_icon);
-        this.english_icon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.english_icon);
+        try{
+            this.input_stream = assets_manager.open("button_icons/sound_on_icon.png");
+            this.sounds_on_icon = BitmapFactory.decodeStream(input_stream);
+
+            this.input_stream = assets_manager.open("button_icons/sound_off_icon.png");
+            this.sounds_off_icon = BitmapFactory.decodeStream(input_stream);
+
+            this.input_stream = assets_manager.open("button_icons/music_on_icon.png");
+            this.music_on_icon = BitmapFactory.decodeStream(input_stream);
+
+            this.input_stream = assets_manager.open("button_icons/music_off_icon.png");
+            this.music_off_icon = BitmapFactory.decodeStream(input_stream);
+
+            this.input_stream = assets_manager.open("button_icons/spanish_icon.png");
+            this.spanish_icon = BitmapFactory.decodeStream(input_stream);
+
+            this.input_stream = assets_manager.open("button_icons/english_icon.png");
+            this.english_icon = BitmapFactory.decodeStream(input_stream);
+
+        } catch (IOException e) {
+            Log.i("assets", "problem getting the asset");
+            throw new RuntimeException(e);
+        }
 
         // Button scale images
         this.scale_sounds_on_image = Bitmap.createScaledBitmap(this.sounds_on_icon,

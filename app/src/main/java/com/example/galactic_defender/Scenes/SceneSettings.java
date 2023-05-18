@@ -138,12 +138,13 @@ public class SceneSettings extends Scene {
             }
         }
         if (language_button.contains(x, y)) {
-            if(GalacticDefender.language_button_image.equals(spanish_icon)){
-                GalacticDefender.language_button_image = english_icon;
+            if(GalacticDefender.language.equals("en")){
                 gd_manager.changeLanguage("es");
+                GalacticDefender.language_button_image = english_icon;
             } else {
-                GalacticDefender.language_button_image = spanish_icon;
                 gd_manager.changeLanguage("en");
+                GalacticDefender.language_button_image = spanish_icon;
+                GalacticDefender.language = GalacticDefender.configuration.locale.getLanguage();
             }
         }
         return this.scene_number;

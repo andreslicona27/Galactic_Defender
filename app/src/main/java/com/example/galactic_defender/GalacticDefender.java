@@ -2,6 +2,7 @@ package com.example.galactic_defender;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,6 +47,8 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
     boolean thread_working = false; // Control of the thread
 
     /////////////// OTHER CLASSES USES /////////////////
+    public static Configuration configuration;
+    public static String language;
     public static MediaPlayer background_music;
     public static Bitmap sounds_button_image;
     public static Bitmap music_button_image;
@@ -65,6 +68,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         this.game_thread = new Hilo();
         this.handler = new Handler();
 
+
         // Background Music
         background_music = MediaPlayer.create(this.getContext(), R.raw.background_music);
         background_music.setLooping(true);
@@ -78,15 +82,19 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
             this.input_stream = assets_manager.open("button_icons/music_on_icon.png");
             music_button_image = BitmapFactory.decodeStream(input_stream);
 
-            this.input_stream = assets_manager.open("button_icons/english_icon.png");
-            language_button_image = BitmapFactory.decodeStream(input_stream);
+            this.input_stream = assets_manager.open("button_icons/spanish_icon.png");
+//            language_button_image = BitmapFactory.decodeStream(input_stream);
 
         } catch (IOException e) {
             Log.i("assets", "problem getting the asset");
             throw new RuntimeException(e);
         }
 
+        // Language
         changeLanguage("en");
+        this.configuration = getResources().getConfiguration();
+        language = configuration.locale.getLanguage();
+        language_button_image = BitmapFactory.decodeStream(input_stream);
     }
 
 

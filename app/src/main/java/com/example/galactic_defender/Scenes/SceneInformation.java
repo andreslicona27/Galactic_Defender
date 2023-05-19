@@ -4,14 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.util.Log;
-import android.view.MotionEvent;
 
+import com.example.galactic_defender.GalacticDefender;
 import com.example.galactic_defender.R;
-import com.example.galactic_defender.Utilities.Background;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * The SceneInformation class represents the information scene in the game.
@@ -26,14 +25,9 @@ import java.util.ArrayList;
  */
 public class SceneInformation extends Scene {
 
-    Background[] english_instructions = new Background[3];
-    Background[] spanish_instructions = new Background[3];
-    Background bg_english1, bg_english2, bg_english3;
-    Bitmap english_asset1, english_asset2, english_asset3;
-    Bitmap spanish_asset1, spanish_asset2, spanish_asset3;
+    Bitmap english_asset, spanish_asset;
+    Bitmap information_english, information_spanish;
     int scene_number = 8;
-    int current_image = 0;
-    boolean move = false;
 
 
     /**
@@ -48,38 +42,20 @@ public class SceneInformation extends Scene {
         super(context, screen_height, screen_width, scene_number);
 
         try {
-            this.input_stream = assets_manager.open("images/how_to_play/htp_english1.png");
-            this.english_asset1 = BitmapFactory.decodeStream(input_stream);
-            this.input_stream = assets_manager.open("images/how_to_play/htp_english2.png");
-            this.english_asset2 = BitmapFactory.decodeStream(input_stream);
-            this.input_stream = assets_manager.open("images/how_to_play/htp_english3.png");
-            this.english_asset3 = BitmapFactory.decodeStream(input_stream);
-
-            this.input_stream = assets_manager.open("images/how_to_play/htp_spanish1.png");
-            this.spanish_asset1 = BitmapFactory.decodeStream(input_stream);
-            this.input_stream = assets_manager.open("images/how_to_play/htp_spanish2.png");
-            this.spanish_asset2 = BitmapFactory.decodeStream(input_stream);
-            this.input_stream = assets_manager.open("images/how_to_play/htp_spanish3.png");
-            this.spanish_asset3 = BitmapFactory.decodeStream(input_stream);
+            this.input_stream = assets_manager.open("images/how_to_play/information_english.png");
+            this.english_asset = BitmapFactory.decodeStream(input_stream);
+            this.input_stream = assets_manager.open("images/how_to_play/information_spanish.png");
+            this.spanish_asset = BitmapFactory.decodeStream(input_stream);
 
         } catch (IOException e) {
             Log.i("assets", "problem getting the asset");
             throw new RuntimeException(e);
         }
 
-        this.bg_english1 = new Background(Bitmap.createScaledBitmap(this.english_asset1, screen_width + 10, screen_height + 10, true),
-                (float) screen_height / 5,
-                (float) screen_width);
-        this.bg_english2 = new Background(Bitmap.createScaledBitmap(this.english_asset2, screen_width + 10, screen_height + 10, true),
-                (float) screen_height,
-                (float) screen_width);
-        this.bg_english3 = new Background(Bitmap.createScaledBitmap(this.english_asset3, screen_width + 10, screen_height + 10, true),
-                (float) screen_height,
-                (float) screen_width);
-
-        this.english_instructions[0] = bg_english1;
-        this.english_instructions[1] = bg_english2;
-        this.english_instructions[2] = bg_english3;
+        this.information_english = Bitmap.createScaledBitmap(this.english_asset, screen_width+10, screen_height+10,
+                true);
+        this.information_spanish = Bitmap.createScaledBitmap(this.spanish_asset, screen_width+10,
+                screen_height+10, true);
     }
 
     /**
@@ -91,25 +67,17 @@ public class SceneInformation extends Scene {
         super.draw(canvas);
         canvas.drawText(context.getString(R.string.information_title), (float) screen_width / 10 * 5,
                 (float) screen_height / 6, title_paint);
-
-        if (move) {
-            canvas.drawBitmap(english_instructions[0].image, english_instructions[0].position.x,
-                    english_instructions[0].position.y, null);
+        if(GalacticDefender.language.equals("en")){
+            canvas.drawBitmap(this.information_english, null, new Rect(canvas.getWidth()/10,
+                    canvas.getHeight()/5,
+                    canvas.getWidth() - canvas.getWidth()/10,
+                    canvas.getHeight()), null);
+        } else {
+            canvas.drawBitmap(this.information_spanish, null, new Rect(0, canvas.getHeight()/5, canvas.getWidth(),
+                    canvas.getHeight()), null);
         }
+
     }
 
-    @Override
-    public int onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            move = true;
-            if(current_image >= english_instructions.length - 1){
-                current_image = 0;
-            }
-            current_image++;
-        }
-        if(event.getAction() == MotionEvent.ACTION_UP){
-            move = false;
-        }
-        return 0;
-    }
+
 }

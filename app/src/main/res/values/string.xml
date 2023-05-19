@@ -6,4 +6,6 @@
     <string name="pause_title">Pausa</string>
     <string name="records_title">Registros</string>
     <string name="settings_title">Ajustes</string>
+    <string name="home_button">Menú</string>
+    <string name="resume_button">Reanudar</string>
 </resources>

@@ -24,7 +24,6 @@ import com.example.galactic_defender.Scenes.SceneGame;
 import com.example.galactic_defender.Scenes.SceneGameOver;
 import com.example.galactic_defender.Scenes.SceneInformation;
 import com.example.galactic_defender.Scenes.SceneMenu;
-import com.example.galactic_defender.Scenes.ScenePause;
 import com.example.galactic_defender.Scenes.SceneRecords;
 import com.example.galactic_defender.Scenes.SceneSettings;
 
@@ -53,6 +52,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
     public static Bitmap sounds_button_image;
     public static Bitmap music_button_image;
     public static Bitmap language_button_image;
+    public static int score = 0;
 
 
     /**
@@ -167,8 +167,6 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
                     current_scene = new SceneSettings(context, screen_height, screen_width, 5);
                     break;
                 case 6:
-                    current_scene = new ScenePause(context, screen_height, screen_width, 6);
-                    break;
                 case 7:
                     current_scene = new SceneGameOver(context, screen_height, screen_width, 7);
                     break;

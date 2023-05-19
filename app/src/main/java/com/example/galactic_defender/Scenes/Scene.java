@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.media.VolumeShaper;
 import android.util.Log;
@@ -38,7 +39,9 @@ public class Scene {
     AssetManager assets_manager;
     Typeface font;
     Paint title_paint;
+    Paint pause_paint;
     Rect back_button;
+    RectF base;
     Bitmap back_button_image;
     Bitmap scale_button_image;
     public int scene_number = -1;
@@ -67,6 +70,10 @@ public class Scene {
         this.title_paint.setTextSize((float)screen_height/10);
         this.title_paint.setTextAlign(Paint.Align.CENTER);
 
+        this.pause_paint = new Paint();
+        base = new RectF((float)screen_width/5, (float)screen_height/5, (float)screen_width/5*4,
+                (float)screen_height/5*4);
+
         try{
             this.assets_manager = context.getAssets();
             this.input_stream = assets_manager.open("button_icons/home_icon.png");
@@ -81,6 +88,8 @@ public class Scene {
                 screen_width/8, screen_width/8, true);
         this.back_button = new Rect(screen_width/20, screen_height/12, screen_width/20+50
                 , screen_height/12+50);
+
+
     }
 
     /**
@@ -120,5 +129,22 @@ public class Scene {
             }
         }
         return -1;
+    }
+
+    public void pause(Canvas canvas){
+        // Rectangle
+        this.pause_paint.setStyle(Paint.Style.FILL);
+        this.title_paint.setTextAlign(Paint.Align.CENTER);
+        this.pause_paint.setColor(ContextCompat.getColor(context, R.color.secondary_blue));
+        canvas.drawRoundRect(base, 20f, 20f,pause_paint);
+
+        // Title Text
+        this.pause_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
+        this.pause_paint.setTypeface(font);
+        this.pause_paint.setTextSize((float)screen_height/8);
+        canvas.drawText((String) context.getText(R.string.pause_title), (float)screen_width/5*2,
+                (float)screen_height/5*2,
+                this.pause_paint);
+
     }
 }

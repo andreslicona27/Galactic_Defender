@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">GD</string>
     <string name="credits_title">Créditos</string>
-    <string name="gameOver_title">Fin Del Juego</string>
     <string name="information_title">Como Jugar</string>
-    <string name="pause_title">Pausa</string>
     <string name="records_title">Registros</string>
     <string name="settings_title">Ajustes</string>
+    <string name="pause_title">Pausa</string>
+    <string name="game_over_title">Fin del Juego</string>
+
     <string name="home_button">Menú</string>
     <string name="resume_button">Reanudar</string>
+    <string name="play_button">Jugar</string>
 </resources>

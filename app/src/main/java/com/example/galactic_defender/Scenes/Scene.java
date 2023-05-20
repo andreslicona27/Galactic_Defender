@@ -10,12 +10,12 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.media.VolumeShaper;
 import android.util.Log;
 import android.view.MotionEvent;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.galactic_defender.GalacticDefender;
 import com.example.galactic_defender.R;
 
 import java.io.IOException;
@@ -39,21 +39,23 @@ public class Scene {
     AssetManager assets_manager;
     Typeface font;
     Paint title_paint;
-    Paint pause_paint;
+    Paint window_paint;
     Rect back_button;
     RectF base;
+    RectF home_button, resume_button;
     Bitmap back_button_image;
     Bitmap scale_button_image;
     public int scene_number = -1;
     int screen_height, screen_width;
+    boolean game_over = false;
 
     /**
      * Constructs an instance of the Scene class.
      *
-     * @param context The context of the application.
+     * @param context       The context of the application.
      * @param screen_height The height of the screen.
-     * @param screen_width The width of the screen.
-     * @param scene_number The number identifying the scene.
+     * @param screen_width  The width of the screen.
+     * @param scene_number  The number identifying the scene.
      */
     public Scene(Context context, int screen_height, int screen_width, int scene_number) {
         this.context = context;
@@ -67,14 +69,14 @@ public class Scene {
         this.title_paint.setTypeface(font);
         this.title_paint.setAntiAlias(true);
         this.title_paint.setColor(Color.WHITE);
-        this.title_paint.setTextSize((float)screen_height/10);
+        this.title_paint.setTextSize((float) screen_height / 10);
         this.title_paint.setTextAlign(Paint.Align.CENTER);
 
-        this.pause_paint = new Paint();
-        base = new RectF((float)screen_width/5, (float)screen_height/5, (float)screen_width/5*4,
-                (float)screen_height/5*4);
+        this.window_paint = new Paint();
+        base = new RectF((float) screen_width / 5, (float) screen_height / 5, (float) screen_width / 5 * 4,
+                (float) screen_height / 5 * 4);
 
-        try{
+        try {
             this.assets_manager = context.getAssets();
             this.input_stream = assets_manager.open("button_icons/home_icon.png");
             this.back_button_image = BitmapFactory.decodeStream(input_stream);
@@ -85,9 +87,9 @@ public class Scene {
         }
 
         this.scale_button_image = Bitmap.createScaledBitmap(this.back_button_image,
-                screen_width/8, screen_width/8, true);
-        this.back_button = new Rect(screen_width/20, screen_height/12, screen_width/20+50
-                , screen_height/12+50);
+                screen_width / 8, screen_width / 8, true);
+        this.back_button = new Rect(screen_width / 20, screen_height / 12, screen_width / 20 + 50
+                , screen_height / 12 + 50);
 
 
     }
@@ -118,33 +120,63 @@ public class Scene {
      *
      * @param event The MotionEvent representing the touch event.
      * @return The result of the touch event handling.
-     *         Returns 1 if the back button was touched (in scenes other than 1 and 3), otherwise returns -1.
+     * Returns 1 if the back button was touched (in scenes other than 1 and 3), otherwise returns -1.
      */
     public int onTouchEvent(MotionEvent event) {
         int x = (int) event.getX();
         int y = (int) event.getY();
-        if(scene_number != 1 && scene_number != 3){
-            if(back_button.contains(x, y)){
+        if (scene_number != 1 && scene_number != 3) {
+            if (back_button.contains(x, y)) {
                 return 1;
             }
         }
         return -1;
     }
 
-    public void pause(Canvas canvas){
-        // Rectangle
-        this.pause_paint.setStyle(Paint.Style.FILL);
+    public void onDestroy() {
+
+    }
+
+    public void gameWindow(Canvas canvas, boolean game_over) {
+        this.game_over = game_over;
+        // Base Rectangle
+        this.window_paint.setStyle(Paint.Style.FILL);
         this.title_paint.setTextAlign(Paint.Align.CENTER);
-        this.pause_paint.setColor(ContextCompat.getColor(context, R.color.secondary_blue));
-        canvas.drawRoundRect(base, 20f, 20f,pause_paint);
+        this.window_paint.setColor(ContextCompat.getColor(context, R.color.secondary_blue));
+        canvas.drawRoundRect(base, 20f, 20f, window_paint);
 
         // Title Text
-        this.pause_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
-        this.pause_paint.setTypeface(font);
-        this.pause_paint.setTextSize((float)screen_height/8);
-        canvas.drawText((String) context.getText(R.string.pause_title), (float)screen_width/5*2,
-                (float)screen_height/5*2,
-                this.pause_paint);
+        this.window_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
+        this.window_paint.setTypeface(font);
+        this.window_paint.setTextSize((float) screen_height / 8);
+        if (game_over) {
+            canvas.drawText((String) context.getText(R.string.game_over_title),
+                    (float) screen_width / 5 * 2,
+                    (float) screen_height / 7 * 2, this.window_paint);
+            canvas.drawText(String.valueOf(GalacticDefender.score), (float) screen_width / 5 * 2,
+                    (float) screen_height / 7 * 3,
+                    this.window_paint);
+        } else {
+            canvas.drawText((String) context.getText(R.string.pause_title), (float) screen_width / 5 * 2,
+                    (float) screen_height / 7 * 3, this.window_paint);
+        }
+
+        // Buttons
+        window_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
+        canvas.drawRoundRect(this.home_button, 20f, 20f, window_paint);
+        canvas.drawRoundRect(this.resume_button, 20f, 20f, window_paint);
+
+        // Buttons Text
+        window_paint.setColor(ContextCompat.getColor(context, R.color.secondary_blue));
+        window_paint.setTextSize((float) screen_height / 15);
+        if (!game_over) {
+            canvas.drawText((String) context.getString(R.string.home_button),
+                    (float) screen_width / 7 * 4, (float) screen_height / 12 * 8, window_paint);
+        } else {
+            canvas.drawText((String) context.getString(R.string.home_button), (float) screen_width / 7 * 2, (float) screen_height / 12 * 8, window_paint);
+            canvas.drawText((String) context.getString(R.string.resume_button), (float) screen_width / 7 * 4, (float) screen_height / 12 * 8, window_paint);
+        }
+
 
     }
 }

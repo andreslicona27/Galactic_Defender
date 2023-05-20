@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -17,7 +18,6 @@ import com.example.galactic_defender.Characters.Enemy;
 import com.example.galactic_defender.Characters.Spaceship;
 import com.example.galactic_defender.GalacticDefender;
 import com.example.galactic_defender.R;
-import com.example.galactic_defender.Utilities.Explosion;
 import com.example.galactic_defender.Utilities.JoyStick;
 import com.example.galactic_defender.Utilities.FireButton;
 import com.example.galactic_defender.Utilities.VibrateManager;
@@ -29,10 +29,9 @@ import java.util.Timer;
 
 public class SceneGame extends Scene {
 
+    MediaPlayer enemy_dies, spaceship_explosion, laser_shot;
     Bitmap pause_button_image;
     Rect pause_button;
-    RectF home_button;
-    RectF resume_button;
     Paint score_paint;
     PointF last_touch_difference;
     Timer timer;
@@ -40,7 +39,6 @@ public class SceneGame extends Scene {
     JoyStick joystick;
     FireButton fire_button;
     Spaceship spaceship;
-    Explosion explosion;
     VibrateManager vibrator;
     ArrayList<Enemy> enemies;
     ArrayList<FireButton> spaceship_shots;
@@ -85,6 +83,11 @@ public class SceneGame extends Scene {
         this.score_paint.setTextSize((float)screen_height / 10);
         this.score_paint.setTextAlign(Paint.Align.CENTER);
 
+        // Sound Effects
+        this.enemy_dies = MediaPlayer.create(context.getApplicationContext(), R.raw.alien_dead);
+        this.spaceship_explosion = MediaPlayer.create(context.getApplicationContext(), R.raw.spaceship_explosion);
+        this.laser_shot = MediaPlayer.create(context.getApplicationContext(), R.raw.laser_shot);
+
         // Pause Button and window
         try{
             this.assets_manager = context.getAssets();
@@ -98,11 +101,14 @@ public class SceneGame extends Scene {
         this.pause_button = new Rect(screen_width / 15 * 13, screen_height / 10, screen_width / 15 * 14
                 , screen_height / 10 + 50);
 
-        this.home_button = new RectF((float)screen_width/9*2, (float)screen_height/6*3,
-                (float)screen_width/9*4, (float)screen_height/6*4);
-        this.resume_button = new RectF((float)screen_width/9*5, (float)screen_height/6*3,
-                (float)screen_width/9*7, (float)screen_height/6*4);
 
+        if(game_over){
+            home_button = new RectF((float)screen_width/9*4, (float)screen_height/7*4,
+                    (float)screen_width/9*6, (float)screen_height/7*5);
+        } else {
+            home_button = new RectF((float)screen_width/9*2, (float)screen_height/7*4, (float)screen_width/9*4, (float)screen_height/7*5);
+            resume_button = new RectF((float)screen_width/9*5, (float)screen_height/7*4, (float)screen_width/9*7, (float)screen_height/7*5);
+        }
     }
 
     /**
@@ -129,7 +135,7 @@ public class SceneGame extends Scene {
 
         // Manage the pause
         if(pause){
-            pause(canvas);
+            gameWindow(canvas, false);
         }
     }
 
@@ -141,6 +147,7 @@ public class SceneGame extends Scene {
                     // TODO code for the game over
                     enemies.remove(i);
                     this.vibrator.vibrate();
+                    enemy_dies.start();
 
                     // Code to insert the score in the database
 //                    InsertScore insert_score = new InsertScore(this.context);
@@ -184,21 +191,9 @@ public class SceneGame extends Scene {
     }
 
     @Override
-    public void pause(Canvas canvas){
-        super.pause(canvas);
-
-        // Buttons
-        pause_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
-        canvas.drawRoundRect(this.home_button, 20f, 20f, pause_paint);
-        canvas.drawRoundRect(this.resume_button, 20f, 20f, pause_paint);
-
-        // Buttons Text
-        pause_paint.setColor(ContextCompat.getColor(context, R.color.secondary_blue));
-        pause_paint.setTextSize((float)screen_height/15);
-        canvas.drawText((String)context.getString(R.string.home_button), (float)screen_width/7*2,
-                (float)screen_height/10*6, pause_paint);
-        canvas.drawText((String)context.getString(R.string.resume_button), (float)screen_width/7*4,
-                (float)screen_height/10*6, pause_paint);
+    public void onDestroy() {
+        super.onDestroy();
+        enemy_dies.release();
     }
 
     ////////////////////////////  PLAYER FUNCTIONS ////////////////////////////

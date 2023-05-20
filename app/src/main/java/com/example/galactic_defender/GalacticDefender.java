@@ -21,7 +21,6 @@ import androidx.annotation.NonNull;
 import com.example.galactic_defender.Scenes.Scene;
 import com.example.galactic_defender.Scenes.SceneCredits;
 import com.example.galactic_defender.Scenes.SceneGame;
-import com.example.galactic_defender.Scenes.SceneGameOver;
 import com.example.galactic_defender.Scenes.SceneInformation;
 import com.example.galactic_defender.Scenes.SceneMenu;
 import com.example.galactic_defender.Scenes.SceneRecords;

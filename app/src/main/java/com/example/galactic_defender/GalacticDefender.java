@@ -167,8 +167,6 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
                     break;
                 case 6:
                 case 7:
-                    current_scene = new SceneGameOver(context, screen_height, screen_width, 7);
-                    break;
                 case 8:
                     current_scene = new SceneInformation(context, screen_height, screen_width, 8);
             }

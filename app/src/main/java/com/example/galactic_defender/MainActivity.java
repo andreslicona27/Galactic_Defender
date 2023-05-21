@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     Vibrator vibrator;
     SensorManager sensor_manager;
+    Sensor accelerometer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         this.sensor_manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        this.accelerometer = sensor_manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
 
         if (Build.VERSION.SDK_INT < 16) { // previous versions of Jelly Bean

@@ -36,9 +36,7 @@ public class Enemy extends Character {
     public int direction_x, direction_y;
     int pos_x;
     int pos_y;
-    int angle = 0;
-
-
+    int angle;
     int current_frame = 0;
     int frame_count;
 
@@ -91,6 +89,11 @@ public class Enemy extends Character {
 
 
     // GETTERS
+    /**
+     * Obtains the rectangle which contains the enemy image
+     *
+     * @return The Rect at the borders of the image
+     */
     public Rect getHide_box() {
         return this.hide_box;
     }

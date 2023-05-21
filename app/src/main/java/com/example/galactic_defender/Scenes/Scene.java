@@ -38,16 +38,12 @@ public class Scene {
     InputStream input_stream;
     AssetManager assets_manager;
     Typeface font;
-    Paint title_paint;
-    Paint window_paint;
+    Paint title_paint, window_paint;
     Rect back_button;
-    RectF base;
-    RectF home_button, resume_button;
-    Bitmap back_button_image;
-    Bitmap scale_button_image;
+    RectF base, home_button1, home_button2, resume_button;
+    Bitmap back_button_image, scale_button_image;
     public int scene_number = -1;
     int screen_height, screen_width;
-    boolean game_over = false;
 
     /**
      * Constructs an instance of the Scene class.
@@ -133,12 +129,13 @@ public class Scene {
         return -1;
     }
 
-    public void onDestroy() {
 
-    }
-
-    public void gameWindow(Canvas canvas, boolean game_over) {
-        this.game_over = game_over;
+    /**
+     * Displays a pause window on the canvas.
+     *
+     * @param canvas The canvas on which to draw the pause window.
+     */
+    public void pauseWindow(Canvas canvas) {
         // Base Rectangle
         this.window_paint.setStyle(Paint.Style.FILL);
         this.title_paint.setTextAlign(Paint.Align.CENTER);
@@ -149,34 +146,58 @@ public class Scene {
         this.window_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
         this.window_paint.setTypeface(font);
         this.window_paint.setTextSize((float) screen_height / 8);
-        if (game_over) {
-            canvas.drawText((String) context.getText(R.string.game_over_title),
-                    (float) screen_width / 5 * 2,
-                    (float) screen_height / 7 * 2, this.window_paint);
-            canvas.drawText(String.valueOf(GalacticDefender.score), (float) screen_width / 5 * 2,
-                    (float) screen_height / 7 * 3,
-                    this.window_paint);
-        } else {
-            canvas.drawText((String) context.getText(R.string.pause_title), (float) screen_width / 5 * 2,
-                    (float) screen_height / 7 * 3, this.window_paint);
-        }
+        canvas.drawText((String) context.getText(R.string.pause_title),
+                (float) screen_width / 2 - window_paint.measureText((String) context.getText(R.string.pause_title))/2,
+                (float) screen_height / 7 * 3, this.window_paint);
 
         // Buttons
         window_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
-        canvas.drawRoundRect(this.home_button, 20f, 20f, window_paint);
+        canvas.drawRoundRect(this.home_button1, 20f, 20f, window_paint);
         canvas.drawRoundRect(this.resume_button, 20f, 20f, window_paint);
 
         // Buttons Text
         window_paint.setColor(ContextCompat.getColor(context, R.color.secondary_blue));
         window_paint.setTextSize((float) screen_height / 15);
-        if (!game_over) {
-            canvas.drawText((String) context.getString(R.string.home_button),
-                    (float) screen_width / 7 * 4, (float) screen_height / 12 * 8, window_paint);
-        } else {
-            canvas.drawText((String) context.getString(R.string.home_button), (float) screen_width / 7 * 2, (float) screen_height / 12 * 8, window_paint);
-            canvas.drawText((String) context.getString(R.string.resume_button), (float) screen_width / 7 * 4, (float) screen_height / 12 * 8, window_paint);
-        }
+        canvas.drawText((String) context.getString(R.string.home_button), (float) screen_width / 7 * 2, (float) screen_height / 12 * 8, window_paint);
+        canvas.drawText((String) context.getString(R.string.resume_button), (float) screen_width / 7 * 4, (float) screen_height / 12 * 8, window_paint);
+    }
 
+    /**
+     * Displays a game over window on the canvas.
+     *
+     * @param canvas The canvas on which to draw the pause window.
+     */
+    public void gameOverWindow(Canvas canvas) {
+        canvas.drawColor(Color.BLACK);
+        // Base Rectangle
+        this.window_paint.setStyle(Paint.Style.FILL);
+        this.title_paint.setTextAlign(Paint.Align.CENTER);
+        this.window_paint.setColor(ContextCompat.getColor(context, R.color.secondary_blue));
+        canvas.drawRoundRect(base, 20f, 20f, window_paint);
+
+        // Title Text
+        this.window_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
+        this.window_paint.setTypeface(font);
+        this.window_paint.setTextSize((float) screen_height / 8);
+        canvas.drawText((String) context.getText(R.string.game_over_title),
+                ((float) screen_width / 2) - window_paint.measureText((String) context.getText(R.string.game_over_title)) / 2,
+                (float) screen_height / 8 * 3, this.window_paint);
+        canvas.drawText(String.valueOf(GalacticDefender.score),
+                (float) screen_width / 2 - window_paint.measureText(String.valueOf(GalacticDefender.score)) / 2,
+                (float) screen_height / 8 * 4,
+                this.window_paint);
+
+        // Buttons
+        window_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
+        canvas.drawRoundRect(this.home_button2, 20f, 20f, window_paint);
+
+        // Buttons Text
+        window_paint.setColor(ContextCompat.getColor(context, R.color.secondary_blue));
+        window_paint.setTextSize((float) screen_height / 15);
+        canvas.drawText((String) context.getString(R.string.home_button),
+                (float) screen_width / 2 - window_paint.measureText((String) context.getString(R.string.home_button)) / 2,
+                (float) screen_height / 12 * 8,
+                window_paint);
 
     }
 }

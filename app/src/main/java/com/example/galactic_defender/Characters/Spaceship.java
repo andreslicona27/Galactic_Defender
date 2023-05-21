@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.util.Log;
 
@@ -17,12 +19,14 @@ public class Spaceship extends Character {
     Bitmap spaceship3_asset, spaceship3_image;
     Bitmap spaceship4_asset, spaceship4_image;
     Bitmap[] spaceship = new Bitmap[4];
+    Bitmap rotatedBitmap;
     Rect hide_box;
-    public Point position;
-    public int velocity = screen_height / 80;
-    public boolean is_alive = true;
+    Point position;
+    int velocity = screen_height / 80;
+    public boolean move_player = false;
     int current_frame = 0;
-    int frame_count = 0;
+    int frame_count;
+    float speed_x, speed_y;
 
     /**
      * Constructs an instance of the Spaceship class.
@@ -142,6 +146,33 @@ public class Spaceship extends Character {
             this.current_frame = 0;
         }
         this.current_frame++;
+    }
+
+
+    public void playerMovement(PointF last_touch_difference) {
+        if (!move_player) {
+            return;
+        }
+
+        float ratio = Math.abs(last_touch_difference.x) / Math.abs(last_touch_difference.y);
+        double angle = Math.atan(ratio);  // return the value in radians
+
+        this.speed_x = (float) Math.cos(angle);
+        this.speed_y = (float) Math.sin(angle);
+
+        matrix.postRotate((float) Math.toDegrees(angle));
+        this.spaceship[current_frame] = Bitmap.createBitmap(this.spaceship[current_frame], 0, 0,
+                this.spaceship[current_frame].getWidth(),
+                this.spaceship[current_frame].getHeight(), matrix, true);
+
+        if (last_touch_difference.x < 0) {
+            this.speed_x *= -1;
+        }
+        if (last_touch_difference.y < 0) {
+            this.speed_y *= -1;
+        }
+        this.position.x += this.speed_x * this.velocity;
+        this.position.y += this.speed_y * this.velocity;
     }
 
 }

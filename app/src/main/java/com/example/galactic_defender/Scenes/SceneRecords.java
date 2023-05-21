@@ -28,7 +28,8 @@ public class SceneRecords extends Scene{
      */
     public void draw(Canvas canvas){
         super.draw(canvas);
-        canvas.drawText(context.getString(R.string.records_title), (float)screen_width/10*5,
+        canvas.drawText(context.getString(R.string.records_title),
+                (float)screen_width/2 - title_paint.measureText(context.getString(R.string.records_title))/2,
                 (float)screen_height/6, title_paint);
     }
 }

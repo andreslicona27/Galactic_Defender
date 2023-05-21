@@ -19,8 +19,7 @@ import com.example.galactic_defender.Scenes.SceneGame;
 public class JoyStick {
 
     SceneGame scene_game;
-    public Rect joystick_rect;
-    Paint outer_paint, inner_paint, test_paint;
+    Paint outer_paint, inner_paint;
     Point inner_circle_position;
     float center_x;
     float center_y;
@@ -31,6 +30,14 @@ public class JoyStick {
     boolean touch_down;
 
     // BUILDER
+    /**
+     * Constructs an instance of the JoyStick class.
+     *
+     * @param scene_game    The class that it would referred
+     * @param context       The context of the application.
+     * @param screen_width  The width of the screen.
+     * @param screen_height The height of the screen.
+     */
     public JoyStick(SceneGame scene_game, Context context, int screen_width, int screen_height) {
         this.scene_game = scene_game;
         this.screen_width = screen_width;

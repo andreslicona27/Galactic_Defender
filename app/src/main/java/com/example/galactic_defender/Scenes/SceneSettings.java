@@ -97,7 +97,9 @@ public class SceneSettings extends Scene {
      */
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        canvas.drawText(context.getString(R.string.settings_title), screen_width/10*5, screen_height/6,
+        canvas.drawText(context.getString(R.string.settings_title),
+                (float)screen_width/2 - title_paint.measureText(context.getString(R.string.settings_title))/2,
+                (float)screen_height/6,
                 title_paint);
 
         canvas.drawBitmap(GalacticDefender.sounds_button_image, null, sounds_button, null);

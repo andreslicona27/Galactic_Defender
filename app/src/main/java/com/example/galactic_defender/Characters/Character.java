@@ -19,11 +19,20 @@ public class Character {
     Paint border_paint;
     int screen_width, screen_height;
 
+    /**
+     * Constructs an instance of the Character class
+     *
+     * @param context       The context of the application.
+     * @param screen_width  The width of the screen.
+     * @param screen_height The height of the screen.
+     */
     public Character(Context context, int screen_width, int screen_height){
         this.context = context;
         this.screen_width = screen_width;
         this.screen_height = screen_height;
         this.assets_manager = context.getAssets();
+
+        this.matrix = new Matrix();
 
         this.border_paint = new Paint();
         this.border_paint.setColor(Color.RED);

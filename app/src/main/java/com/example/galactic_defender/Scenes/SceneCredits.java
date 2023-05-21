@@ -61,7 +61,8 @@ public class SceneCredits extends Scene{
      */
     public void draw(Canvas canvas){
         super.draw(canvas);
-        canvas.drawText(context.getString(R.string.credits_title), (float)screen_width/10*5,
+        canvas.drawText(context.getString(R.string.credits_title),
+                (float)screen_width/2 - title_paint.measureText(context.getString(R.string.credits_title))/2,
                 (float)screen_height/6, title_paint);
         if(GalacticDefender.language.equals("en")){
             canvas.drawBitmap(this.credits_english, null, new Rect(canvas.getWidth()/10,

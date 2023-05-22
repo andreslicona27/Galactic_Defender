@@ -52,6 +52,7 @@ public class Scene {
      * @param screen_height The height of the screen.
      * @param screen_width  The width of the screen.
      * @param scene_number  The number identifying the scene.
+     * @exception RuntimeException If there is a problem obtaining the assets
      */
     public Scene(Context context, int screen_height, int screen_width, int scene_number) {
         this.context = context;

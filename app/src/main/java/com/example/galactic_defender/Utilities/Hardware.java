@@ -11,6 +11,12 @@ import android.os.Vibrator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * This class provides hardware-related functionalities such as vibration and sensor data.
+ * It provides a method for vibrating the device.
+ * And it also handles the accelerometer sensor and provides methods to start, stop, and handle
+ * sensor events.
+ */
 public class Hardware extends AppCompatActivity implements SensorEventListener{
 
     Vibrator vibrator;
@@ -19,29 +25,51 @@ public class Hardware extends AppCompatActivity implements SensorEventListener{
     float[] gravity = new float[3];
     float[] linear_acceleration = new float[3];
 
+    /**
+     * Constructor for the Hardware class.
+     * Initializes the vibrator and sensor manager.
+     * @param context The context of the application.
+     */
     public Hardware(Context context){
         this.vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         this.sensor_manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.accelerometer = sensor_manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
+    /**
+     * Starts listening to sensor events.
+     */
     public void start() {
         if(this.sensor_manager != null){
             this.sensor_manager.registerListener(this, this.accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
+    /**
+     * Stops listening to sensor events.
+     */
     public void stop() {
         if(this.sensor_manager != null){
             this.sensor_manager.unregisterListener(this);
         }
     }
 
+    /**
+     * Called when the accuracy of a sensor has changed.
+     *
+     * @param sensor The sensor that has changed accuracy.
+     * @param accuracy The new accuracy value.
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 
+    /**
+     * Called when sensor values have changed.
+     *
+     * @param event The sensor event.
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -65,6 +93,9 @@ public class Hardware extends AppCompatActivity implements SensorEventListener{
     }
 
 
+    /**
+     * Vibrates the device
+     */
     public void vibrate() {
         if (vibrator != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

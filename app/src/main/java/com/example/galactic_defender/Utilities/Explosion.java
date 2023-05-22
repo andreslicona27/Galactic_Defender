@@ -1,33 +1,78 @@
 package com.example.galactic_defender.Utilities;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Point;
+import android.util.Log;
 
 import com.example.galactic_defender.R;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+/**
+ * The Explosion class represents an explosion animation. It loads a series of bitmap frames
+ * representing the explosion animation and provides a method to draw the explosion on a canvas.
+ */
 public class Explosion {
+
+    Context context;
+    InputStream input_stream;
+    AssetManager assets_manager;
     Bitmap[] explosion = new Bitmap[9];
     public int explosion_frame;
-    public int explosionX;
-    public int explosionY;
 
-    public Explosion(Context context, int explosionX, int explosionY){
-//        explosion[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.explosion0);
-//        explosion[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.explosion1);
-//        explosion[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.explosion2);
-//        explosion[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable.explosion3);
-//        explosion[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable.explosion4);
-//        explosion[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable.explosion5);
-//        explosion[6] = BitmapFactory.decodeResource(context.getResources(), R.drawable.explosion6);
-//        explosion[7] = BitmapFactory.decodeResource(context.getResources(), R.drawable.explosion7);
-//        explosion[8] = BitmapFactory.decodeResource(context.getResources(), R.drawable.explosion8);
-        explosion_frame = 0;
-        this.explosionX = explosionX;
-        this.explosionY = explosionY;
+    /**
+     * Constructs an instance of the Explosion class.
+     *
+     * @param context The Android application context.
+     * @exception RuntimeException If there is a problem obtaining the assets
+     */
+    public Explosion(Context context) {
+        this.context = context;
+        this.assets_manager = context.getAssets();
+        try {
+            this.input_stream = assets_manager.open("utilities/explosion/explosion0.png");
+            this.explosion[0] = BitmapFactory.decodeStream(input_stream);
+            this.input_stream = assets_manager.open("utilities/explosion/explosion1.png");
+            this.explosion[1] = BitmapFactory.decodeStream(input_stream);
+            this.input_stream = assets_manager.open("utilities/explosion/explosion2.png");
+            this.explosion[2] = BitmapFactory.decodeStream(input_stream);
+            this.input_stream = assets_manager.open("utilities/explosion/explosion3.png");
+            this.explosion[3] = BitmapFactory.decodeStream(input_stream);
+            this.input_stream = assets_manager.open("utilities/explosion/explosion4.png");
+            this.explosion[4] = BitmapFactory.decodeStream(input_stream);
+            this.input_stream = assets_manager.open("utilities/explosion/explosion5.png");
+            this.explosion[5] = BitmapFactory.decodeStream(input_stream);
+            this.input_stream = assets_manager.open("utilities/explosion/explosion6.png");
+            this.explosion[6] = BitmapFactory.decodeStream(input_stream);
+            this.input_stream = assets_manager.open("utilities/explosion/explosion7.png");
+            this.explosion[7] = BitmapFactory.decodeStream(input_stream);
+            this.input_stream = assets_manager.open("utilities/explosion/explosion8.png");
+            this.explosion[8] = BitmapFactory.decodeStream(input_stream);
+
+        } catch (IOException e) {
+            Log.i("assets", "problem getting the asset");
+            throw new RuntimeException(e);
+        }
+
+        this.explosion_frame = 0;
     }
 
-    public Bitmap getExplosion(int explosion_frame){
-        return explosion[explosion_frame];
+    /**
+     * Draws the explosion animation on the given canvas at the specified coordinates.
+     *
+     * @param canvas       The canvas on which to draw the explosion.
+     * @param spaceship_x  The x-coordinate of the spaceship where the explosion occurs.
+     * @param spaceship_y  The y-coordinate of the spaceship where the explosion occurs.
+     */
+    public void drawExplosion(Canvas canvas, int spaceship_x, int spaceship_y){
+        canvas.drawBitmap(this.explosion[explosion_frame], spaceship_x, spaceship_y, null);
+        if(this.explosion_frame < explosion.length-1){
+            this.explosion_frame++;
+        }
     }
 }

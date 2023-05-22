@@ -10,6 +10,13 @@ import android.graphics.Rect;
 
 import java.io.InputStream;
 
+/**
+ * The Character class represents a game character in the Galactic Defender game.
+ *
+ * @author [Andres Licona]
+ * @version [1.0]
+ * @since [05-16-2023]
+ */
 public class Character {
 
     Context context;
@@ -40,16 +47,34 @@ public class Character {
         this.border_paint.setStrokeWidth(5);
     }
 
+    /**
+     * Draws the character on the canvas.
+     *
+     * @param canvas The canvas to draw on.
+     */
     public void draw(Canvas canvas){
     }
 
+
+    /**
+     * Updates the hide box of the character.
+     */
     public void updateHideBox(){
     }
 
+    /**
+     * Checks for collision with the given hide box.
+     *
+     * @param hide_box The hide box to check collision with.
+     * @return True if a collision occurs, false otherwise.
+     */
     public boolean collision(Rect hide_box){
         return false;
     }
 
+    /**
+     * Updates the animation of the character.
+     */
     public void updateAnimation(){
 
     }

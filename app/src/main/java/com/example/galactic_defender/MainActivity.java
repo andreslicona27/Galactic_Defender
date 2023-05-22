@@ -1,26 +1,26 @@
 package com.example.galactic_defender;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GestureDetectorCompat;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.WindowManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+
+import com.example.galactic_defender.Utilities.Gestures;
 
 public class MainActivity extends AppCompatActivity {
 
     Vibrator vibrator;
     SensorManager sensor_manager;
     Sensor accelerometer;
+    GestureDetectorCompat gesture_detector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         this.vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         this.sensor_manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         this.accelerometer = sensor_manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        this.gesture_detector = new GestureDetectorCompat(this, new Gestures());
 
 
         if (Build.VERSION.SDK_INT < 16) { // previous versions of Jelly Bean
@@ -57,4 +59,7 @@ public class MainActivity extends AppCompatActivity {
         galactic_defender.setKeepScreenOn(true);
         setContentView(galactic_defender);
     }
+
+
+
 }

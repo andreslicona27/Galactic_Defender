@@ -15,6 +15,7 @@ import com.example.galactic_defender.Characters.Enemy;
 import com.example.galactic_defender.Characters.Spaceship;
 import com.example.galactic_defender.GalacticDefender;
 import com.example.galactic_defender.R;
+import com.example.galactic_defender.Utilities.Explosion;
 import com.example.galactic_defender.Utilities.Hardware;
 import com.example.galactic_defender.Utilities.JoyStick;
 import com.example.galactic_defender.Utilities.FireButton;
@@ -29,8 +30,10 @@ public class SceneGame extends Scene {
     MediaPlayer enemy_dies, spaceship_explosion, laser_shot;
     Bitmap pause_button_image;
     Rect pause_button;
+    Canvas canvas;
     PointF last_touch_difference;
     Timer timer;
+    Explosion explosion;
     JoyStick joystick;
     FireButton fire_button;
     Spaceship spaceship;
@@ -49,6 +52,7 @@ public class SceneGame extends Scene {
      * @param screen_height The height of the screen.
      * @param screen_width  The width of the screen.
      * @param scene_number  The number identifying the scene.
+     * @exception RuntimeException If there is a problem obtaining the assets
      */
     public SceneGame(Context context, int screen_height, int screen_width, int scene_number) {
         super(context, screen_height, screen_width, scene_number);
@@ -59,6 +63,7 @@ public class SceneGame extends Scene {
         // Controls
         this.joystick = new JoyStick(this, context, screen_width, screen_height);
         this.fire_button = new FireButton(this, context, screen_width, screen_height);
+        this.explosion = new Explosion(context);
 
         // Characters
         this.spaceship_shots = new ArrayList<>();
@@ -67,7 +72,7 @@ public class SceneGame extends Scene {
 
         // Timer Properties
         this.timer = new Timer();
-        this.timer.schedule(new EnemyTask(), 1000, time_per_enemy);
+        this.timer.schedule(new EnemyTask(), 500, time_per_enemy);
         this.timer.schedule(new Animation(), 300, 300);
 
         // Sound Effects
@@ -102,6 +107,8 @@ public class SceneGame extends Scene {
      */
     public void draw(Canvas canvas) {
         super.draw(canvas);
+        this.canvas = canvas;
+
         // Characters
         this.spaceship.draw(canvas);
         drawEnemies(canvas);
@@ -122,7 +129,11 @@ public class SceneGame extends Scene {
         }
         // Manage the game over
         if (game_over) {
-            gameOverWindow(canvas);
+            this.explosion.drawExplosion(canvas, this.spaceship.position.x, this.spaceship.position.y);
+            if(this.explosion.explosion_frame == 8){
+                 gameOverWindow(canvas);
+                 releaseResources();
+             }
         }
     }
 
@@ -201,16 +212,16 @@ public class SceneGame extends Scene {
 
 
     //////////////////////////// GENERAL FUNCTIONS ////////////////////////////
-    public void destroySoundEffectResources() {
+    public void releaseResources() {
         this.enemy_dies.release();
         this.spaceship_explosion.release();
         this.laser_shot.release();
+        this.timer.cancel();
     }
 
 
     //////////////////////////// TIMER CLASSES ////////////////////////////
     private class Animation extends java.util.TimerTask {
-
         @Override
         public void run() {
             spaceship.updateAnimation();

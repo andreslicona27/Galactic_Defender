@@ -58,6 +58,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
      * Constructs an instance of the SceneSettings class.
      *
      * @param context The context of the application.
+     * @exception RuntimeException If there is a problem obtaining the assets
      */
     public GalacticDefender(Context context) {
         super(context);
@@ -66,7 +67,6 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         this.context = context;
         this.game_thread = new Hilo();
         this.handler = new Handler();
-
 
         // Background Music
         background_music = MediaPlayer.create(this.getContext(), R.raw.background_music);
@@ -91,7 +91,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
 
         // Language
         changeLanguage("en");
-        this.configuration = getResources().getConfiguration();
+        configuration = getResources().getConfiguration();
         language = configuration.locale.getLanguage();
         language_button_image = BitmapFactory.decodeStream(input_stream);
     }

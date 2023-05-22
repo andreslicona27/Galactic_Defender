@@ -16,6 +16,15 @@ import androidx.core.content.ContextCompat;
 import com.example.galactic_defender.R;
 import com.example.galactic_defender.Scenes.SceneGame;
 
+
+/**
+ * The JoyStick class represents a joystick control used in a game scene.
+ * It allows the player to control the movement of the player character.
+ *
+ * @author [Andres Licona]
+ * @version [1.0]
+ * @since [05-10-2023]
+ */
 public class JoyStick {
 
     SceneGame scene_game;
@@ -66,6 +75,11 @@ public class JoyStick {
         canvas.drawCircle(this.inner_circle_position.x, this.inner_circle_position.y, inner_radius, inner_paint);
     }
 
+    /**
+     * Handles touch events for the joystick.
+     *
+     * @param event The MotionEvent object representing the touch event.
+     */
     public void touchEvent(MotionEvent event){
         float x = event.getX();
         float y = event.getY();

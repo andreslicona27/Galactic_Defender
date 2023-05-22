@@ -25,10 +25,9 @@ public class FireButton {
     Context context;
     InputStream input_stream;
     AssetManager assets_manager;
-    Bitmap shot, scale_shot_image, images;
+    Bitmap scale_shot_image, images;
     Paint paint;
     SceneGame scene_game;
-    public Point position;
     int radius = 100;
     int screen_width, screen_height;
     int center_x, center_y;
@@ -64,36 +63,6 @@ public class FireButton {
                 this.images_width/4, this.images_height/4);
     }
 
-    public FireButton(Context context, int shot_x, int shot_y, int screen_width, int screen_height) {
-        this.context = context;
-        this.screen_width = screen_width;
-        this.screen_height = screen_height;
-
-        try{
-            this.assets_manager = context.getAssets();
-            this.input_stream = assets_manager.open("utilities/shot.png");
-            this.shot = BitmapFactory.decodeStream(input_stream);
-
-        } catch (IOException e) {
-            Log.i("assets", "problem getting the asset");
-            throw new RuntimeException(e);
-        }
-
-        this.scale_shot_image = Bitmap.createScaledBitmap(this.shot,
-                this.center_x, this.center_y,true);
-        this.position = new Point(shot_x, shot_y);
-    }
-
-    // GETTERS
-    public Bitmap getShot(){
-        return this.scale_shot_image;
-    }
-    public int getShotWidth(){
-        return this.scale_shot_image.getWidth();
-    }
-    public int getShotHeight(){
-        return this.scale_shot_image.getHeight();
-    }
 
     // FUNCTIONS
     public void drawFireButton(Canvas canvas){

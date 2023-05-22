@@ -46,6 +46,7 @@ public class Enemy extends Character {
      * @param context       The context of the application.
      * @param screen_width  The width of the screen.
      * @param screen_height The height of the screen.
+     * @exception RuntimeException If there is a problem obtaining the assets
      */
     public Enemy(Context context, int screen_width, int screen_height) {
         super(context, screen_width, screen_height);
@@ -127,12 +128,21 @@ public class Enemy extends Character {
 
 
     // FUNCTIONS
+    /**
+     * Draws the enemy on the canvas.
+     *
+     * @param canvas The canvas on which to draw the spaceship.
+     */
     @Override
     public void draw(Canvas canvas) {
         canvas.drawBitmap(this.enemy[current_frame], position.x, position.y, null);
         canvas.drawRect(this.hide_box, this.border_paint);
     }
 
+    /**
+     * Updates the hide box position based on the current position and enemy frame.
+     * The hide box represents the bounding box of the enemy.
+     */
     @Override
     public void updateHideBox() {
         this.hide_box = new Rect(this.position.x, this.position.y,
@@ -140,11 +150,20 @@ public class Enemy extends Character {
                 this.position.y + this.enemy[current_frame].getHeight());
     }
 
+    /**
+     * Checks for collision between the hide box of this object and the provided hide box.
+     *
+     * @param hide_box The hide box to check collision against.
+     * @return true if collision occurs, false otherwise.
+     */
     @Override
     public boolean collision(Rect hide_box) {
         return this.hide_box.intersect(hide_box);
     }
 
+    /**
+     * Updates the animation frame of the spaceship.
+     */
     @Override
     public void updateAnimation() {
         if (this.current_frame == this.frame_count - 1) {

@@ -13,8 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.galactic_defender.Utilities.Gestures;
-
 public class MainActivity extends AppCompatActivity {
 
     Vibrator vibrator;

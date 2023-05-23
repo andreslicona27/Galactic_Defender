@@ -27,8 +27,6 @@ public class SceneInformation extends Scene {
 
     Bitmap english_asset, spanish_asset;
     Bitmap information_english, information_spanish;
-    int scene_number = 8;
-
 
     /**
      * Constructs an instance of the SceneInformation class.
@@ -67,7 +65,7 @@ public class SceneInformation extends Scene {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         canvas.drawText(context.getString(R.string.information_title),
-                (float)screen_width/2 - title_paint.measureText(context.getString(R.string.information_title))/2,
+                (float)screen_width/2 - (title_paint.measureText((String)context.getString(R.string.information_title))/2),
                 (float) screen_height / 6, title_paint);
 
         if(GalacticDefender.language.equals("en")){

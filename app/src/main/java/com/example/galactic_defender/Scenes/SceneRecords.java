@@ -5,9 +5,15 @@ import android.graphics.Canvas;
 
 import com.example.galactic_defender.R;
 
+/**
+ * The SceneRecords class represents a scene for displaying records.
+ * It extends the Scene class and provides methods for drawing the scene on a canvas.
+ *
+ * @author [Andres Licona]
+ * @version [1.0]
+ * @since [05-04-2023]
+ */
 public class SceneRecords extends Scene{
-
-    int scene_number = 2;
 
     /**
      * Constructs an instance of the SceneRecords class.
@@ -29,7 +35,7 @@ public class SceneRecords extends Scene{
     public void draw(Canvas canvas){
         super.draw(canvas);
         canvas.drawText(context.getString(R.string.records_title),
-                (float)screen_width/2 - title_paint.measureText(context.getString(R.string.records_title))/2,
+                (float)screen_width/2 - title_paint.measureText((String)context.getString(R.string.records_title))/2,
                 (float)screen_height/6, title_paint);
     }
 }

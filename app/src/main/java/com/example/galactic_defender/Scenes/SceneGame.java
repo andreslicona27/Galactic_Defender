@@ -40,7 +40,6 @@ public class SceneGame extends Scene {
     ArrayList<Enemy> enemies;
     ArrayList<FireButton> spaceship_shots;
     int time_per_enemy = 5000;
-    int scene_number = 3;
     boolean pause = false;
     boolean game_over = false;
 
@@ -137,13 +136,19 @@ public class SceneGame extends Scene {
         }
     }
 
+
+    /**
+     * Updates the physics of the game.
+     * This method is called to update the game physics, including collision detection,
+     * game over condition, enemy removal, vibration, and score insertion.
+     */
     @Override
     public void updatePhysics() {
         if (!pause && !game_over) {
             for (int i = enemies.size() - 1; i >= 0; i--) {
                 if (this.spaceship.collision(enemies.get(i).getHide_box())) {
                     // TODO code for the game over
-                    this.game_over = true;
+//                    this.game_over = true;
                     enemies.remove(i);
                     this.hardware.vibrate();
 
@@ -162,12 +167,12 @@ public class SceneGame extends Scene {
 
     @Override
     public int onTouchEvent(MotionEvent event) {
-        int action = event.getActionMasked(); // manage multitouch
-        int pointerIndex = event.getActionIndex(); // obtains the action finger
-        int pointerID = event.getPointerId(pointerIndex); // obtains the id pointer associate to
-        // the action
         float x = event.getX();
         float y = event.getY();
+
+        // Controls management
+        this.joystick.touchEvent(event);
+        this.fire_button.touchEvent(event);
 
         // Buttons touch management
         if (this.pause_button.contains((int) x, (int) y)) {
@@ -177,12 +182,10 @@ public class SceneGame extends Scene {
             this.pause = false;
         }
         if (home_button1.contains((int) x, (int) y) || home_button2.contains((int) x, (int) y)) {
+            releaseResources();
+            enemies.clear();
             return 1;
         }
-
-        // Controls management
-        this.joystick.touchEvent(event);
-        this.fire_button.touchEvent(event);
 
         return super.onTouchEvent(event);
     }
@@ -204,8 +207,7 @@ public class SceneGame extends Scene {
         for (Enemy enemy : enemies) {
             enemy.draw(canvas);
             if (!pause  && !game_over) {
-                enemy.moveEnemy(screen_height / 80);
-                // TODO try to get all the functions into enemy
+                enemy.moveEnemy(screen_height / 100);
             }
         }
     }
@@ -221,7 +223,15 @@ public class SceneGame extends Scene {
 
 
     //////////////////////////// TIMER CLASSES ////////////////////////////
+    /**
+     * A private class representing an animation task for a game.
+     * This class extends the java.util.TimerTask class.
+     */
     private class Animation extends java.util.TimerTask {
+        /**
+         * The run method that is executed when the task is scheduled to run.
+         * It updates the animation of the spaceship and all the enemies.
+         */
         @Override
         public void run() {
             spaceship.updateAnimation();
@@ -230,7 +240,17 @@ public class SceneGame extends Scene {
             }
         }
     }
+
+    /**
+     * A private class representing an enemy task for a game.
+     * This class extends the java.util.TimerTask class.
+     */
     private class EnemyTask extends java.util.TimerTask {
+        /**
+         * The run method that is executed when the task is scheduled to run.
+         * It creates a new enemy object and adds it to the list of enemies, if the game is not
+         * paused and not over.
+         */
         @Override
         public void run() {
             if (!pause && !game_over) {

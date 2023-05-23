@@ -60,6 +60,7 @@ public class Scene {
         this.screen_height = screen_height;
         this.screen_width = screen_width;
 
+        // Paint for the titles of the scenes
         this.font = Typeface.createFromAsset(context.getAssets(), "font/russo_one.ttf");
         this.title_paint = new Paint();
         this.title_paint.setAlpha(240);
@@ -67,11 +68,15 @@ public class Scene {
         this.title_paint.setAntiAlias(true);
         this.title_paint.setColor(Color.WHITE);
         this.title_paint.setTextSize((float) screen_height / 10);
-        this.title_paint.setTextAlign(Paint.Align.CENTER);
 
+        // Paint for the text int he window of pause and game over
         this.window_paint = new Paint();
-        base = new RectF((float) screen_width / 5, (float) screen_height / 5, (float) screen_width / 5 * 4,
-                (float) screen_height / 5 * 4);
+        this.window_paint.setAlpha(240);
+        this.window_paint.setTypeface(font);
+        this.window_paint.setAntiAlias(true);
+        this.window_paint.setStyle(Paint.Style.FILL);
+        this.window_paint.setColor(ContextCompat.getColor(context, R.color.secondary_blue));
+        base = new RectF((float) screen_width / 5, (float) screen_height / 5, (float) screen_width / 5 * 4,(float) screen_height / 5 * 4);
 
         try {
             this.assets_manager = context.getAssets();
@@ -83,6 +88,7 @@ public class Scene {
             throw new RuntimeException(e);
         }
 
+        // Back button of the scenes
         this.scale_button_image = Bitmap.createScaledBitmap(this.back_button_image,
                 screen_width / 8, screen_width / 8, true);
         this.back_button = new Rect(screen_width / 20, screen_height / 12, screen_width / 20 + 50
@@ -138,21 +144,16 @@ public class Scene {
      */
     public void pauseWindow(Canvas canvas) {
         // Base Rectangle
-        this.window_paint.setStyle(Paint.Style.FILL);
-        this.title_paint.setTextAlign(Paint.Align.CENTER);
-        this.window_paint.setColor(ContextCompat.getColor(context, R.color.secondary_blue));
         canvas.drawRoundRect(base, 20f, 20f, window_paint);
 
         // Title Text
         this.window_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
-        this.window_paint.setTypeface(font);
         this.window_paint.setTextSize((float) screen_height / 8);
         canvas.drawText((String) context.getText(R.string.pause_title),
                 (float) screen_width / 2 - window_paint.measureText((String) context.getText(R.string.pause_title))/2,
                 (float) screen_height / 7 * 3, this.window_paint);
 
         // Buttons
-        window_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
         canvas.drawRoundRect(this.home_button1, 20f, 20f, window_paint);
         canvas.drawRoundRect(this.resume_button, 20f, 20f, window_paint);
 
@@ -171,14 +172,10 @@ public class Scene {
     public void gameOverWindow(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
         // Base Rectangle
-        this.window_paint.setStyle(Paint.Style.FILL);
-        this.title_paint.setTextAlign(Paint.Align.CENTER);
-        this.window_paint.setColor(ContextCompat.getColor(context, R.color.secondary_blue));
         canvas.drawRoundRect(base, 20f, 20f, window_paint);
 
         // Title Text
         this.window_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
-        this.window_paint.setTypeface(font);
         this.window_paint.setTextSize((float) screen_height / 8);
         canvas.drawText((String) context.getText(R.string.game_over_title),
                 ((float) screen_width / 2) - window_paint.measureText((String) context.getText(R.string.game_over_title)) / 2,
@@ -189,7 +186,6 @@ public class Scene {
                 this.window_paint);
 
         // Buttons
-        window_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
         canvas.drawRoundRect(this.home_button2, 20f, 20f, window_paint);
 
         // Buttons Text

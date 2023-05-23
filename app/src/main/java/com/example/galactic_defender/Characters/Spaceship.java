@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
@@ -28,15 +27,15 @@ public class Spaceship extends Character {
     Bitmap spaceship2_asset, spaceship2_image;
     Bitmap spaceship3_asset, spaceship3_image;
     Bitmap spaceship4_asset, spaceship4_image;
-    Bitmap[] spaceship = new Bitmap[4];
-    Bitmap rotatedBitmap;
+    Bitmap[] spaceship;
     Rect hide_box;
     public Point position;
-    int velocity = screen_height / 80;
-    public boolean move_player = false;
-    int current_frame = 0;
+    int displacement;
+    public boolean move_player;
     int frame_count;
+    int current_frame;
     float speed_x, speed_y;
+    float spaceship_angle;
 
     /**
      * Constructs an instance of the Spaceship class.
@@ -48,7 +47,7 @@ public class Spaceship extends Character {
      */
     public Spaceship(Context context, int screen_width, int screen_height) {
         super(context, screen_width, screen_height);
-
+        this.spaceship = new Bitmap[4];
         try {
             this.input_stream = assets_manager.open("characters/spaceships/spaceship1.png");
             this.spaceship1_asset = BitmapFactory.decodeStream(input_stream);
@@ -70,54 +69,26 @@ public class Spaceship extends Character {
         this.spaceship3_image = Bitmap.createBitmap(this.spaceship3_asset, 0, 0, this.spaceship3_asset.getWidth(), this.spaceship3_asset.getHeight());
         this.spaceship4_image = Bitmap.createBitmap(this.spaceship4_asset, 0, 0, this.spaceship4_asset.getWidth(), this.spaceship4_asset.getHeight());
 
-        this.spaceship[0] = Bitmap.createScaledBitmap(this.spaceship1_image, screen_height/6,
-                screen_height/4, true);
-        this.spaceship[1] = Bitmap.createScaledBitmap(this.spaceship2_image, screen_height/6,
-                screen_height/4, true);
-        this.spaceship[2] = Bitmap.createScaledBitmap(this.spaceship3_image, screen_height/6,
-                screen_height/4, true);
-        this.spaceship[3] = Bitmap.createScaledBitmap(this.spaceship4_image, screen_height/6,
-                screen_height/4, true);
+        this.spaceship[0] = Bitmap.createScaledBitmap(this.spaceship1_image, screen_height/5,
+                screen_height/3, true);
+        this.spaceship[1] = Bitmap.createScaledBitmap(this.spaceship2_image, screen_height/5,
+                screen_height/3, true);
+        this.spaceship[2] = Bitmap.createScaledBitmap(this.spaceship3_image, screen_height/5,
+                screen_height/3, true);
+        this.spaceship[3] = Bitmap.createScaledBitmap(this.spaceship4_image, screen_height/5,
+                screen_height/3, true);
 
         this.frame_count = this.spaceship.length;
-
+        this.current_frame = 0;
+        this.displacement = screen_height / 100;
+        this.move_player = false;
         this.position = new Point(screen_width / 2 - this.spaceship[current_frame].getWidth() / 2,
                 screen_height / 2 - this.spaceship[current_frame].getHeight() / 2);
 
         updateHideBox();
     }
 
-    // GETTERS
-
-    /**
-     * Obtains the scale image of the spaceship
-     *
-     * @return The scale image of the spaceship as Bitmap
-     */
-    public Bitmap getSpaceshipImage() {
-        return this.spaceship[current_frame];
-    }
-
-    /**
-     * Obtains the width of the spaceship image
-     *
-     * @return Width of the spaceship image as int
-     */
-    public int getSpaceshipWidth() {
-        return this.spaceship[current_frame].getWidth();
-    }
-
-    /**
-     * Obtains the width of the spaceship image
-     *
-     * @return Width of the spaceship image as int
-     */
-    public int getSpaceshipHeight() {
-        return this.spaceship[current_frame].getHeight();
-    }
-
     // FUNCTIONS
-
     /**
      * Draws the spaceship on the canvas and manages its position within the borders.
      *
@@ -129,7 +100,7 @@ public class Spaceship extends Character {
         if (this.position.x > screen_width - this.spaceship[current_frame].getWidth()) {
             this.position.x = screen_width - this.spaceship[current_frame].getWidth();
         } else if (this.position.x < 0) {
-            this.position.y = 0;
+            this.position.x = 0;
         }
 
         if (this.position.y > screen_height - this.spaceship[current_frame].getHeight()) {
@@ -139,7 +110,11 @@ public class Spaceship extends Character {
         }
 
         // Draw elements
+        canvas.save();
+        canvas.rotate(this.spaceship_angle, this.hide_box.centerX(), this.hide_box.centerY());
         canvas.drawBitmap(this.spaceship[current_frame], position.x, position.y, null);
+        canvas.restore();
+
         canvas.drawRect(this.hide_box, this.border_paint);
         updateHideBox();
     }
@@ -181,33 +156,41 @@ public class Spaceship extends Character {
     /**
      * Moves the player based on the provided last touch difference.
      *
-     * @param last_touch_difference The difference between the current and last touch positions as
+     * @param last_touch The difference between the current and last touch positions as
      *                            a PointF object.
      */
-    public void playerMovement(PointF last_touch_difference) {
+    public void playerMovement(PointF last_touch) {
         if (!move_player) {
             return;
         }
 
-        float ratio = Math.abs(last_touch_difference.x) / Math.abs(last_touch_difference.y);
-        double angle = Math.atan(ratio);  // return the value in radians
+        // Calculate the estimate absolute value of the difference of coordinates
+        float ratio = Math.abs(last_touch.x) / Math.abs(last_touch.y);
 
+        // Trying to be the one that makes the great rotation of the spaceship
+        this.spaceship_angle = (float)Math.toDegrees(Math.atan(last_touch.x / last_touch.y) + Math.toRadians(50));
+        Log.i("test6", " " + spaceship_angle);
+
+        // Calculates the angle
+        double angle = Math.atan(ratio);  // return the value in radians
+        // Gap for detecting correctly the direction of the spaceship
+        angle += Math.toRadians(100);
+
+        // Calculate the speed component of both directions
         this.speed_x = (float) Math.cos(angle);
         this.speed_y = (float) Math.sin(angle);
 
-        matrix.postRotate((float) Math.toDegrees(angle));
-        this.spaceship[current_frame] = Bitmap.createBitmap(this.spaceship[current_frame], 0, 0,
-                this.spaceship[current_frame].getWidth(),
-                this.spaceship[current_frame].getHeight(), matrix, true);
-
-        if (last_touch_difference.x < 0) {
+        // Determines the direction of the spaceship
+        if (last_touch.x < 0) {
             this.speed_x *= -1;
         }
-        if (last_touch_difference.y < 0) {
+        if (last_touch.y > 0) {
             this.speed_y *= -1;
         }
-        this.position.x += this.speed_x * this.velocity;
-        this.position.y += this.speed_y * this.velocity;
+
+        // Moves the spaceship
+        this.position.x += this.speed_x * this.displacement;
+        this.position.y += this.speed_y * this.displacement;
     }
 
 }

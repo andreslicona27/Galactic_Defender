@@ -32,7 +32,7 @@ import java.util.Locale;
 
 public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callback {
 
-    SurfaceHolder surface_holder;
+    final SurfaceHolder surface_holder;
     Context context;
     InputStream input_stream;
     AssetManager assets_manager;
@@ -98,16 +98,32 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
 
 
     ////////////////////////////  OVERRIDE FUNCTIONS  ////////////////////////////
+
+    /**
+     * Called when the surface is created.
+     * This method is invoked when the SurfaceHolder is created.
+     * @param holder The SurfaceHolder object associated with the surface.
+     */
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
 
     }
 
+    /**
+     * Called when the surface dimensions or format change.
+     * This method is invoked when the size or format of the surface changes.
+     *
+     * @param holder The SurfaceHolder object associated with the surface.
+     * @param format The new PixelFormat of the surface.
+     * @param width The new width of the surface.
+     * @param height The new height of the surface.
+     */
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
         this.screen_width = width;
         this.screen_height = height;
         current_scene = new SceneMenu(context, screen_height, screen_width, 1);
+        Log.i("test6", "surfaceChanged: " + screen_height);
 
         if (game_thread.getState() == Thread.State.NEW) {
             game_thread.start();
@@ -118,6 +134,12 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         }
     }
 
+    /**
+     * Called when the surface is destroyed.
+     * This method is invoked when the SurfaceHolder is destroyed.
+     *
+     * @param holder The SurfaceHolder object associated with the surface.
+     */
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         this.playing = false;
@@ -129,24 +151,35 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         }
     }
 
+    /**
+     * This method overrides the onTouchEvent() method from the superclass and handles the touch
+     * events
+     *
+     * @param event The motion event representing the touch event
+     * @return True if the touch event is handled, false otherwise
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int pointerIndex = event.getActionIndex();
-        int pointerID = event.getPointerId(pointerIndex);
         int action = event.getActionMasked();
-        int x = (int) event.getX();
-        int y = (int) event.getY();
 
         if (action == MotionEvent.ACTION_DOWN) {
             new_scene = current_scene.onTouchEvent(event);
             changeScene(new_scene);
             return true;
+        } else {
+            current_scene.onTouchEvent(event);
         }
-        return super.onTouchEvent(event);
+        return true;
     }
 
 
     ////////////////////////////  EXTRA FUNCTIONS  ////////////////////////////
+
+    /**
+     * Changes the current scene based on the given scene number.
+     *
+     * @param change_scene The scene number to change to.
+     */
     public void changeScene(int change_scene) {
         if (current_scene.scene_number != change_scene) {
             switch (change_scene) {
@@ -187,7 +220,16 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
     }
 
     //////////////////////////// THREAD CLASS ////////////////////////////
+
+    /**
+     * The Hilo class extends Thread and represents a thread that performs rendering operations on a Canvas.
+     */
     public class Hilo extends Thread {
+
+        /**
+         * Overrides the run method of the Thread class.
+         * This method is responsible for executing the rendering operations on the Canvas.
+         */
         @Override
         public void run() {
             super.run();
@@ -216,6 +258,11 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
                 }
             }
         }
+        /**
+         * Sets the working flag of the thread.
+         *
+         * @param flag the value to set the working flag to
+         */
         public void SetWorking(boolean flag) {
             thread_working = flag;
         }

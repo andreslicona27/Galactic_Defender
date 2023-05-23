@@ -13,6 +13,15 @@ import com.example.galactic_defender.R;
 
 import java.io.IOException;
 
+
+/**
+ * The SceneSettings class represents a settings scene in the Galactic Defender game.
+ * It allows the player to adjust sound, music, and language settings.
+ *
+ * @author [Andres Licona]
+ * @version [1.0]
+ * @since [05-04-2023]
+ */
 public class SceneSettings extends Scene {
 
     GalacticDefender gd_manager;
@@ -99,7 +108,7 @@ public class SceneSettings extends Scene {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         canvas.drawText(context.getString(R.string.settings_title),
-                (float)screen_width/2 - title_paint.measureText(context.getString(R.string.settings_title))/2,
+                (float)screen_width/2 - title_paint.measureText((String)context.getString(R.string.settings_title))/2,
                 (float)screen_height/6,
                 title_paint);
 

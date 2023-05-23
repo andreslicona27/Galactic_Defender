@@ -22,7 +22,7 @@ public class Explosion {
     Context context;
     InputStream input_stream;
     AssetManager assets_manager;
-    Bitmap[] explosion = new Bitmap[9];
+    Bitmap[] explosion;
     public int explosion_frame;
 
     /**
@@ -33,6 +33,7 @@ public class Explosion {
      */
     public Explosion(Context context) {
         this.context = context;
+        this.explosion = new Bitmap[9];
         this.assets_manager = context.getAssets();
         try {
             this.input_stream = assets_manager.open("utilities/explosion/explosion0.png");

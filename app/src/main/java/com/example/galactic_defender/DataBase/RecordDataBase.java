@@ -29,15 +29,6 @@ public class RecordDataBase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE " + TABLE);
         onCreate(db);
+
     }
-
-    public void saveHighScore(int score) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put("score", score);
-
-        db.insert("high_scores", null, values);
-    }
-
 }

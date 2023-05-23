@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -114,16 +115,19 @@ public class SceneMenu extends Scene{
         super.draw(canvas);
         canvas.drawBitmap(scale_logo, null, logo_rect, null);
         title_paint.setTextSize((float) screen_height/6);
-        canvas.drawText("Galactic", (float) screen_width/8*5, (float) screen_height/7*2, title_paint);
-        canvas.drawText("Defender", (float) screen_width/8*5, (float) screen_height/7*3+50, title_paint);
+//        title_paint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText("Galactic", (float) screen_width/5*2,
+                (float) screen_height/7*2,
+                title_paint);
+        canvas.drawText("Defender", (float) screen_width/5*2,
+                (float) screen_height/7*3+50,
+                title_paint);
 
         canvas.drawBitmap(scale_records_image, null, records_button, null);
         canvas.drawBitmap(scale_information_image, null, information_button, null);
         canvas.drawBitmap(scale_play_image, null, play_button, null);
         canvas.drawBitmap(scale_credits_image, null, credits_button, null);
         canvas.drawBitmap(scale_settings_image, null, settings_button, null);
-
-
     }
 
     /**

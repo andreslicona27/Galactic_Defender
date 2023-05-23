@@ -27,8 +27,6 @@ public class SceneCredits extends Scene{
 
     Bitmap english_asset, spanish_asset;
     Bitmap credits_english,credits_spanish;
-    Rect credits_rect;
-    int scene_number = 4;
 
     /**
      * Constructs an instance of the SceneCredits class.
@@ -63,7 +61,7 @@ public class SceneCredits extends Scene{
     public void draw(Canvas canvas){
         super.draw(canvas);
         canvas.drawText(context.getString(R.string.credits_title),
-                (float)screen_width/2 - title_paint.measureText(context.getString(R.string.credits_title))/2,
+                (float)screen_width/2 - title_paint.measureText((String)context.getString(R.string.credits_title))/2,
                 (float)screen_height/6, title_paint);
         if(GalacticDefender.language.equals("en")){
             canvas.drawBitmap(this.credits_english, null, new Rect(canvas.getWidth()/10,

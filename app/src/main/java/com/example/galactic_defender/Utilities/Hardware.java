@@ -73,10 +73,9 @@ public class Hardware extends AppCompatActivity implements SensorEventListener{
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float xAxis = event.values[0];
-            float yAxis = event.values[1];
-            float zAxis = event.values[2];
-            // TODO stun the enemies with the values of the axis
+//            float xAxis = event.values[0];
+//            float yAxis = event.values[1];
+//            float zAxis = event.values[2];
 
             final float alpha = (float) 0.8;
 
@@ -89,6 +88,18 @@ public class Hardware extends AppCompatActivity implements SensorEventListener{
             linear_acceleration[0] = event.values[0] - gravity[0];
             linear_acceleration[1] = event.values[1] - gravity[1];
             linear_acceleration[2] = event.values[2] - gravity[2];
+
+            double magnitude = Math.sqrt(
+                    linear_acceleration[0] * linear_acceleration[0] +
+                    linear_acceleration[1] * linear_acceleration[1] +
+                    linear_acceleration[2] * linear_acceleration[2]);
+
+
+            double threshold = 1.0;
+
+            if (magnitude > threshold) {
+
+            }
         }
     }
 

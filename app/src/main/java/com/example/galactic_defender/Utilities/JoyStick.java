@@ -30,15 +30,17 @@ public class JoyStick {
     SceneGame scene_game;
     Paint outer_paint, inner_paint;
     Point inner_circle_position;
+    Canvas canvas;
     float center_x;
     float center_y;
     float outer_radius = 100;
-    float inner_radius = 50;
+    float inner_radius = 40;
     float touch_x, touch_y;
     int screen_width, screen_height;
     boolean touch_down;
 
     // BUILDER
+
     /**
      * Constructs an instance of the JoyStick class.
      *
@@ -60,18 +62,20 @@ public class JoyStick {
         this.inner_paint = new Paint();
         this.inner_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
 
-        this.center_x = (float) this.screen_width/20*2;
-        this.center_y = (float) this.screen_width/20*16;
-        this.inner_circle_position = new Point(this.screen_width/20*2, this.screen_height/20*16);
+        this.center_x = (float) this.screen_width / 20 * 2;
+        this.center_y = (float) this.screen_width / 20 * 16;
+        this.inner_circle_position = new Point(this.screen_width / 20 * 2, this.screen_height / 20 * 16);
     }
 
-    // FUNCTIONS
+
     /**
      * Function that draws the joystick
+     *
      * @param canvas for it to  draw the graphics in the canvas
-     * */
+     */
     public void drawJoystick(Canvas canvas) {
-        canvas.drawCircle((float)this.screen_width/20*2, (float)this.screen_height/20*16, outer_radius, outer_paint);
+        this.canvas = canvas;
+        canvas.drawCircle((float) this.screen_width / 20 * 2, (float) this.screen_height / 20 * 16, outer_radius, outer_paint);
         canvas.drawCircle(this.inner_circle_position.x, this.inner_circle_position.y, inner_radius, inner_paint);
     }
 
@@ -80,51 +84,52 @@ public class JoyStick {
      *
      * @param event The MotionEvent object representing the touch event.
      */
-    public void touchEvent(MotionEvent event){
-        float x = event.getX();
-        float y = event.getY();
-        int action = event.getActionMasked();
-        this.center_x = (float) this.screen_width/20*2;
-        this.center_y = (float) this.screen_width/20*16;
+    public void touchEvent(MotionEvent event) {
+        int pointerIndex = event.getActionIndex(); // obtains the action finger
+        float x = event.getX(pointerIndex);
+        float y = event.getY(pointerIndex);
+        int pointerID = event.getPointerId(pointerIndex); // obtains the id pointer associated to
+        // the action
 
-        Log.i("test", "joystick touch ");
-        switch (action){
+        this.center_x = (float) this.screen_width / 20 * 2;
+        this.center_y = (float) this.screen_height / 20 * 16;
+
+        switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                Log.i("test", "down ");
-
+            case MotionEvent.ACTION_POINTER_DOWN:
                 // Trigonometry
                 float side_a = Math.abs(x - center_x);
                 float side_b = Math.abs(y - center_y);
-                float hypotenuse = (float)Math.hypot(side_a, side_b);
+                float hypotenuse = (float) Math.hypot(side_a, side_b);
 
-                if(hypotenuse <= outer_radius){
-                    touch_down = true;
+                if (hypotenuse <= outer_radius) {
                     touch_x = x;
                     touch_y = y;
                 }
 
                 break;
             case MotionEvent.ACTION_MOVE:
-                Log.i("test", "move");
-                if(touch_down){
-                    touch_x = event.getX();
-                    touch_y = event.getY();
-                    Log.i("test", "movement");
+                touch_x = event.getX(pointerIndex);
+                touch_y = event.getY(pointerIndex);
 
-                    float difference_x = touch_x - center_x;
-                    float difference_y = touch_y - center_y;
+                float difference_x = center_x - touch_x;
+                float difference_y = center_y - touch_y;
 
-                    if(this.inner_circle_position.x <= touch_x && this.inner_circle_position.y <= touch_y){
-                        this.inner_circle_position = new Point((int) touch_x, (int) touch_y);
-                    } else {
-                        this.inner_circle_position = new Point((int) this.center_x, (int) this.center_y);
-                    }
+                float as = Math.abs(x - center_x);
+                float es = Math.abs(y - center_y);
+                float is = (float) Math.hypot(as, es);
 
-                    this.scene_game.setPlayerMoveTrue(new PointF(difference_x, difference_y));
+                if (is <= outer_radius) {
+                    canvas.drawCircle((int) touch_x, (int) touch_y, inner_radius, inner_paint);
+                } else {
+                    canvas.drawCircle(center_x, center_y, inner_radius, inner_paint);
                 }
+
+                this.scene_game.setPlayerMoveTrue(new PointF(difference_x, difference_y));
+
                 break;
             case MotionEvent.ACTION_UP:
-                touch_down = false;
+            case MotionEvent.ACTION_POINTER_UP:
                 this.scene_game.setPlayerMoveFalse();
                 break;
         }

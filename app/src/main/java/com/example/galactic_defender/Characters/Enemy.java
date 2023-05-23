@@ -36,9 +36,9 @@ public class Enemy extends Character {
     public int direction_x, direction_y;
     int pos_x;
     int pos_y;
-    int angle;
-    int current_frame = 0;
+    int current_frame;
     int frame_count;
+    int angle;
 
     /**
      * Constructs an instance of the Enemy class.
@@ -71,17 +71,18 @@ public class Enemy extends Character {
         this.enemy3_image = Bitmap.createBitmap(this.enemy3_asset, 0, 0, this.enemy3_asset.getWidth(), this.enemy3_asset.getHeight());
         this.enemy4_image = Bitmap.createBitmap(this.enemy4_asset, 0, 0, this.enemy4_asset.getWidth(), this.enemy4_asset.getHeight());
 
-        this.enemy[0] = Bitmap.createScaledBitmap(this.enemy1_image, screen_height / 6,
-                screen_height / 4, true);
-        this.enemy[1] = Bitmap.createScaledBitmap(this.enemy2_image, screen_height / 6,
-                screen_height / 4, true);
-        this.enemy[2] = Bitmap.createScaledBitmap(this.enemy3_image, screen_height / 6,
-                screen_height / 4, true);
-        this.enemy[3] = Bitmap.createScaledBitmap(this.enemy4_image, screen_height / 6,
-                screen_height / 4, true);
+        this.enemy[0] = Bitmap.createScaledBitmap(this.enemy1_image, screen_height/5,
+                screen_height/3, true);
+        this.enemy[1] = Bitmap.createScaledBitmap(this.enemy2_image, screen_height/5,
+                screen_height/3, true);
+        this.enemy[2] = Bitmap.createScaledBitmap(this.enemy3_image, screen_height/5,
+                screen_height/3, true);
+        this.enemy[3] = Bitmap.createScaledBitmap(this.enemy4_image, screen_height/5,
+                screen_height/3, true);
 
         this.frame_count = this.enemy.length;
         this.random = new Random();
+        this.current_frame = 0;
         this.direction_x = generateRandomDirection();
         this.direction_y = generateRandomDirection();
         generateRandomPosition();
@@ -89,7 +90,6 @@ public class Enemy extends Character {
     }
 
 
-    // GETTERS
     /**
      * Obtains the rectangle which contains the enemy image
      *
@@ -99,35 +99,7 @@ public class Enemy extends Character {
         return this.hide_box;
     }
 
-    /**
-     * Obtains the scale image of the enemy
-     *
-     * @return The scale image of the enemy as Bitmap
-     */
-    public Bitmap getEnemyImage() {
-        return this.enemy[current_frame];
-    }
 
-    /**
-     * Obtains the width of the enemy image
-     *
-     * @return Width of the enemy image as int
-     */
-    public int getEnemyWidth() {
-        return this.enemy[current_frame].getWidth();
-    }
-
-    /**
-     * Obtains the height of the enemy image
-     *
-     * @return Height of the enemy image as int
-     */
-    public int getEnemyHeight() {
-        return this.enemy[current_frame].getHeight();
-    }
-
-
-    // FUNCTIONS
     /**
      * Draws the enemy on the canvas.
      *

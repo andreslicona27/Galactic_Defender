@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.media.MediaPlayer;
@@ -12,6 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.galactic_defender.Characters.Enemy;
+import com.example.galactic_defender.Characters.Shot;
 import com.example.galactic_defender.Characters.Spaceship;
 import com.example.galactic_defender.GalacticDefender;
 import com.example.galactic_defender.R;
@@ -31,15 +31,14 @@ public class SceneGame extends Scene {
     Bitmap pause_button_image;
     Rect pause_button;
     Canvas canvas;
-    PointF last_touch_difference;
     Timer timer;
-    Explosion explosion;
+    Explosion[] explosions;
     JoyStick joystick;
     FireButton fire_button;
     Spaceship spaceship;
     ArrayList<Enemy> enemies;
-    ArrayList<FireButton> spaceship_shots;
-    int time_per_enemy = 5000;
+    public ArrayList<Shot> spaceship_shots;
+    int time_per_enemy;
     boolean pause = false;
     boolean game_over = false;
 
@@ -51,35 +50,42 @@ public class SceneGame extends Scene {
      * @param screen_height The height of the screen.
      * @param screen_width  The width of the screen.
      * @param scene_number  The number identifying the scene.
-     * @exception RuntimeException If there is a problem obtaining the assets
+     * @throws RuntimeException If there is a problem obtaining the assets
      */
     public SceneGame(Context context, int screen_height, int screen_width, int scene_number) {
         super(context, screen_height, screen_width, scene_number);
+        GalacticDefender.score = 0;
 
         // Hardware
         this.hardware = new Hardware(context);
-
-        // Controls
-        this.joystick = new JoyStick(this, context, screen_width, screen_height);
-        this.fire_button = new FireButton(this, context, screen_width, screen_height);
-        this.explosion = new Explosion(context);
 
         // Characters
         this.spaceship_shots = new ArrayList<>();
         this.enemies = new ArrayList<>();
         this.spaceship = new Spaceship(context, screen_width, screen_height);
 
+        // Controls
+        this.joystick = new JoyStick(this.spaceship, context, screen_width, screen_height);
+        this.fire_button = new FireButton(this, this.spaceship, context, screen_width, screen_height);
+        this.explosions = new Explosion[5];
+        this.explosions[0] = new Explosion(context, this.spaceship.position.x, this.spaceship.position.y);
+        this.explosions[1] = new Explosion(context, this.spaceship.position.x + 50, this.spaceship.position.y + 50);
+        this.explosions[2] = new Explosion(context, this.spaceship.position.x + 60, this.spaceship.position.y + 100);
+        this.explosions[3] = new Explosion(context, this.spaceship.position.x, this.spaceship.position.y + 75);
+        this.explosions[4] = new Explosion(context, this.spaceship.position.x + 75, this.spaceship.position.y);
+
         // Timer Properties
+        this.time_per_enemy = 3000;
         this.timer = new Timer();
-        this.timer.schedule(new EnemyTask(), 500, time_per_enemy);
-        this.timer.schedule(new Animation(), 300, 300);
+        this.timer.schedule(new EnemyAdditionTask(), 500, time_per_enemy);
+        this.timer.schedule(new AnimationsTask(), 300, 300);
 
         // Sound Effects
         this.enemy_dies = MediaPlayer.create(context.getApplicationContext(), R.raw.alien_dead);
         this.spaceship_explosion = MediaPlayer.create(context.getApplicationContext(), R.raw.spaceship_explosion);
         this.laser_shot = MediaPlayer.create(context.getApplicationContext(), R.raw.laser_shot);
 
-        // Pause Button and window
+        // Get Resources
         try {
             this.assets_manager = context.getAssets();
             this.input_stream = assets_manager.open("button_icons/pause_icon.png");
@@ -111,6 +117,7 @@ public class SceneGame extends Scene {
         // Characters
         this.spaceship.draw(canvas);
         drawEnemies(canvas);
+        drawShots(canvas);
 
         // Controls
         this.joystick.drawJoystick(canvas);
@@ -128,11 +135,13 @@ public class SceneGame extends Scene {
         }
         // Manage the game over
         if (game_over) {
-            this.explosion.drawExplosion(canvas, this.spaceship.position.x, this.spaceship.position.y);
-            if(this.explosion.explosion_frame == 8){
-                 gameOverWindow(canvas);
-                 releaseResources();
-             }
+            for (Explosion value : explosions) {
+                value.drawExplosion(canvas);
+                if (value.explosion_frame == 8) {
+                    gameOverWindow(canvas);
+                    releaseResources();
+                }
+            }
         }
     }
 
@@ -146,8 +155,7 @@ public class SceneGame extends Scene {
     public void updatePhysics() {
         if (!pause && !game_over) {
             for (int i = enemies.size() - 1; i >= 0; i--) {
-                if (this.spaceship.collision(enemies.get(i).getHide_box())) {
-                    // TODO code for the game over
+                if (this.spaceship.collision(enemies.get(i).getHideBox())) {
 //                    this.game_over = true;
                     enemies.remove(i);
                     this.hardware.vibrate();
@@ -158,9 +166,23 @@ public class SceneGame extends Scene {
 
                 }
                 // TODO create collision with shots
-                enemy_dies.start();
+                for (int j = spaceship_shots.size() - 1; j >= 0; j--) {
+                    if (enemies.get(i).collision(spaceship_shots.get(j).getHideBox())) {
+                        enemies.remove(i);
+                        spaceship_shots.remove(j);
+                        this.enemy_dies.start();
+                        this.hardware.vibrate();
+                        GalacticDefender.score += 10;
+                    }
+                    if(spaceship_shots.get(j).wallCollision()){
+                        spaceship_shots.remove(j);
+                        Log.i("test", "shot remove");
+                        Log.i("test", "" + spaceship_shots.size());
+                    }
+
+                }
             }
-            this.spaceship.playerMovement(last_touch_difference);
+            this.spaceship.move();
         }
     }
 
@@ -178,56 +200,60 @@ public class SceneGame extends Scene {
         if (this.pause_button.contains((int) x, (int) y)) {
             this.pause = true;
         }
-        if (resume_button.contains((int) x, (int) y)) {
-            this.pause = false;
+        if (this.pause || this.game_over) {
+            if (this.resume_button.contains((int) x, (int) y)) {
+                this.pause = false;
+            }
+            if (this.home_button1.contains((int) x, (int) y) || this.home_button2.contains((int) x, (int) y)) {
+                releaseResources();
+                enemies.clear();
+                return 1;
+            }
         }
-        if (home_button1.contains((int) x, (int) y) || home_button2.contains((int) x, (int) y)) {
-            releaseResources();
-            enemies.clear();
-            return 1;
-        }
-
         return super.onTouchEvent(event);
     }
 
+    //////////////////////////// GENERAL FUNCTIONS ////////////////////////////
 
-    ////////////////////////////  PLAYER FUNCTIONS ////////////////////////////
-
-    public void setPlayerMoveTrue(PointF last_touch_difference) {
-        this.spaceship.move_player = true;
-        this.last_touch_difference = last_touch_difference;
-    }
-
-    public void setPlayerMoveFalse() {
-        this.spaceship.move_player = false;
-    }
-
-    ////////////////////////////  ENEMY FUNCTIONS ////////////////////////////
     public void drawEnemies(Canvas canvas) {
         for (Enemy enemy : enemies) {
             enemy.draw(canvas);
-            if (!pause  && !game_over) {
-                enemy.moveEnemy(screen_height / 100);
+            if (!pause && !game_over) {
+                enemy.move();
             }
         }
     }
 
+    public void drawShots(Canvas canvas) {
+        for (Shot shot : spaceship_shots) {
+            shot.draw(canvas);
+            if (!pause && !game_over) {
+                shot.move();
+            }
+        }
+    }
 
-    //////////////////////////// GENERAL FUNCTIONS ////////////////////////////
     public void releaseResources() {
+        // Release sound effects
         this.enemy_dies.release();
         this.spaceship_explosion.release();
         this.laser_shot.release();
+
+        // Clear lists
+        this.spaceship_shots.clear();
+        this.enemies.clear();
+
+        // Stop timer
         this.timer.cancel();
     }
 
-
     //////////////////////////// TIMER CLASSES ////////////////////////////
+
     /**
      * A private class representing an animation task for a game.
      * This class extends the java.util.TimerTask class.
      */
-    private class Animation extends java.util.TimerTask {
+    private class AnimationsTask extends java.util.TimerTask {
         /**
          * The run method that is executed when the task is scheduled to run.
          * It updates the animation of the spaceship and all the enemies.
@@ -238,6 +264,11 @@ public class SceneGame extends Scene {
             for (Enemy enemy : enemies) {
                 enemy.updateAnimation();
             }
+            if (game_over) {
+                for (Explosion value : explosions) {
+                    value.updateAnimation();
+                }
+            }
         }
     }
 
@@ -245,7 +276,7 @@ public class SceneGame extends Scene {
      * A private class representing an enemy task for a game.
      * This class extends the java.util.TimerTask class.
      */
-    private class EnemyTask extends java.util.TimerTask {
+    private class EnemyAdditionTask extends java.util.TimerTask {
         /**
          * The run method that is executed when the task is scheduled to run.
          * It creates a new enemy object and adds it to the list of enemies, if the game is not
@@ -259,6 +290,5 @@ public class SceneGame extends Scene {
             }
         }
     }
+
 }
-
-

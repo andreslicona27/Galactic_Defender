@@ -19,21 +19,43 @@ import java.io.InputStream;
  */
 public class Explosion {
 
+    /**
+     * Represents the attribute of context in the character class
+     */
     Context context;
+    /**
+     * Represents the input stream for it to read data from a concrete source
+     */
     InputStream input_stream;
+    /**
+     * Represents the asset manager.for it to manage the assets
+     */
     AssetManager assets_manager;
+    /**
+     * Bitmap array that would manage all the explosions images
+     */
     Bitmap[] explosion;
+    /**
+     * Represents the position of the explosion
+     */
+    Point position;
+    /**
+     * Integer that would represent the current image of the explosion
+     */
     public int explosion_frame;
 
     /**
      * Constructs an instance of the Explosion class.
      *
-     * @param context The Android application context.
+     * @param context       The Android application context.
+     * @param spaceship_x   The x-coordinate of the spaceship where the explosion occurs.
+     * @param spaceship_y   The y-coordinate of the spaceship where the explosion occurs.
      * @exception RuntimeException If there is a problem obtaining the assets
      */
-    public Explosion(Context context) {
+    public Explosion(Context context, int spaceship_x, int spaceship_y) {
         this.context = context;
         this.explosion = new Bitmap[9];
+        this.position = new Point(spaceship_x, spaceship_y);
         this.assets_manager = context.getAssets();
         try {
             this.input_stream = assets_manager.open("utilities/explosion/explosion0.png");
@@ -67,11 +89,15 @@ public class Explosion {
      * Draws the explosion animation on the given canvas at the specified coordinates.
      *
      * @param canvas       The canvas on which to draw the explosion.
-     * @param spaceship_x  The x-coordinate of the spaceship where the explosion occurs.
-     * @param spaceship_y  The y-coordinate of the spaceship where the explosion occurs.
      */
-    public void drawExplosion(Canvas canvas, int spaceship_x, int spaceship_y){
-        canvas.drawBitmap(this.explosion[explosion_frame], spaceship_x, spaceship_y, null);
+    public void drawExplosion(Canvas canvas){
+        canvas.drawBitmap(this.explosion[explosion_frame], position.x, position.y, null);
+    }
+
+    /**
+     * Updates the animation frame of the explosion.
+     */
+    public void updateAnimation(){
         if(this.explosion_frame < explosion.length-1){
             this.explosion_frame++;
         }

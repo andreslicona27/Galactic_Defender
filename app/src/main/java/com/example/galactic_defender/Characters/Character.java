@@ -19,12 +19,30 @@ import java.io.InputStream;
  */
 public class Character {
 
+    /**
+     * Represents the attribute of context in the character class
+     */
     Context context;
+    /**
+     * Represents the input stream for it to read data from a concrete source
+     */
     InputStream input_stream;
+    /**
+     * Represents the asset manager.for it to manage the assets
+     */
     AssetManager assets_manager;
-    Matrix matrix;
+    /**
+     * Represents the paint used for the borders
+     */
     Paint border_paint;
-    int screen_width, screen_height;
+    /**
+     * Represents the width of the screen
+     */
+    int screen_width;
+    /**
+     * Represents the height of the screen
+     */
+    int screen_height;
 
     /**
      * Constructs an instance of the Character class
@@ -33,14 +51,13 @@ public class Character {
      * @param screen_width  The width of the screen.
      * @param screen_height The height of the screen.
      */
-    public Character(Context context, int screen_width, int screen_height){
+    public Character(Context context, int screen_width, int screen_height) {
         this.context = context;
         this.screen_width = screen_width;
         this.screen_height = screen_height;
         this.assets_manager = context.getAssets();
 
-        this.matrix = new Matrix();
-
+        // Border paint for the hide box of the characters
         this.border_paint = new Paint();
         this.border_paint.setColor(Color.RED);
         this.border_paint.setStyle(Paint.Style.STROKE);
@@ -52,14 +69,20 @@ public class Character {
      *
      * @param canvas The canvas to draw on.
      */
-    public void draw(Canvas canvas){
+    public void draw(Canvas canvas) {
     }
 
+    /**
+     * Updates the position of the character.
+     */
+    public void move(){
+
+    }
 
     /**
      * Updates the hide box of the character.
      */
-    public void updateHideBox(){
+    public void updateHideBox() {
     }
 
     /**
@@ -68,14 +91,14 @@ public class Character {
      * @param hide_box The hide box to check collision with.
      * @return True if a collision occurs, false otherwise.
      */
-    public boolean collision(Rect hide_box){
+    public boolean collision(Rect hide_box) {
         return false;
     }
 
     /**
      * Updates the animation of the character.
      */
-    public void updateAnimation(){
+    public void updateAnimation() {
 
     }
 }

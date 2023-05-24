@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         this.sensor_manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         this.accelerometer = sensor_manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        this.gesture_detector = new GestureDetectorCompat(this, new Gestures());
 
 
         if (Build.VERSION.SDK_INT < 16) { // previous versions of Jelly Bean

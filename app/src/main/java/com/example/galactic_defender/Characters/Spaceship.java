@@ -28,14 +28,17 @@ public class Spaceship extends Character {
     Bitmap spaceship3_asset, spaceship3_image;
     Bitmap spaceship4_asset, spaceship4_image;
     Bitmap[] spaceship;
+    PointF last_touch;
     Rect hide_box;
     public Point position;
     int displacement;
-    public boolean move_player;
-    int frame_count;
+    boolean move_player;
     int current_frame;
-    float speed_x, speed_y;
-    float spaceship_angle;
+    float speed_x;
+    float speed_y;
+    public float spaceship_angle;
+    boolean shot;
+
 
     /**
      * Constructs an instance of the Spaceship class.
@@ -47,7 +50,12 @@ public class Spaceship extends Character {
      */
     public Spaceship(Context context, int screen_width, int screen_height) {
         super(context, screen_width, screen_height);
+        this.shot = false;
+        this.current_frame = 0;
+        this.move_player = false;
         this.spaceship = new Bitmap[4];
+        this.displacement = screen_height / 100;
+
         try {
             this.input_stream = assets_manager.open("characters/spaceships/spaceship1.png");
             this.spaceship1_asset = BitmapFactory.decodeStream(input_stream);
@@ -69,8 +77,7 @@ public class Spaceship extends Character {
         this.spaceship3_image = Bitmap.createBitmap(this.spaceship3_asset, 0, 0, this.spaceship3_asset.getWidth(), this.spaceship3_asset.getHeight());
         this.spaceship4_image = Bitmap.createBitmap(this.spaceship4_asset, 0, 0, this.spaceship4_asset.getWidth(), this.spaceship4_asset.getHeight());
 
-        this.spaceship[0] = Bitmap.createScaledBitmap(this.spaceship1_image, screen_height/5,
-                screen_height/3, true);
+        this.spaceship[0] = Bitmap.createScaledBitmap(this.spaceship1_image, screen_height/5, screen_height/3, true);
         this.spaceship[1] = Bitmap.createScaledBitmap(this.spaceship2_image, screen_height/5,
                 screen_height/3, true);
         this.spaceship[2] = Bitmap.createScaledBitmap(this.spaceship3_image, screen_height/5,
@@ -78,17 +85,12 @@ public class Spaceship extends Character {
         this.spaceship[3] = Bitmap.createScaledBitmap(this.spaceship4_image, screen_height/5,
                 screen_height/3, true);
 
-        this.frame_count = this.spaceship.length;
-        this.current_frame = 0;
-        this.displacement = screen_height / 100;
-        this.move_player = false;
+
         this.position = new Point(screen_width / 2 - this.spaceship[current_frame].getWidth() / 2,
                 screen_height / 2 - this.spaceship[current_frame].getHeight() / 2);
-
         updateHideBox();
     }
 
-    // FUNCTIONS
     /**
      * Draws the spaceship on the canvas and manages its position within the borders.
      *
@@ -96,26 +98,12 @@ public class Spaceship extends Character {
      */
     @Override
     public void draw(Canvas canvas) {
-        // Manage if the spaceship its in the borders
-        if (this.position.x > screen_width - this.spaceship[current_frame].getWidth()) {
-            this.position.x = screen_width - this.spaceship[current_frame].getWidth();
-        } else if (this.position.x < 0) {
-            this.position.x = 0;
-        }
-
-        if (this.position.y > screen_height - this.spaceship[current_frame].getHeight()) {
-            this.position.y = screen_height - this.spaceship[current_frame].getHeight();
-        } else if (this.position.y < 0) {
-            this.position.y = 0;
-        }
-
-        // Draw elements
         canvas.save();
         canvas.rotate(this.spaceship_angle, this.hide_box.centerX(), this.hide_box.centerY());
         canvas.drawBitmap(this.spaceship[current_frame], position.x, position.y, null);
+        canvas.drawRect(this.hide_box, this.border_paint);
         canvas.restore();
 
-        canvas.drawRect(this.hide_box, this.border_paint);
         updateHideBox();
     }
 
@@ -146,7 +134,7 @@ public class Spaceship extends Character {
      */
     @Override
     public void updateAnimation() {
-        if (this.current_frame == this.frame_count - 1) {
+        if (this.current_frame == this.spaceship.length - 1) {
             this.current_frame = 0;
         }
         this.current_frame++;
@@ -154,22 +142,20 @@ public class Spaceship extends Character {
 
 
     /**
-     * Moves the player based on the provided last touch difference.
-     *
-     * @param last_touch The difference between the current and last touch positions as
-     *                            a PointF object.
+     * Moves the player around the screen depending on the touch position
      */
-    public void playerMovement(PointF last_touch) {
+    @Override
+    public void move() {
         if (!move_player) {
             return;
         }
+        manageLimits();
 
         // Calculate the estimate absolute value of the difference of coordinates
         float ratio = Math.abs(last_touch.x) / Math.abs(last_touch.y);
 
         // Trying to be the one that makes the great rotation of the spaceship
-        this.spaceship_angle = (float)Math.toDegrees(Math.atan(last_touch.x / last_touch.y) + Math.toRadians(50));
-        Log.i("test6", " " + spaceship_angle);
+        this.spaceship_angle = (float)Math.toDegrees(Math.atan(last_touch.x / last_touch.y));
 
         // Calculates the angle
         double angle = Math.atan(ratio);  // return the value in radians
@@ -191,6 +177,40 @@ public class Spaceship extends Character {
         // Moves the spaceship
         this.position.x += this.speed_x * this.displacement;
         this.position.y += this.speed_y * this.displacement;
+    }
+
+    /**
+     * Manages the limits of the spaceship's position within the screen borders.
+     */
+    public void manageLimits(){
+        if (this.position.x > screen_width - this.spaceship[current_frame].getWidth()) {
+            this.position.x = screen_width - this.spaceship[current_frame].getWidth();
+        } else if (this.position.x < 0) {
+            this.position.x = 0;
+        }
+
+        if (this.position.y > screen_height - this.spaceship[current_frame].getHeight()) {
+            this.position.y = screen_height - this.spaceship[current_frame].getHeight();
+        } else if (this.position.y < 0) {
+            this.position.y = 0;
+        }
+    }
+
+    /**
+     * Sets the player move flag to true and updates the last touch position.
+     *
+     * @param last_touch the PointF object representing the last touch position
+     */
+    public void setPlayerMoveTrue(PointF last_touch) {
+        this.move_player = true;
+        this.last_touch = last_touch;
+    }
+
+    /**
+     * Sets the player move flag to false.
+     */
+    public void setPlayerMoveFalse() {
+        this.move_player = false;
     }
 
 }

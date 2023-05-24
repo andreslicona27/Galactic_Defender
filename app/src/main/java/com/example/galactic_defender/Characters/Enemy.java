@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.opengl.Matrix;
 import android.util.Log;
 
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class Enemy extends Character {
     int pos_x;
     int pos_y;
     int current_frame;
-    int frame_count;
+    int velocity;
     int angle;
 
     /**
@@ -51,6 +50,7 @@ public class Enemy extends Character {
     public Enemy(Context context, int screen_width, int screen_height) {
         super(context, screen_width, screen_height);
 
+        // Get Resources
         try {
             this.input_stream = assets_manager.open("characters/enemy/enemy1.png");
             this.enemy1_asset = BitmapFactory.decodeStream(input_stream);
@@ -80,11 +80,13 @@ public class Enemy extends Character {
         this.enemy[3] = Bitmap.createScaledBitmap(this.enemy4_image, screen_height/5,
                 screen_height/3, true);
 
-        this.frame_count = this.enemy.length;
+        // Initialization of code
         this.random = new Random();
         this.current_frame = 0;
+        this.velocity = screen_height / 100;
         this.direction_x = generateRandomDirection();
         this.direction_y = generateRandomDirection();
+
         generateRandomPosition();
         updateHideBox();
     }
@@ -95,7 +97,7 @@ public class Enemy extends Character {
      *
      * @return The Rect at the borders of the image
      */
-    public Rect getHide_box() {
+    public Rect getHideBox() {
         return this.hide_box;
     }
 
@@ -138,7 +140,7 @@ public class Enemy extends Character {
      */
     @Override
     public void updateAnimation() {
-        if (this.current_frame == this.frame_count - 1) {
+        if (this.current_frame == this.enemy.length - 1) {
             this.current_frame = 0;
         }
         this.current_frame++;
@@ -146,10 +148,9 @@ public class Enemy extends Character {
 
     /**
      * Moves the enemy based on the specified screen dimensions and velocity.
-     *
-     * @param velocity The velocity at which the enemy should move.
      */
-    public void moveEnemy(int velocity) {
+    @Override
+    public void move() {
         int posX = this.position.x + (velocity * this.direction_x);
         int posY = this.position.y + (velocity * this.direction_y);
         this.position = new Point(posX, posY);

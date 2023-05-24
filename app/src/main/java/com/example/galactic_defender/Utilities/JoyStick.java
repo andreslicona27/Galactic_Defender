@@ -9,10 +9,12 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.Space;
 
 
 import androidx.core.content.ContextCompat;
 
+import com.example.galactic_defender.Characters.Spaceship;
 import com.example.galactic_defender.R;
 import com.example.galactic_defender.Scenes.SceneGame;
 
@@ -28,6 +30,7 @@ import com.example.galactic_defender.Scenes.SceneGame;
 public class JoyStick {
 
     SceneGame scene_game;
+    Spaceship spaceship;
     Paint outer_paint, inner_paint;
     Point inner_circle_position;
     Canvas canvas;
@@ -37,20 +40,19 @@ public class JoyStick {
     float inner_radius = 40;
     float touch_x, touch_y;
     int screen_width, screen_height;
-    boolean touch_down;
 
     // BUILDER
 
     /**
      * Constructs an instance of the JoyStick class.
      *
-     * @param scene_game    The class that it would referred
+     * @param spaceship     The class that it would referred
      * @param context       The context of the application.
      * @param screen_width  The width of the screen.
      * @param screen_height The height of the screen.
      */
-    public JoyStick(SceneGame scene_game, Context context, int screen_width, int screen_height) {
-        this.scene_game = scene_game;
+    public JoyStick(Spaceship spaceship, Context context, int screen_width, int screen_height) {
+        this.spaceship = spaceship;
         this.screen_width = screen_width;
         this.screen_height = screen_height;
 
@@ -115,22 +117,22 @@ public class JoyStick {
                 float difference_x = center_x - touch_x;
                 float difference_y = center_y - touch_y;
 
-                float as = Math.abs(x - center_x);
-                float es = Math.abs(y - center_y);
+                float as = Math.abs(x - this.center_x);
+                float es = Math.abs(y - this.center_y);
                 float is = (float) Math.hypot(as, es);
 
-                if (is <= outer_radius) {
-                    canvas.drawCircle((int) touch_x, (int) touch_y, inner_radius, inner_paint);
-                } else {
-                    canvas.drawCircle(center_x, center_y, inner_radius, inner_paint);
-                }
+//                if (is <= outer_radius) {
+//                    canvas.drawCircle((int) touch_x, (int) touch_y, inner_radius, inner_paint);
+//                } else {
+//                    canvas.drawCircle(center_x, center_y, inner_radius, inner_paint);
+//                }
 
-                this.scene_game.setPlayerMoveTrue(new PointF(difference_x, difference_y));
+                this.spaceship.setPlayerMoveTrue(new PointF(difference_x, difference_y));
 
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
-                this.scene_game.setPlayerMoveFalse();
+                this.spaceship.setPlayerMoveFalse();
                 break;
         }
     }

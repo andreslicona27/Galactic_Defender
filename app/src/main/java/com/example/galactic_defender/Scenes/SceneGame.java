@@ -4,11 +4,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.hardware.SensorEventListener;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
+
+import androidx.core.content.ContextCompat;
 
 import com.example.galactic_defender.Characters.Enemy;
 import com.example.galactic_defender.Characters.Shot;
@@ -79,6 +83,7 @@ public class SceneGame extends Scene {
         this.timer = new Timer();
         this.timer.schedule(new EnemyAdditionTask(), 500, time_per_enemy);
         this.timer.schedule(new AnimationsTask(), 300, 300);
+        this.timer.schedule(new FireButtonChange(), 10000, 10000);
 
         // Sound Effects
         this.enemy_dies = MediaPlayer.create(context.getApplicationContext(), R.raw.alien_dead);
@@ -157,15 +162,13 @@ public class SceneGame extends Scene {
             for (int i = enemies.size() - 1; i >= 0; i--) {
                 if (this.spaceship.collision(enemies.get(i).getHideBox())) {
 //                    this.game_over = true;
-                    enemies.remove(i);
-                    this.hardware.vibrate();
+//                    this.hardware.vibrate();
 
                     // Code to insert the score in the database
 //                    InsertScore insert_score = new InsertScore(this.context);
 //                    insert_score.insertScore(GalacticDefender.score);
 
                 }
-                // TODO create collision with shots
                 for (int j = spaceship_shots.size() - 1; j >= 0; j--) {
                     if (enemies.get(i).collision(spaceship_shots.get(j).getHideBox())) {
                         enemies.remove(i);
@@ -176,13 +179,11 @@ public class SceneGame extends Scene {
                     }
                     if(spaceship_shots.get(j).wallCollision()){
                         spaceship_shots.remove(j);
-                        Log.i("test", "shot remove");
-                        Log.i("test", "" + spaceship_shots.size());
                     }
-
                 }
             }
             this.spaceship.move();
+            this.hardware.verifiedMovement(this);
         }
     }
 
@@ -247,6 +248,16 @@ public class SceneGame extends Scene {
         this.timer.cancel();
     }
 
+    public void studEnemies(){
+        if(this.fire_button.paint.getColor() == Color.WHITE){
+            for (int i = enemies.size() - 1; i > 0 ; i--) {
+                enemies.remove(i);
+                GalacticDefender.score += 10;
+            }
+            this.fire_button.paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
+        }
+    }
+
     //////////////////////////// TIMER CLASSES ////////////////////////////
 
     /**
@@ -287,6 +298,24 @@ public class SceneGame extends Scene {
             if (!pause && !game_over) {
                 Enemy enemy = new Enemy(context, screen_width, screen_height);
                 enemies.add(enemy);
+            }
+        }
+    }
+
+    /**
+     * A private class representing a change of paint color task in the FireButton class.
+     * This class extends the java.util.TimerTask class.
+     */
+    private class FireButtonChange extends java.util.TimerTask{
+        /**
+         * The run method that is executed when the task is scheduled to run.
+         * It verifies if the color of the FireButton class paint is the main_yellow.
+         * If it is it changes it to white
+         */
+        @Override
+        public void run(){
+            if(fire_button.paint.getColor() == ContextCompat.getColor(context, R.color.main_yellow)){
+                fire_button.paint.setColor(Color.WHITE);
             }
         }
     }

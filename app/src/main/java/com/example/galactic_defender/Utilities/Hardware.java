@@ -11,6 +11,8 @@ import android.os.Vibrator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.galactic_defender.Scenes.SceneGame;
+
 /**
  * This class provides hardware-related functionalities such as vibration and sensor data.
  * It provides a method for vibrating the device.
@@ -19,11 +21,29 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 public class Hardware extends AppCompatActivity implements SensorEventListener{
 
+    /**
+     * Represents a vibrator that can generate haptic feedback.
+     */
     Vibrator vibrator;
+    /**
+     * Manages sensor-related operations, such as registering and listening for sensor events.
+     */
     SensorManager sensor_manager;
+    /**
+     * Represents an accelerometer sensor that measures acceleration forces applied to the device.
+     */
     Sensor accelerometer;
-    float[] gravity = new float[3];
-    float[] linear_acceleration = new float[3];
+    /**
+     * An array to store the gravity components (x, y, z) measured by the accelerometer sensor.
+     * The gravity values represent the force applied to the device due to gravity.
+     */
+    float[] gravity;
+    /**
+     * An array to store the linear acceleration components (x, y, z) calculated by subtracting the gravity components
+     * from the accelerometer readings. Linear acceleration values represent the actual acceleration experienced by the device,
+     * excluding the force of gravity.
+     */
+    float[] linear_acceleration;
 
     /**
      * Constructor for the Hardware class.
@@ -34,25 +54,10 @@ public class Hardware extends AppCompatActivity implements SensorEventListener{
         this.vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         this.sensor_manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         this.accelerometer = sensor_manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        this.gravity = new float[3];
+        this.linear_acceleration = new float[3];
     }
 
-    /**
-     * Starts listening to sensor events.
-     */
-    public void start() {
-        if(this.sensor_manager != null){
-            this.sensor_manager.registerListener(this, this.accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        }
-    }
-
-    /**
-     * Stops listening to sensor events.
-     */
-    public void stop() {
-        if(this.sensor_manager != null){
-            this.sensor_manager.unregisterListener(this);
-        }
-    }
 
     /**
      * Called when the accuracy of a sensor has changed.
@@ -72,35 +77,57 @@ public class Hardware extends AppCompatActivity implements SensorEventListener{
      */
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-//            float xAxis = event.values[0];
-//            float yAxis = event.values[1];
-//            float zAxis = event.values[2];
+    }
 
-            final float alpha = (float) 0.8;
+    /**
+     * This method is responsible for handling verified movement using the accelerometer sensor
+     *
+     * @param scene_game The SceneGame object representing the current game scene
+     */
+    public void verifiedMovement(final SceneGame scene_game) {
+        SensorEventListener accelerometerListener = new SensorEventListener() {
+            /**
+             * Called when sensor values have changed.
+             *
+             * @param event The sensor event.
+             */
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                final float alpha = (float) 0.8;
+                // Isolate the force of gravity with the low-pass filter.
+                gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
+                gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
+                gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
 
-            // Isolate the force of gravity with the low-pass filter.
-            gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
-            gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
-            gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
+                // Remove the gravity contribution with the high-pass filter.
+                linear_acceleration[0] = event.values[0] - gravity[0];
+                linear_acceleration[1] = event.values[1] - gravity[1];
+                linear_acceleration[2] = event.values[2] - gravity[2];
 
-            // Remove the gravity contribution with the high-pass filter.
-            linear_acceleration[0] = event.values[0] - gravity[0];
-            linear_acceleration[1] = event.values[1] - gravity[1];
-            linear_acceleration[2] = event.values[2] - gravity[2];
-
-            double magnitude = Math.sqrt(
-                    linear_acceleration[0] * linear_acceleration[0] +
-                    linear_acceleration[1] * linear_acceleration[1] +
-                    linear_acceleration[2] * linear_acceleration[2]);
+                double magnitude = Math.sqrt(
+                        linear_acceleration[0] * linear_acceleration[0] +
+                                linear_acceleration[1] * linear_acceleration[1] +
+                                linear_acceleration[2] * linear_acceleration[2]);
 
 
-            double threshold = 1.0;
+                double threshold = 10.0;
+                if (magnitude > threshold) {
+                    scene_game.studEnemies();
+                }
+            }
 
-            if (magnitude > threshold) {
+            /**
+             * Called when the accuracy of a sensor has changed.
+             *
+             * @param sensor The sensor that has changed accuracy.
+             * @param accuracy The new accuracy value.
+             */
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
             }
-        }
+        };
+        sensor_manager.registerListener(accelerometerListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
 

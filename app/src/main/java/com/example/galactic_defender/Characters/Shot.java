@@ -17,17 +17,56 @@ import java.io.InputStream;
  * Extends the Character class.
  */
 public class Shot extends Character{
-
+    /**
+     * Represents an input stream.
+     */
     InputStream input_stream;
+
+    /**
+     * Manages access to an application's assets.
+     */
     AssetManager assets_manager;
+
+    /**
+     * Represents a drawing surface.
+     */
     Canvas canvas;
-    public Point position;
+
+    /**
+     * Represents an asset for a shot.
+     */
     Bitmap shot_asset;
+
+    /**
+     * Represents an image for a shot.
+     */
     Bitmap shot_image;
-    public Bitmap scale_shot_image;
+
+    /**
+     * Represents a rectangular area for the limits of the shot.
+     */
     Rect hide_box;
+
+    /**
+     * Represents the position of th shot in a coordinate system.
+     */
+    public Point position;
+
+    /**
+     * Represents a scaled image for the shot.
+     */
+    public Bitmap scale_shot_image;
+
+    /**
+     * Represents the displacement of ths shot.
+     */
     int displacement;
+
+    /**
+     * Represents the angle of rotation it which the shot would move
+     */
     float angle;
+
 
 
     /**
@@ -80,11 +119,8 @@ public class Shot extends Character{
     @Override
     public void draw(Canvas canvas) {
         this.canvas = canvas;
-        canvas.save();
-        canvas.rotate(this.angle, this.hide_box.centerX(), this.hide_box.centerY());
         canvas.drawBitmap(this.scale_shot_image, this.position.x, this.position.y, null);
         canvas.drawRect(this.hide_box, this.border_paint);
-        canvas.restore();
     }
 
     /**
@@ -92,35 +128,50 @@ public class Shot extends Character{
      */
     @Override
     public void move(){
-        if (this.angle >= 0 && this.angle <= 22) {
-            this.position.x = this.position.x + this.displacement;
-        }
-        if(this.angle > 22 && this.angle <= 67){
-            this.position.x = this.position.x + this.displacement;
-            this.position.y = this.position.y + this.displacement;
-        }
-        if(this.angle > 67 && this.angle <= 112){
-            this.position.y = this.position.y + this.displacement;
-        }
-        if(this.angle > 112 && this.angle <= 157){
-            this.position.x = this.position.x - this.displacement;
-            this.position.y = this.position.y + this.displacement;
-        }
-        if(this.angle > 157 && this.angle <= 202){
-            this.position.x = this.position.x - this.displacement;
-        }
-        if(this.angle > 202 && this.angle <= 247){
-            this.position.x = this.position.x - this.displacement;
-            this.position.y = this.position.y - this.displacement;
-        }
-        if(this.angle > 247 && this.angle <= 292){
-            this.position.y = this.position.y - this.displacement;
-        }
-        if(this.angle > 337){
-            this.position.x = this.position.x + this.displacement;
-        }
+//        if (this.angle >= 0 && this.angle <= 22) {
+//            this.position.x = this.position.x + this.displacement;
+//        }
+//        if(this.angle > 22 && this.angle <= 67){
+//            this.position.x = this.position.x + this.displacement;
+//            this.position.y = this.position.y + this.displacement;
+//        }
+//        if(this.angle > 67 && this.angle <= 112){
+//            this.position.y = this.position.y + this.displacement;
+//        }
+//        if(this.angle > 112 && this.angle <= 157){
+//            this.position.x = this.position.x - this.displacement;
+//            this.position.y = this.position.y + this.displacement;
+//        }
+//        if(this.angle > 157 && this.angle <= 202){
+//            this.position.x = this.position.x - this.displacement;
+//        }
+//        if(this.angle > 202 && this.angle <= 247){
+//            this.position.x = this.position.x - this.displacement;
+//            this.position.y = this.position.y - this.displacement;
+//        }
+//        if(this.angle > 247 && this.angle <= 292){
+//            this.position.y = this.position.y - this.displacement;
+//        }
+//        if (this.angle > 292 && this.angle <= 337){
+//            this.position.x = this.position.x + this.displacement;
+//        }
 
-//        this.position.y = this.position.y + this.displacement;
+        if(this.angle > 0 && this.angle <= 90){
+            this.position.x = this.position.x + this.displacement;
+            Log.i("test", "" + this.angle);
+        }
+        if(this.angle > 180 && this.angle <= 270){
+            this.position.x = this.position.x - this.displacement;
+            Log.i("test", "" + this.angle);
+        }
+        if(this.angle > 90 && this.angle <= 180){
+            this.position.y = this.position.y + this.displacement;
+            Log.i("test", "" + this.angle);
+        }
+        if(this.angle > 270 && this.angle <= 359){
+            this.position.y = this.position.y - this.displacement;
+            Log.i("test", "" + this.angle);
+        }
         updateHideBox();
     }
 

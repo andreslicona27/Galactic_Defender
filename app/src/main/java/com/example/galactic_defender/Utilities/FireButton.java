@@ -34,7 +34,7 @@ public class FireButton {
     /**
      * Represents the paint used for drawing.
      */
-    Paint paint;
+    public Paint paint;
     /**
      * Represents the radius of the fire button.
      */

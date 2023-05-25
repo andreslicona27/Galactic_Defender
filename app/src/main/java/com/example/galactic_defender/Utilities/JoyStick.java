@@ -90,8 +90,6 @@ public class JoyStick {
         int pointerIndex = event.getActionIndex(); // obtains the action finger
         float x = event.getX(pointerIndex);
         float y = event.getY(pointerIndex);
-        int pointerID = event.getPointerId(pointerIndex); // obtains the id pointer associated to
-        // the action
 
         this.center_x = (float) this.screen_width / 20 * 2;
         this.center_y = (float) this.screen_height / 20 * 16;
@@ -126,7 +124,6 @@ public class JoyStick {
 //                } else {
 //                    canvas.drawCircle(center_x, center_y, inner_radius, inner_paint);
 //                }
-
                 this.spaceship.setPlayerMoveTrue(new PointF(difference_x, difference_y));
 
                 break;

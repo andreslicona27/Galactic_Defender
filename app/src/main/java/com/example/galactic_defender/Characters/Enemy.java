@@ -24,20 +24,95 @@ import java.util.Random;
  **/
 public class Enemy extends Character {
 
+    /**
+     * The asset image for enemy 1.
+     */
+    Bitmap enemy1_asset;
+
+    /**
+     * The asset image for enemy 2.
+     */
+    Bitmap enemy2_asset;
+
+    /**
+     * The asset image for enemy 3.
+     */
+    Bitmap enemy3_asset;
+
+    /**
+     * The asset image for enemy 4.
+     */
+    Bitmap enemy4_asset;
+
+    /**
+     * The image of the enemy 1.
+     */
+    Bitmap enemy1_image;
+
+    /**
+     * The image of the enemy 2.
+     */
+    Bitmap enemy2_image;
+
+    /**
+     * The image of the enemy 3.
+     */
+    Bitmap enemy3_image;
+
+    /**
+     * The image of the enemy 4.
+     */
+    Bitmap enemy4_image;
+
+    /**
+     * An array of spaceship images that would be displaying for the animations
+     */
+    Bitmap[] enemy;
+
+    /**
+     * Rectangle area that determinate the enemy limits.
+     */
     Rect hide_box;
-    Bitmap enemy1_asset, enemy1_image;
-    Bitmap enemy2_asset, enemy2_image;
-    Bitmap enemy3_asset, enemy3_image;
-    Bitmap enemy4_asset, enemy4_image;
-    Bitmap[] enemy = new Bitmap[4];
+
+    /**
+     * Random variable used to randomly assigned the enemy position.
+     */
     Random random;
+
+    /**
+     * Represents the position of the enemy.
+     */
     public Point position;
-    public int direction_x, direction_y;
+
+    /**
+     * Represents the direction of the enemy in the x coordinate.
+     */
+    public int direction_x;
+
+    /**
+     * Represents the direction of the enemy in the y coordinate.
+     */
+    public int direction_y;
+
+    /**
+     * Variable used to determined the initial random position of the enemy in the x coordinate.
+     */
     int pos_x;
+
+    /**
+     * Variable used to determined the initial random position of the enemy in the y coordinate.
+     */
     int pos_y;
+
+    /**
+     * Current frame in th enemy array animation.
+     */
     int current_frame;
-    int velocity;
-    int angle;
+
+    /**
+     * Represents the speed of the enemy around the game
+     */
+    int speed;
 
     /**
      * Constructs an instance of the Enemy class.
@@ -49,6 +124,12 @@ public class Enemy extends Character {
      */
     public Enemy(Context context, int screen_width, int screen_height) {
         super(context, screen_width, screen_height);
+        this.random = new Random();
+        this.current_frame = 0;
+        this.speed = screen_height / 100;
+        this.direction_x = generateRandomDirection();
+        this.direction_y = generateRandomDirection();
+        this.enemy = new Bitmap[4];
 
         // Get Resources
         try {
@@ -71,6 +152,7 @@ public class Enemy extends Character {
         this.enemy3_image = Bitmap.createBitmap(this.enemy3_asset, 0, 0, this.enemy3_asset.getWidth(), this.enemy3_asset.getHeight());
         this.enemy4_image = Bitmap.createBitmap(this.enemy4_asset, 0, 0, this.enemy4_asset.getWidth(), this.enemy4_asset.getHeight());
 
+        // Fill of the images array
         this.enemy[0] = Bitmap.createScaledBitmap(this.enemy1_image, screen_height/5,
                 screen_height/3, true);
         this.enemy[1] = Bitmap.createScaledBitmap(this.enemy2_image, screen_height/5,
@@ -80,12 +162,6 @@ public class Enemy extends Character {
         this.enemy[3] = Bitmap.createScaledBitmap(this.enemy4_image, screen_height/5,
                 screen_height/3, true);
 
-        // Initialization of code
-        this.random = new Random();
-        this.current_frame = 0;
-        this.velocity = screen_height / 100;
-        this.direction_x = generateRandomDirection();
-        this.direction_y = generateRandomDirection();
 
         generateRandomPosition();
         updateHideBox();
@@ -151,8 +227,8 @@ public class Enemy extends Character {
      */
     @Override
     public void move() {
-        int posX = this.position.x + (velocity * this.direction_x);
-        int posY = this.position.y + (velocity * this.direction_y);
+        int posX = this.position.x + (speed * this.direction_x);
+        int posY = this.position.y + (speed * this.direction_y);
         this.position = new Point(posX, posY);
 
         if (this.position.x + this.enemy[current_frame].getWidth() >= screen_width || this.position.x <= 0) {

@@ -23,22 +23,27 @@ public class Character {
      * Represents the attribute of context in the character class
      */
     Context context;
+
     /**
      * Represents the input stream for it to read data from a concrete source
      */
     InputStream input_stream;
+
     /**
      * Represents the asset manager.for it to manage the assets
      */
     AssetManager assets_manager;
+
     /**
      * Represents the paint used for the borders
      */
     Paint border_paint;
+
     /**
      * Represents the width of the screen
      */
     int screen_width;
+
     /**
      * Represents the height of the screen
      */

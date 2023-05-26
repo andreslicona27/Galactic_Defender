@@ -23,21 +23,95 @@ import java.io.IOException;
  **/
 public class Spaceship extends Character {
 
-    Bitmap spaceship1_asset, spaceship1_image;
-    Bitmap spaceship2_asset, spaceship2_image;
-    Bitmap spaceship3_asset, spaceship3_image;
-    Bitmap spaceship4_asset, spaceship4_image;
+    /**
+     * The asset image for spaceship 1.
+     */
+    Bitmap spaceship1_asset;
+
+    /**
+     * The asset image for spaceship 2.
+     */
+    Bitmap spaceship2_asset;
+
+    /**
+     * The asset image for spaceship 3.
+     */
+    Bitmap spaceship3_asset;
+
+    /**
+     * The asset image for spaceship 4.
+     */
+    Bitmap spaceship4_asset;
+
+    /**
+     * The image of the spaceship 1.
+     */
+    Bitmap spaceship1_image;
+
+    /**
+     * The image of the spaceship 2.
+     */
+    Bitmap spaceship2_image;
+
+    /**
+     * The image of the spaceship 3.
+     */
+    Bitmap spaceship3_image;
+
+    /**
+     * The image of the spaceship 4.
+     */
+    Bitmap spaceship4_image;
+
+    /**
+     * An array of spaceship images that would be displaying for the animations
+     */
     Bitmap[] spaceship;
+
+    /**
+     * The position  of the last touch of the player
+     */
     PointF last_touch;
+
+    /**
+     * Rectangle are used to represent the limits of the spaceship
+     */
     Rect hide_box;
+
+    /**
+     * Represent the position of the spaceship
+     */
     public Point position;
+
+    /**
+     * Represents the amount of displacement that the spaceship makes
+     */
     int displacement;
+
+    /**
+     * Variable that indicates weather the spaceship is currently moving
+     */
     boolean move_player;
+
+    /**
+     * The current frame of the spaceship animation
+     */
     int current_frame;
+
+    /**
+     * The players speed in the x axis
+     */
     float speed_x;
+
+    /**
+     * The players speed in the y axis
+     */
     float speed_y;
+
+    /**
+     * The angle or rotation of the spaceship
+     */
     public float spaceship_angle;
-    boolean shot;
 
 
     /**
@@ -50,7 +124,6 @@ public class Spaceship extends Character {
      */
     public Spaceship(Context context, int screen_width, int screen_height) {
         super(context, screen_width, screen_height);
-        this.shot = false;
         this.current_frame = 0;
         this.move_player = false;
         this.spaceship = new Bitmap[4];

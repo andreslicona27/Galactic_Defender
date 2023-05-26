@@ -1,6 +1,7 @@
 package com.example.galactic_defender;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -33,24 +34,23 @@ import java.util.Locale;
 public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callback {
 
     final SurfaceHolder surface_holder;
+    public static SharedPreferences shared_preferences;
     Context context;
-    InputStream input_stream;
-    AssetManager assets_manager;
     Scene current_scene;
     Hilo game_thread;
     Handler handler;
-    int screen_height, screen_width;
+    int screen_height;
+    int screen_width;
     int new_scene;
-    boolean playing = true;
-    boolean thread_working = false; // Control of the thread
+    boolean playing;
+    boolean thread_working; // Control of the thread
 
     /////////////// OTHER CLASSES USES /////////////////
-    public static Configuration configuration;
-    public static String language;
     public static MediaPlayer background_music;
-    public static Bitmap sounds_button_image;
-    public static Bitmap music_button_image;
-    public static Bitmap language_button_image;
+    public static Configuration configuration;
+    public static boolean soundEnabled = true;
+    public static boolean musicEnabled = true;
+    public static String language;
     public static int score = 0;
 
 
@@ -68,32 +68,27 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         this.game_thread = new Hilo();
         this.handler = new Handler();
 
+        // Booleans variables that manage the game
+        this.playing = true;
+        this.thread_working = false;
+
+        // Shared values
+        shared_preferences = context.getApplicationContext().getSharedPreferences("SettingsValues", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = GalacticDefender.shared_preferences.edit();
+        editor.putBoolean("soundEnabled", true);
+        editor.putBoolean("musicEnabled", true);
+        editor.putString("language", "en");
+        editor.apply();
+
         // Background Music
         background_music = MediaPlayer.create(this.getContext(), R.raw.background_music);
         background_music.setLooping(true);
         background_music.start();
 
-        try{
-            this.assets_manager = context.getAssets();
-            this.input_stream = assets_manager.open("button_icons/sound_on_icon.png");
-            sounds_button_image = BitmapFactory.decodeStream(input_stream);
-
-            this.input_stream = assets_manager.open("button_icons/music_on_icon.png");
-            music_button_image = BitmapFactory.decodeStream(input_stream);
-
-            this.input_stream = assets_manager.open("button_icons/spanish_icon.png");
-//            language_button_image = BitmapFactory.decodeStream(input_stream);
-
-        } catch (IOException e) {
-            Log.i("assets", "problem getting the asset");
-            throw new RuntimeException(e);
-        }
-
         // Language
         changeLanguage("en");
         configuration = getResources().getConfiguration();
         language = configuration.locale.getLanguage();
-        language_button_image = BitmapFactory.decodeStream(input_stream);
     }
 
 
@@ -106,7 +101,9 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
      */
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-
+        soundEnabled = shared_preferences.getBoolean("soundEnabled", true);
+        musicEnabled = shared_preferences.getBoolean("musicEnabled", true);
+        language = shared_preferences.getString("language", "en");
     }
 
     /**
@@ -123,7 +120,6 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         this.screen_width = width;
         this.screen_height = height;
         current_scene = new SceneMenu(context, screen_height, screen_width, 1);
-        Log.i("test6", "surfaceChanged: " + screen_height);
 
         if (game_thread.getState() == Thread.State.NEW) {
             game_thread.start();

@@ -15,22 +15,13 @@ import java.io.InputStream;
 /**
  * Represents a Shot object in the game.
  * Extends the Character class.
+ *
+ * @author [Andres Licona]
+ * @version [1.0]
+ * @since [05-24-2023]
  */
 public class Shot extends Character{
-    /**
-     * Represents an input stream.
-     */
-    InputStream input_stream;
 
-    /**
-     * Manages access to an application's assets.
-     */
-    AssetManager assets_manager;
-
-    /**
-     * Represents a drawing surface.
-     */
-    Canvas canvas;
 
     /**
      * Represents an asset for a shot.
@@ -58,7 +49,7 @@ public class Shot extends Character{
     public Bitmap scale_shot_image;
 
     /**
-     * Represents the displacement of ths shot.
+     * Represents the amount of displacement that the shot would make
      */
     int displacement;
 
@@ -86,6 +77,7 @@ public class Shot extends Character{
         this.displacement = screen_height / 100;
         this.assets_manager = context.getAssets();
 
+        // Assets
         try {
             this.input_stream = assets_manager.open("characters/laser.png");
             this.shot_asset = BitmapFactory.decodeStream(input_stream);
@@ -118,7 +110,6 @@ public class Shot extends Character{
      */
     @Override
     public void draw(Canvas canvas) {
-        this.canvas = canvas;
         canvas.drawBitmap(this.scale_shot_image, this.position.x, this.position.y, null);
         canvas.drawRect(this.hide_box, this.border_paint);
     }

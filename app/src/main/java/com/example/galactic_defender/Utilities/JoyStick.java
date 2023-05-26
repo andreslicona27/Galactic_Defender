@@ -2,21 +2,16 @@ package com.example.galactic_defender.Utilities;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.Rect;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.Space;
 
 
 import androidx.core.content.ContextCompat;
 
 import com.example.galactic_defender.Characters.Spaceship;
 import com.example.galactic_defender.R;
-import com.example.galactic_defender.Scenes.SceneGame;
 
 
 /**
@@ -29,17 +24,65 @@ import com.example.galactic_defender.Scenes.SceneGame;
  */
 public class JoyStick {
 
-    SceneGame scene_game;
+    /**
+     * Spaceship that would be need to call the functions for the spaceship movement
+     */
     Spaceship spaceship;
-    Paint outer_paint, inner_paint;
+
+    /**
+     * The outer paint of the joystick
+     */
+    Paint outer_paint;
+
+    /**
+     * The inner paint of the joystick
+     */
+    Paint inner_paint;
+
+    /**
+     * The position of the inner circle
+     */
     Point inner_circle_position;
-    Canvas canvas;
+
+    /**
+     * The x coordinate of the center of the joystick
+     */
     float center_x;
+
+    /**
+     * The y coordinate of the center of the joystick
+     */
     float center_y;
-    float outer_radius = 100;
-    float inner_radius = 40;
-    float touch_x, touch_y;
-    int screen_width, screen_height;
+
+    /**
+     * Constant that defines the radius of the outer circle of the joystick
+     */
+    float OUTER_RADIUS = 100;
+
+    /**
+     * Constants that defines radius of the inner circle of the joystick
+     */
+    float INNER_RADIUS = 40;
+
+    /**
+     * The x coordinate of the touch position
+     */
+    float touch_x;
+
+    /**
+     * The y coordinate of the touch position
+     */
+    float touch_y;
+
+    /**
+     * The width of the screen
+     */
+    int screen_width;
+
+    /**
+     * The height of the screen
+     */
+    int screen_height;
 
     // BUILDER
 
@@ -56,14 +99,17 @@ public class JoyStick {
         this.screen_width = screen_width;
         this.screen_height = screen_height;
 
+        // Outer paint
         this.outer_paint = new Paint();
         this.outer_paint.setStyle(Paint.Style.STROKE);
         this.outer_paint.setStrokeWidth(5);
         this.outer_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
 
+        // Inner paint
         this.inner_paint = new Paint();
         this.inner_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
 
+        // Position values
         this.center_x = (float) this.screen_width / 20 * 2;
         this.center_y = (float) this.screen_width / 20 * 16;
         this.inner_circle_position = new Point(this.screen_width / 20 * 2, this.screen_height / 20 * 16);
@@ -76,9 +122,8 @@ public class JoyStick {
      * @param canvas for it to  draw the graphics in the canvas
      */
     public void drawJoystick(Canvas canvas) {
-        this.canvas = canvas;
-        canvas.drawCircle((float) this.screen_width / 20 * 2, (float) this.screen_height / 20 * 16, outer_radius, outer_paint);
-        canvas.drawCircle(this.inner_circle_position.x, this.inner_circle_position.y, inner_radius, inner_paint);
+        canvas.drawCircle((float) this.screen_width / 20 * 2, (float) this.screen_height / 20 * 16, OUTER_RADIUS, outer_paint);
+        canvas.drawCircle(this.inner_circle_position.x, this.inner_circle_position.y, INNER_RADIUS, inner_paint);
     }
 
     /**
@@ -102,7 +147,7 @@ public class JoyStick {
                 float side_b = Math.abs(y - center_y);
                 float hypotenuse = (float) Math.hypot(side_a, side_b);
 
-                if (hypotenuse <= outer_radius) {
+                if (hypotenuse <= OUTER_RADIUS) {
                     touch_x = x;
                     touch_y = y;
                 }

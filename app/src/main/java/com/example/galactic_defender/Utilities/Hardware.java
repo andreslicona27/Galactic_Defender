@@ -112,7 +112,7 @@ public class Hardware extends AppCompatActivity implements SensorEventListener{
 
                 double threshold = 10.0;
                 if (magnitude > threshold) {
-                    scene_game.studEnemies();
+                    scene_game.removeEnemies();
                 }
             }
 

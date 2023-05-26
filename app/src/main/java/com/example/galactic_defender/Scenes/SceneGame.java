@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.hardware.SensorEventListener;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -30,12 +29,11 @@ import java.util.Timer;
 
 public class SceneGame extends Scene {
 
+    Timer timer;
     Hardware hardware;
     MediaPlayer enemy_dies, spaceship_explosion, laser_shot;
     Bitmap pause_button_image;
     Rect pause_button;
-    Canvas canvas;
-    Timer timer;
     Explosion[] explosions;
     JoyStick joystick;
     FireButton fire_button;
@@ -104,6 +102,7 @@ public class SceneGame extends Scene {
                 , screen_height / 10 + 50);
 
 
+        // Pause and game over buttons
         home_button1 = new RectF((float) screen_width / 9 * 2, (float) screen_height / 7 * 4, (float) screen_width / 9 * 4, (float) screen_height / 7 * 5);
         resume_button = new RectF((float) screen_width / 9 * 5, (float) screen_height / 7 * 4, (float) screen_width / 9 * 7, (float) screen_height / 7 * 5);
         home_button2 = new RectF((float) screen_width / 10 * 3, (float) screen_height / 7 * 4,
@@ -117,8 +116,6 @@ public class SceneGame extends Scene {
      */
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        this.canvas = canvas;
-
         // Characters
         this.spaceship.draw(canvas);
         drawEnemies(canvas);
@@ -162,7 +159,10 @@ public class SceneGame extends Scene {
             for (int i = enemies.size() - 1; i >= 0; i--) {
                 if (this.spaceship.collision(enemies.get(i).getHideBox())) {
 //                    this.game_over = true;
-//                    this.hardware.vibrate();
+                    if (GalacticDefender.soundEnabled) {
+                        this.hardware.vibrate();
+                        this.spaceship_explosion.start();
+                    }
 
                     // Code to insert the score in the database
 //                    InsertScore insert_score = new InsertScore(this.context);
@@ -171,13 +171,15 @@ public class SceneGame extends Scene {
                 }
                 for (int j = spaceship_shots.size() - 1; j >= 0; j--) {
                     if (enemies.get(i).collision(spaceship_shots.get(j).getHideBox())) {
-                        enemies.remove(i);
-                        spaceship_shots.remove(j);
-                        this.enemy_dies.start();
-                        this.hardware.vibrate();
+                        this.enemies.remove(i);
+                        this.spaceship_shots.remove(j);
                         GalacticDefender.score += 10;
+                        if (GalacticDefender.soundEnabled) {
+                            this.enemy_dies.start();
+                            this.hardware.vibrate();
+                        }
                     }
-                    if(spaceship_shots.get(j).wallCollision()){
+                    if (spaceship_shots.get(j).wallCollision()) {
                         spaceship_shots.remove(j);
                     }
                 }
@@ -188,6 +190,12 @@ public class SceneGame extends Scene {
     }
 
 
+    /**
+     * Overrides the onTouchEvent method from the superclass to handle touch events.
+     *
+     * @param event The MotionEvent representing the touch event.
+     * @return Returns an integer value indicating the result of the touch event.
+     */
     @Override
     public int onTouchEvent(MotionEvent event) {
         float x = event.getX();
@@ -216,6 +224,11 @@ public class SceneGame extends Scene {
 
     //////////////////////////// GENERAL FUNCTIONS ////////////////////////////
 
+    /**
+     * Draws the enemies on the given canvas.
+     *
+     * @param canvas The canvas to draw on.
+     */
     public void drawEnemies(Canvas canvas) {
         for (Enemy enemy : enemies) {
             enemy.draw(canvas);
@@ -225,6 +238,11 @@ public class SceneGame extends Scene {
         }
     }
 
+    /**
+     * Draws the shots fired by the spaceship on the given canvas.
+     *
+     * @param canvas The canvas to draw on.
+     */
     public void drawShots(Canvas canvas) {
         for (Shot shot : spaceship_shots) {
             shot.draw(canvas);
@@ -234,6 +252,10 @@ public class SceneGame extends Scene {
         }
     }
 
+    /**
+     * Releases the resources used by the game.
+     * This includes releasing sound effects, clearing lists, and stopping the timer.
+     */
     public void releaseResources() {
         // Release sound effects
         this.enemy_dies.release();
@@ -248,12 +270,16 @@ public class SceneGame extends Scene {
         this.timer.cancel();
     }
 
-    public void studEnemies(){
-        if(this.fire_button.paint.getColor() == Color.WHITE){
-            for (int i = enemies.size() - 1; i > 0 ; i--) {
-                enemies.remove(i);
-                GalacticDefender.score += 10;
-            }
+    /**
+     * Remove the enemies if the fire button color is white.
+     * Clears enemies list and increases the score with the corresponding points .
+     * Changes the fire button color to yellow.
+     * All is the "power" of the accelerometer
+     */
+    public void removeEnemies() {
+        if (this.fire_button.paint.getColor() == Color.WHITE) {
+            GalacticDefender.score += enemies.size() * 10;
+            enemies.clear();
             this.fire_button.paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
         }
     }
@@ -306,15 +332,15 @@ public class SceneGame extends Scene {
      * A private class representing a change of paint color task in the FireButton class.
      * This class extends the java.util.TimerTask class.
      */
-    private class FireButtonChange extends java.util.TimerTask{
+    private class FireButtonChange extends java.util.TimerTask {
         /**
          * The run method that is executed when the task is scheduled to run.
          * It verifies if the color of the FireButton class paint is the main_yellow.
          * If it is it changes it to white
          */
         @Override
-        public void run(){
-            if(fire_button.paint.getColor() == ContextCompat.getColor(context, R.color.main_yellow)){
+        public void run() {
+            if (fire_button.paint.getColor() == ContextCompat.getColor(context, R.color.main_yellow)) {
                 fire_button.paint.setColor(Color.WHITE);
             }
         }

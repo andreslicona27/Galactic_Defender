@@ -11,4 +11,6 @@
     <string name="home_button">Menu</string>
     <string name="resume_button">Resume</string>
     <string name="play_button">Play</string>
+    <string name="remove_info_button">Remove All Records</string>
+    <string name="no_records_message">No records yet</string>
 </resources>

@@ -34,16 +34,85 @@ import java.io.InputStream;
  */
 public class Scene {
 
+    /**
+     * The context object that provides access to the application-specific resources and operations.
+     */
     Context context;
+
+    /**
+     * The input stream used for reading data.
+     */
     InputStream input_stream;
+
+    /**
+     * The asset manager used for accessing application's asset files.
+     */
     AssetManager assets_manager;
+
+    /**
+     * The Typeface object representing a custom font.
+     */
     Typeface font;
-    Paint title_paint, window_paint;
+
+    /**
+     * represents the paint in charge of the titles of the game.
+     */
+    Paint title_paint;
+
+    /**
+     * Represents the paint use in the drawing of the pause and game over window.
+     */
+    Paint window_paint;
+
+    /**
+     * Rectangle representing the back button.
+     */
     Rect back_button;
-    RectF base, home_button1, home_button2, resume_button;
-    Bitmap back_button_image, scale_button_image;
+
+    /**
+     * Rectangle with floating-point coordinates representing the base of the pause anf game over window.
+     */
+    RectF base;
+
+    /**
+     * Rectangle representing the first home button.
+     */
+    RectF home_button1;
+
+    /**
+     * Rectangle representing the second home button.
+     */
+    RectF home_button2;
+
+    /**
+     * Rectangle representing the resume button.
+     */
+    RectF resume_button;
+
+    /**
+     * The asset for the back button image.
+     */
+    Bitmap back_button_image;
+
+    /**
+     * The image for the back button escalated
+     */
+    Bitmap scale_button_image;
+
+    /**
+     * Represents the scene number of the class.
+     */
     public int scene_number = -1;
-    int screen_height, screen_width;
+
+    /**
+     * Represents the height of the screen.
+     */
+    int screen_height;
+
+    /**
+     * Represents the width of the screen.
+     */
+    int screen_width;
 
     /**
      * Constructs an instance of the Scene class.

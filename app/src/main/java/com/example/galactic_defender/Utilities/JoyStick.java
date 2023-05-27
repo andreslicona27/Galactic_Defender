@@ -84,8 +84,6 @@ public class JoyStick {
      */
     int screen_height;
 
-    // BUILDER
-
     /**
      * Constructs an instance of the JoyStick class.
      *

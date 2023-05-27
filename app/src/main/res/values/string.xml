@@ -2,7 +2,7 @@
     <string name="app_name">GD</string>
     <string name="credits_title">Créditos</string>
     <string name="information_title">Como Jugar</string>
-    <string name="records_title">Registros</string>
+    <string name="records_title">Puntuaciones</string>
     <string name="settings_title">Ajustes</string>
     <string name="pause_title">Pausa</string>
     <string name="game_over_title">Fin del Juego</string>
@@ -10,4 +10,6 @@
     <string name="home_button">Menú</string>
     <string name="resume_button">Reanudar</string>
     <string name="play_button">Jugar</string>
+    <string name="remove_info_button">Reestablecer Registros</string>
+    <string name="no_records_message">Aún no hay puntuaciones</string>
 </resources>

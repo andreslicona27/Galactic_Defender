@@ -25,8 +25,25 @@ import java.io.IOException;
  */
 public class SceneCredits extends Scene{
 
-    Bitmap english_asset, spanish_asset;
-    Bitmap credits_english,credits_spanish;
+    /**
+     * The asset of the english image.
+     */
+    Bitmap english_asset;
+
+    /**
+     * The asset of the spanish image.
+     */
+    Bitmap spanish_asset;
+
+    /**
+     * English credits image.
+     */
+    Bitmap credits_english;
+
+    /**
+     * Spanish credits image.
+     */
+    Bitmap credits_spanish;
 
     /**
      * Constructs an instance of the SceneCredits class.
@@ -39,6 +56,8 @@ public class SceneCredits extends Scene{
      */
     public SceneCredits(Context context, int screen_height, int screen_width, int scene_number) {
         super(context, screen_height, screen_width, scene_number);
+
+        // Assets
         try{
             this.input_stream = assets_manager.open("images/credits/credits_english.png");
             this.english_asset = BitmapFactory.decodeStream(input_stream);
@@ -49,6 +68,8 @@ public class SceneCredits extends Scene{
             Log.i("assets", "problem getting the asset");
             throw new RuntimeException(e);
         }
+
+        // Images
         this.credits_english = Bitmap.createScaledBitmap(this.english_asset, screen_width+10, screen_height+10, true);
         this.credits_spanish = Bitmap.createScaledBitmap(this.spanish_asset, screen_width+10, screen_height+10, true);
     }
@@ -63,11 +84,13 @@ public class SceneCredits extends Scene{
         canvas.drawText(context.getString(R.string.credits_title),
                 (float)screen_width/2 - title_paint.measureText((String)context.getString(R.string.credits_title))/2,
                 (float)screen_height/6, title_paint);
+
         if(GalacticDefender.language.equals("en")){
             canvas.drawBitmap(this.credits_english, null, new Rect(canvas.getWidth()/10,
                     canvas.getHeight()/5, canvas.getWidth() - canvas.getWidth()/10, canvas.getHeight()), null);
         } else {
-            canvas.drawBitmap(this.credits_spanish, null, new Rect(0, canvas.getHeight()/5, canvas.getWidth(),
+            canvas.drawBitmap(this.credits_spanish, null, new Rect(canvas.getWidth()/10,
+                    canvas.getHeight()/5, canvas.getWidth() - canvas.getWidth()/10,
                     canvas.getHeight()), null);
         }
     }

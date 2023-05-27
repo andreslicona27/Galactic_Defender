@@ -25,8 +25,25 @@ import java.io.IOException;
  */
 public class SceneInformation extends Scene {
 
-    Bitmap english_asset, spanish_asset;
-    Bitmap information_english, information_spanish;
+    /**
+     * The asset of the english image.
+     */
+    Bitmap english_asset;
+
+    /**
+     * The asset of the spanish image.
+     */
+    Bitmap spanish_asset;
+
+    /**
+     * English information image.
+     */
+    Bitmap information_english;
+
+    /**
+     * Spanish information image.
+     */
+    Bitmap information_spanish;
 
     /**
      * Constructs an instance of the SceneInformation class.
@@ -40,6 +57,7 @@ public class SceneInformation extends Scene {
     public SceneInformation(Context context, int screen_height, int screen_width, int scene_number) {
         super(context, screen_height, screen_width, scene_number);
 
+        // Assets
         try {
             this.input_stream = assets_manager.open("images/how_to_play/information_english.png");
             this.english_asset = BitmapFactory.decodeStream(input_stream);
@@ -51,6 +69,7 @@ public class SceneInformation extends Scene {
             throw new RuntimeException(e);
         }
 
+        // Images
         this.information_english = Bitmap.createScaledBitmap(this.english_asset, screen_width+10, screen_height+10,
                 true);
         this.information_spanish = Bitmap.createScaledBitmap(this.spanish_asset, screen_width+10,
@@ -69,16 +88,15 @@ public class SceneInformation extends Scene {
                 (float) screen_height / 6, title_paint);
 
         if(GalacticDefender.language.equals("en")){
-            canvas.drawBitmap(this.information_english, null, new Rect(canvas.getWidth()/10,
-                    canvas.getHeight()/5,
+            canvas.drawBitmap(this.information_english, null,
+                    new Rect(canvas.getWidth()/10, canvas.getHeight()/5,
                     canvas.getWidth() - canvas.getWidth()/10,
                     canvas.getHeight()), null);
         } else {
-            canvas.drawBitmap(this.information_spanish, null, new Rect(0, canvas.getHeight()/5, canvas.getWidth(),
-                    canvas.getHeight()), null);
+            canvas.drawBitmap(this.information_spanish, null,
+                    new Rect(canvas.getWidth()/10, canvas.getHeight()/5,
+                            canvas.getWidth() - canvas.getWidth()/10, canvas.getHeight()), null);
         }
 
     }
-
-
 }

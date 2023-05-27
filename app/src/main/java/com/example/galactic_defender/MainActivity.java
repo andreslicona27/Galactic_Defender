@@ -5,13 +5,17 @@ import androidx.core.view.GestureDetectorCompat;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.WindowManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.galactic_defender.DataBase.RecordDataBase;
 
 /**
  * The main activity of the Galactic Defender game.
@@ -37,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
      */
     Sensor accelerometer;
 
+    public static RecordDataBase record_data_base;
+    SQLiteDatabase data_base;
+
+
     /**
      * Called when the activity is created.
      *
@@ -56,6 +64,13 @@ public class MainActivity extends AppCompatActivity {
         this.vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         this.sensor_manager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         this.accelerometer = sensor_manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        // Data Base
+        record_data_base = new RecordDataBase(this);
+        this.data_base = record_data_base.getWritableDatabase();
+        if(this.data_base != null){
+            record_data_base.onCreate(this.data_base);
+        }
 
 
         if (Build.VERSION.SDK_INT < 16) { // previous versions of Jelly Bean

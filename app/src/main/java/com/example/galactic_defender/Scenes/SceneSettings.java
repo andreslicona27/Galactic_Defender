@@ -26,23 +26,130 @@ import java.io.IOException;
  */
 public class SceneSettings extends Scene {
 
+    /**
+     * Use to access the changeLanguage function.
+     */
     GalacticDefender gd_manager;
-    Rect sounds_button, music_button, language_button;
+
+    /**
+     * Rectangle area that represents the sound button.
+     */
+    Rect sounds_button;
+
+    /**
+     * Rectangle area that represents the music button.
+     */
+    Rect music_button;
+
+    /**
+     * Rectangle area that represents the language button.
+     */
+    Rect language_button;
+
+    /**
+     * Current image in the sound button.
+     */
     Bitmap sounds_button_image;
+
+    /**
+     * Current image in the music button.
+     */
     Bitmap music_button_image;
+
+    /**
+     * Current image in the language button.
+     */
     Bitmap language_button_image;
 
-    Bitmap sounds_on_icon, sounds_off_icon, music_on_icon, music_off_icon, spanish_icon,
-            english_icon;
+    /**
+     * Sound on asset.
+     */
+    Bitmap sounds_on_icon;
 
-    Bitmap scale_sounds_on_image, scale_sounds_off_image, scale_music_on_image,
-            scale_music_off_image, scale_spanish_image, scale_english_image;
+    /**
+     * Sound off asset.
+     */
+    Bitmap sounds_off_icon;
 
-    boolean sound_effects;
-    boolean music;
+    /**
+     * Music on asset.
+     */
+    Bitmap music_on_icon;
+
+    /**
+     * Music off asset.
+     */
+    Bitmap music_off_icon;
+
+    /**
+     * Spanish language asset.
+     */
+    Bitmap spanish_icon;
+
+    /**
+     * English language asset
+     */
+    Bitmap english_icon;
+
+    /**
+     * Sound on image escalated
+     */
+    Bitmap scale_sounds_on_image;
+
+    /**
+     * Sound off image escalated
+     */
+    Bitmap scale_sounds_off_image;
+
+    /**
+     * Music on image escalated
+     */
+    Bitmap scale_music_on_image;
+
+    /**
+     * Music off image escalated
+     */
+    Bitmap scale_music_off_image;
+
+    /**
+     * Spanish language image escalated
+     */
+    Bitmap scale_spanish_image;
+
+    /**
+     * English language image escalated
+     */
+    Bitmap scale_english_image;
+
+    /**
+     * Variable that stores the language value of the shared preferences object.
+     */
     String language;
+
+    /**
+     * Variable that store the sound effects value of the shared preferences object.
+     */
+    boolean sound_effects;
+
+    /**
+     * Variable that stores the music value of the shared preferences object.
+     */
+    boolean music;
+
+    /**
+     * Represents the scene number of the class.
+     */
     int scene_number = 5;
-    int screen_height, screen_width;
+
+    /**
+     * Represents the screen height.
+     */
+    int screen_height;
+
+    /**
+     * Represents the screen width.
+     */
+    int screen_width;
 
     /**
      * Constructs an instance of the SceneSettings class.

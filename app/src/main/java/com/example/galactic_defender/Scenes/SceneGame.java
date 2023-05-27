@@ -17,6 +17,7 @@ import com.example.galactic_defender.Characters.Enemy;
 import com.example.galactic_defender.Characters.Shot;
 import com.example.galactic_defender.Characters.Spaceship;
 import com.example.galactic_defender.GalacticDefender;
+import com.example.galactic_defender.MainActivity;
 import com.example.galactic_defender.R;
 import com.example.galactic_defender.Utilities.Explosion;
 import com.example.galactic_defender.Utilities.Hardware;
@@ -70,11 +71,6 @@ public class SceneGame extends Scene {
         this.joystick = new JoyStick(this.spaceship, context, screen_width, screen_height);
         this.fire_button = new FireButton(this, this.spaceship, context, screen_width, screen_height);
         this.explosions = new Explosion[5];
-        this.explosions[0] = new Explosion(context, this.spaceship.position.x, this.spaceship.position.y);
-        this.explosions[1] = new Explosion(context, this.spaceship.position.x + 50, this.spaceship.position.y + 50);
-        this.explosions[2] = new Explosion(context, this.spaceship.position.x + 60, this.spaceship.position.y + 100);
-        this.explosions[3] = new Explosion(context, this.spaceship.position.x, this.spaceship.position.y + 75);
-        this.explosions[4] = new Explosion(context, this.spaceship.position.x + 75, this.spaceship.position.y);
 
         // Timer Properties
         this.time_per_enemy = 3000;
@@ -158,16 +154,19 @@ public class SceneGame extends Scene {
         if (!pause && !game_over) {
             for (int i = enemies.size() - 1; i >= 0; i--) {
                 if (this.spaceship.collision(enemies.get(i).getHideBox())) {
-//                    this.game_over = true;
+                    this.explosions[0] = new Explosion(context, this.spaceship.position.x, this.spaceship.position.y);
+                    this.explosions[1] = new Explosion(context, this.spaceship.position.x + 50, this.spaceship.position.y + 50);
+                    this.explosions[2] = new Explosion(context, this.spaceship.position.x + 60, this.spaceship.position.y + 100);
+                    this.explosions[3] = new Explosion(context, this.spaceship.position.x, this.spaceship.position.y + 75);
+                    this.explosions[4] = new Explosion(context, this.spaceship.position.x + 75, this.spaceship.position.y);
+                    this.game_over = true;
                     if (GalacticDefender.soundEnabled) {
                         this.hardware.vibrate();
                         this.spaceship_explosion.start();
                     }
-
-                    // Code to insert the score in the database
-//                    InsertScore insert_score = new InsertScore(this.context);
-//                    insert_score.insertScore(GalacticDefender.score);
-
+                    if(GalacticDefender.score > 0){
+                        MainActivity.record_data_base.insertScore(GalacticDefender.score);
+                    }
                 }
                 for (int j = spaceship_shots.size() - 1; j >= 0; j--) {
                     if (enemies.get(i).collision(spaceship_shots.get(j).getHideBox())) {

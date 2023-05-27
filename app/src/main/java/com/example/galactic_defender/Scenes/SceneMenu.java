@@ -25,16 +25,110 @@ import java.io.IOException;
  */
 public class SceneMenu extends Scene{
 
+    /**
+     * The asset of the logo image.
+     */
     Bitmap logo;
+
+    /**
+     * The logo image escalated.
+     */
     Bitmap scale_logo;
+
+    /**
+     * Rectangle area representing the logo.
+     */
     Rect logo_rect;
-    Rect records_button, information_button, play_button,credits_button,settings_button;
-    Bitmap records_image, information_image, play_image, credits_image,
-            settings_image;
-    Bitmap scale_records_image, scale_information_image, scale_play_image, scale_credits_image,
-            scale_settings_image;
+
+    /**
+     * Rectangle area representing the records button.
+     */
+    Rect records_button;
+
+    /**
+     * Rectangle area representing the information button.
+     */
+    Rect information_button;
+
+    /**
+     * Rectangle area representing the play button.
+     */
+    Rect play_button;
+
+    /**
+     * Rectangle area representing the credits button.
+     */
+    Rect credits_button;
+
+    /**
+     * Rectangle area representing the settings button.
+     */
+    Rect settings_button;
+
+    /**
+     * The asset of the records image.
+     */
+    Bitmap records_image;
+
+    /**
+     * The asset of the information image.
+     */
+    Bitmap information_image;
+
+    /**
+     * The asset of the play image.
+     */
+    Bitmap play_image;
+
+    /**
+     * The asset of the credits image.
+     */
+    Bitmap credits_image;
+
+    /**
+     * The asset of the settings image.
+     */
+    Bitmap settings_image;
+
+    /**
+     * The records image escalated.
+     */
+    Bitmap scale_records_image;
+
+    /**
+     * The information image escalated.
+     */
+    Bitmap scale_information_image;
+
+    /**
+     * The play image escalated.
+     */
+    Bitmap scale_play_image;
+
+    /**
+     * The credits image escalated.
+     */
+    Bitmap scale_credits_image;
+
+    /**
+     * The settings image escalated.
+     */
+    Bitmap scale_settings_image;
+
+    /**
+     * Represents the scene number fo the class
+     */
     int scene_number = 1;
-    int screen_height, screen_width;
+
+    /**
+     * Represents the screen height
+     */
+    int screen_height;
+
+    /**
+     * Represents the screen width
+     */
+    int screen_width;
 
     /**
      * Constructs an instance of the SceneMenu class.
@@ -58,7 +152,7 @@ public class SceneMenu extends Scene{
         this.logo_rect = new Rect(screen_width/8, screen_height/7, screen_width/8*3,
                 screen_height/7*4);
 
-        // Button images
+        // Assets
         try{
             this.input_stream = assets_manager.open("button_icons/records_icon.png");
             this.records_image = BitmapFactory.decodeStream(input_stream);
@@ -113,9 +207,10 @@ public class SceneMenu extends Scene{
      */
     public void draw(Canvas canvas){
         super.draw(canvas);
+
+        // Logo
         canvas.drawBitmap(scale_logo, null, logo_rect, null);
         title_paint.setTextSize((float) screen_height/6);
-//        title_paint.setTextAlign(Paint.Align.CENTER);
         canvas.drawText("Galactic", (float) screen_width/5*2,
                 (float) screen_height/7*2,
                 title_paint);
@@ -123,6 +218,7 @@ public class SceneMenu extends Scene{
                 (float) screen_height/7*3+50,
                 title_paint);
 
+        // Buttons
         canvas.drawBitmap(scale_records_image, null, records_button, null);
         canvas.drawBitmap(scale_information_image, null, information_button, null);
         canvas.drawBitmap(scale_play_image, null, play_button, null);

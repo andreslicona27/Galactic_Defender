@@ -223,7 +223,6 @@ public class SceneSettings extends Scene {
         this.sounds_button_image = this.sound_effects ? this.sounds_on_icon : this.sounds_off_icon;
         this.music_button_image = this.music ? this.music_on_icon : this.music_off_icon;
         this.language_button_image = this.language.equals("en") ? this.english_icon : spanish_icon;
-
     }
 
     /**

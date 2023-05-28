@@ -17,12 +17,11 @@ import com.example.galactic_defender.Characters.Enemy;
 import com.example.galactic_defender.Characters.Shot;
 import com.example.galactic_defender.Characters.Spaceship;
 import com.example.galactic_defender.GalacticDefender;
-import com.example.galactic_defender.MainActivity;
 import com.example.galactic_defender.R;
 import com.example.galactic_defender.Utilities.Explosion;
 import com.example.galactic_defender.Utilities.Hardware;
-import com.example.galactic_defender.Utilities.JoyStick;
-import com.example.galactic_defender.Utilities.FireButton;
+import com.example.galactic_defender.Controls.JoyStick;
+import com.example.galactic_defender.Controls.FireButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,19 +29,79 @@ import java.util.Timer;
 
 public class SceneGame extends Scene {
 
+    /**
+     * The Timer object for managing game timing.
+     */
     Timer timer;
+
+    /**
+     * The Hardware object for managing hardware-related operations.
+     */
     Hardware hardware;
-    MediaPlayer enemy_dies, spaceship_explosion, laser_shot;
+
+    /**
+     * The MediaPlayer object for playing the sound effect when an enemy dies.
+     */
+    MediaPlayer enemy_dies;
+
+    /**
+     * The MediaPlayer object for playing the sound effect when the spaceship explodes.
+     */
+    MediaPlayer spaceship_explosion;
+
+    /**
+     * The image of the pause button.
+     */
     Bitmap pause_button_image;
+
+    /**
+     * The rectangle representing the pause button's position and size.
+     */
     Rect pause_button;
+
+    /**
+     * An array of Explosion objects representing the ongoing explosions in the game.
+     */
     Explosion[] explosions;
+
+    /**
+     * The JoyStick object for controlling the spaceship's movement.
+     */
     JoyStick joystick;
+
+    /**
+     * The FireButton object for triggering the spaceship's shooting action.
+     */
     FireButton fire_button;
+
+    /**
+     * The Spaceship object representing the player's spaceship.
+     */
     Spaceship spaceship;
+
+    /**
+     * An ArrayList of Enemy objects representing the enemies in the game.
+     */
     ArrayList<Enemy> enemies;
+
+    /**
+     * An ArrayList of Shot objects representing the shots fired by the spaceship.
+     */
     public ArrayList<Shot> spaceship_shots;
+
+    /**
+     * The time duration between each enemy appearance.
+     */
     int time_per_enemy;
+
+    /**
+     * Flag indicating whether the game is currently paused.
+     */
     boolean pause = false;
+
+    /**
+     * Flag indicating whether the game is over.
+     */
     boolean game_over = false;
 
 
@@ -82,7 +141,6 @@ public class SceneGame extends Scene {
         // Sound Effects
         this.enemy_dies = MediaPlayer.create(context.getApplicationContext(), R.raw.alien_dead);
         this.spaceship_explosion = MediaPlayer.create(context.getApplicationContext(), R.raw.spaceship_explosion);
-        this.laser_shot = MediaPlayer.create(context.getApplicationContext(), R.raw.laser_shot);
 
         // Get Resources
         try {
@@ -114,12 +172,12 @@ public class SceneGame extends Scene {
         super.draw(canvas);
         // Characters
         this.spaceship.draw(canvas);
-        drawEnemies(canvas);
+//        drawEnemies(canvas);
         drawShots(canvas);
 
         // Controls
-        this.joystick.drawJoystick(canvas);
-        this.fire_button.drawFireButton(canvas);
+        this.joystick.draw(canvas);
+        this.fire_button.draw(canvas);
         canvas.drawBitmap(pause_button_image, null, pause_button, null);
 
         // Score
@@ -154,19 +212,19 @@ public class SceneGame extends Scene {
         if (!pause && !game_over) {
             for (int i = enemies.size() - 1; i >= 0; i--) {
                 if (this.spaceship.collision(enemies.get(i).getHideBox())) {
-                    this.explosions[0] = new Explosion(context, this.spaceship.position.x, this.spaceship.position.y);
-                    this.explosions[1] = new Explosion(context, this.spaceship.position.x + 50, this.spaceship.position.y + 50);
-                    this.explosions[2] = new Explosion(context, this.spaceship.position.x + 60, this.spaceship.position.y + 100);
-                    this.explosions[3] = new Explosion(context, this.spaceship.position.x, this.spaceship.position.y + 75);
-                    this.explosions[4] = new Explosion(context, this.spaceship.position.x + 75, this.spaceship.position.y);
-                    this.game_over = true;
-                    if (GalacticDefender.soundEnabled) {
-                        this.hardware.vibrate();
-                        this.spaceship_explosion.start();
-                    }
-                    if(GalacticDefender.score > 0){
-                        MainActivity.record_data_base.insertScore(GalacticDefender.score);
-                    }
+//                    this.explosions[0] = new Explosion(context, this.spaceship.position.x, this.spaceship.position.y);
+//                    this.explosions[1] = new Explosion(context, this.spaceship.position.x + 50, this.spaceship.position.y + 50);
+//                    this.explosions[2] = new Explosion(context, this.spaceship.position.x + 60, this.spaceship.position.y + 100);
+//                    this.explosions[3] = new Explosion(context, this.spaceship.position.x, this.spaceship.position.y + 75);
+//                    this.explosions[4] = new Explosion(context, this.spaceship.position.x + 75, this.spaceship.position.y);
+//                    this.game_over = true;
+//                    if (GalacticDefender.soundEnabled) {
+//                        this.hardware.vibrate();
+//                        this.spaceship_explosion.start();
+//                    }
+//                    if(GalacticDefender.score > 0){
+//                        MainActivity.record_data_base.insertScore(GalacticDefender.score);
+//                    }
                 }
                 for (int j = spaceship_shots.size() - 1; j >= 0; j--) {
                     if (enemies.get(i).collision(spaceship_shots.get(j).getHideBox())) {
@@ -259,7 +317,6 @@ public class SceneGame extends Scene {
         // Release sound effects
         this.enemy_dies.release();
         this.spaceship_explosion.release();
-        this.laser_shot.release();
 
         // Clear lists
         this.spaceship_shots.clear();
@@ -276,10 +333,10 @@ public class SceneGame extends Scene {
      * All is the "power" of the accelerometer
      */
     public void removeEnemies() {
-        if (this.fire_button.paint.getColor() == Color.WHITE) {
+        if (this.fire_button.fire_button_paint.getColor() == Color.WHITE) {
             GalacticDefender.score += enemies.size() * 10;
             enemies.clear();
-            this.fire_button.paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
+            this.fire_button.fire_button_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
         }
     }
 
@@ -339,8 +396,8 @@ public class SceneGame extends Scene {
          */
         @Override
         public void run() {
-            if (fire_button.paint.getColor() == ContextCompat.getColor(context, R.color.main_yellow)) {
-                fire_button.paint.setColor(Color.WHITE);
+            if (fire_button.fire_button_paint.getColor() == ContextCompat.getColor(context, R.color.main_yellow)) {
+                fire_button.fire_button_paint.setColor(Color.WHITE);
             }
         }
     }

@@ -41,7 +41,14 @@ public class MainActivity extends AppCompatActivity {
      */
     Sensor accelerometer;
 
+    /**
+     * The instance of RecordDataBase for accessing the game database.
+     */
     public static RecordDataBase record_data_base;
+
+    /**
+     * The instance of SQLiteDatabase for interacting with the game database.
+     */
     SQLiteDatabase data_base;
 
 
@@ -71,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         if(this.data_base != null){
             record_data_base.onCreate(this.data_base);
         }
-
 
         if (Build.VERSION.SDK_INT < 16) { // previous versions of Jelly Bean
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);

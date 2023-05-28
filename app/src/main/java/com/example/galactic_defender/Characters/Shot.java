@@ -59,7 +59,6 @@ public class Shot extends Character{
     float angle;
 
 
-
     /**
      * Constructs a new Shot object.
      *

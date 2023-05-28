@@ -53,6 +53,11 @@ public class RecordDataBase extends SQLiteOpenHelper {
         this.context = context;
     }
 
+    /**
+     * Creates the database table if it does not exist.
+     *
+     * @param db The SQLiteDatabase object.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE + "(" +
@@ -60,11 +65,20 @@ public class RecordDataBase extends SQLiteOpenHelper {
                 "score INTEGER NOT NULL)");
     }
 
+
+    /**
+     * Handles the upgrade of the database by dropping the existing table and creating a new one.
+     *
+     * @param db         The SQLiteDatabase object.
+     * @param oldVersion The old version of the database.
+     * @param newVersion The new version of the database.
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE " + TABLE);
         onCreate(db);
     }
+
 
     /**
      * Inserts a score into the high scores table.

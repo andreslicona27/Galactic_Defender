@@ -64,52 +64,52 @@ public class Spaceship extends Character {
     Bitmap spaceship4_image;
 
     /**
-     * An array of spaceship images that would be displaying for the animations
+     * An array of spaceship images that would be displaying for the animations.
      */
     Bitmap[] spaceship;
 
     /**
-     * The position  of the last touch of the player
+     * The position  of the last touch of the player.
      */
     PointF last_touch;
 
     /**
-     * Rectangle are used to represent the limits of the spaceship
+     * Rectangle are used to represent the limits of the spaceship.
      */
     Rect hide_box;
 
     /**
-     * Represent the position of the spaceship
+     * Represent the position of the spaceship.
      */
     public Point position;
 
     /**
-     * Represents the amount of displacement that the spaceship makes
+     * Represents the amount of displacement that the spaceship makes.
      */
     int displacement;
 
     /**
-     * Variable that indicates weather the spaceship is currently moving
+     * Variable that indicates weather the spaceship is currently moving.
      */
     boolean move_player;
 
     /**
-     * The current frame of the spaceship animation
+     * The current frame of the spaceship animation.
      */
     int current_frame;
 
     /**
-     * The players speed in the x axis
+     * The players speed in the x axis.
      */
     float speed_x;
 
     /**
-     * The players speed in the y axis
+     * The players speed in the y axis.
      */
     float speed_y;
 
     /**
-     * The angle or rotation of the spaceship
+     * The angle or rotation of the spaceship.
      */
     public float spaceship_angle;
 
@@ -215,7 +215,7 @@ public class Spaceship extends Character {
 
 
     /**
-     * Moves the player around the screen depending on the touch position
+     * Moves the player around the screen depending on the touch position.
      */
     @Override
     public void move() {
@@ -227,8 +227,8 @@ public class Spaceship extends Character {
         // Calculate the estimate absolute value of the difference of coordinates
         float ratio = Math.abs(last_touch.x) / Math.abs(last_touch.y);
 
-        // Trying to be the one that makes the great rotation of the spaceship
-        this.spaceship_angle = (float)Math.toDegrees(Math.atan(last_touch.x / last_touch.y));
+        // Rotation of the spaceship
+        this.spaceship_angle = (float)Math.toDegrees(Math.atan2(-last_touch.x , last_touch.y));
 
         // Calculates the angle
         double angle = Math.atan(ratio);  // return the value in radians
@@ -272,7 +272,7 @@ public class Spaceship extends Character {
     /**
      * Sets the player move flag to true and updates the last touch position.
      *
-     * @param last_touch the PointF object representing the last touch position
+     * @param last_touch the PointF object representing the last touch position.
      */
     public void setPlayerMoveTrue(PointF last_touch) {
         this.move_player = true;

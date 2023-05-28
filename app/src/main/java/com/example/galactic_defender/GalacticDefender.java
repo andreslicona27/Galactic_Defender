@@ -33,25 +33,93 @@ import java.util.Locale;
 
 public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callback {
 
+    /**
+     * The SurfaceHolder object for managing the game's surface.
+     */
     final SurfaceHolder surface_holder;
-    public static SharedPreferences shared_preferences;
-    Context context;
-    Scene current_scene;
-    Hilo game_thread;
-    Handler handler;
-    int screen_height;
-    int screen_width;
-    int new_scene;
-    boolean playing;
-    boolean thread_working; // Control of the thread
 
-    /////////////// OTHER CLASSES USES /////////////////
+    /**
+     * The SharedPreferences object for storing and retrieving game preferences.
+     */
+    public static SharedPreferences shared_preferences;
+
+    /**
+     * The context used for accessing resources and services.
+     */
+    Context context;
+
+    /**
+     * The current scene being displayed in the game.
+     */
+    Scene current_scene;
+
+    /**
+     * The game thread responsible for running the game logic.
+     */
+    Hilo game_thread;
+
+    /**
+     * The handler used for communication between threads.
+     */
+    Handler handler;
+
+    /**
+     * Represents the height of the screen.
+     */
+    int screen_height;
+
+    /**
+     * represents the width of the screen
+     */
+    int screen_width;
+
+    /**
+     * The identifier for the new scene to be transitioned to.
+     */
+    int new_scene;
+
+    /**
+     * Flag indicating whether the game is currently being played.
+     */
+    boolean playing;
+
+    /**
+     * Flag indicating the status of the game thread.
+     */
+    boolean thread_working;
+
+    /////////////// USED IN OTHER CLASSES /////////////////
+
+    /**
+     * The MediaPlayer object for playing background music.
+     */
     public static MediaPlayer background_music;
+
+    /**
+     * The Configuration object for managing game configuration settings.
+     */
     public static Configuration configuration;
+
+    /**
+     * Flag indicating whether sound effects are enabled.
+     */
     public static boolean soundEnabled = true;
+
+    /**
+     * Flag indicating whether background music is enabled.
+     */
     public static boolean musicEnabled = true;
+
+    /**
+     * The selected language for the game.
+     */
     public static String language;
+
+    /**
+     * The current score in the game.
+     */
     public static int score = 0;
+
 
 
     /**

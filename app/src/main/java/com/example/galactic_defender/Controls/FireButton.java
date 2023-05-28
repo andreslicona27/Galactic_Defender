@@ -1,8 +1,10 @@
-package com.example.galactic_defender.Utilities;
+package com.example.galactic_defender.Controls;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PointF;
+import android.media.MediaPlayer;
 import android.view.MotionEvent;
 
 import androidx.core.content.ContextCompat;
@@ -16,46 +18,32 @@ import com.example.galactic_defender.Scenes.SceneGame;
 /**
  * The FireButton class represents a button used for firing in the game.
  * It allows the player to perform shooting actions by tapping on the button.
+ *
+ * @author [Andres Licona]
+ * @version [1.0]
+ * @since [05-10-2023]
  */
-public class FireButton {
+public class FireButton extends Control {
 
-    /**
-     * Represents the attribute of context in the character class
-     */
-    Context context;
-    /**
-     * Represents a spaceship and is use to access the position attribute of spaceship
-     */
-    Spaceship spaceship;
     /**
      * Represents a scene of the game and is use to access the arraylist of the spaceships shots
      */
     SceneGame scene_game;
+
+    /**
+     * The MediaPlayer object for playing the sound effect when a laser is shot.
+     */
+    MediaPlayer laser_shot;
+
+    /**
+     * Represents the circle area of the fire button
+     */
+    Circle fire_button;
+
     /**
      * Represents the paint used for drawing.
      */
-    public Paint paint;
-    /**
-     * Represents the radius of the fire button.
-     */
-    int radius;
-    /**
-     * Represents the width of the screen
-     */
-    int screen_width;
-    /**
-     * Represents the height of the screen
-     */
-    int screen_height;
-    /**
-     * Represents the center  of the fire button in the x coordinate
-     */
-    int center_x;
-    /**
-     * Represents the center  of the fire button in the y coordinate
-     */
-    int center_y;
-
+    public Paint fire_button_paint;
 
     /**
      * Constructs a FireButton object.
@@ -67,17 +55,18 @@ public class FireButton {
      * @param screen_height The height of the screen
      */
     public FireButton(SceneGame scene_game, Spaceship spaceship, Context context, int screen_width, int screen_height) {
+        super(spaceship, context, screen_width, screen_height);
         this.scene_game = scene_game;
-        this.spaceship = spaceship;
-        this.context = context;
-        this.screen_width = screen_width;
-        this.screen_height = screen_height;
-        this.center_x = screen_width / 10;
-        this.center_y = screen_height / 15;
-        this.radius = 100;
 
-        this.paint = new Paint();
-        this.paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
+        // Media player asset
+        this.laser_shot = MediaPlayer.create(context.getApplicationContext(), R.raw.laser_shot);
+
+        // Paint
+        this.fire_button_paint = new Paint();
+        this.fire_button_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
+
+        // Fire button
+        this.fire_button = new Circle(new PointF((float) this.screen_width / 20 * 18, (float) this.screen_height / 20 * 16), common_radius);
     }
 
 
@@ -86,8 +75,8 @@ public class FireButton {
      *
      * @param canvas the canvas on which to draw the fire button
      */
-    public void drawFireButton(Canvas canvas) {
-        canvas.drawCircle((float) this.screen_width / 20 * 18, (float) this.screen_height / 20 * 16, radius, this.paint);
+    public void draw(Canvas canvas) {
+        canvas.drawCircle(this.fire_button.getCenter().x, this.fire_button.getCenter().y, this.fire_button.getRadius(), this.fire_button_paint);
     }
 
 
@@ -104,18 +93,15 @@ public class FireButton {
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
-                // Calculate if the touch on the screen was inside the circle
-                int circle_x = this.screen_width - this.radius - 10;
-                int circle_y = this.screen_height - this.radius - 10;
-                int distance = (int) Math.sqrt(Math.pow(circle_x - x, 2) + Math.pow(circle_y - y, 2));
-
-                if (distance <= this.radius) {
+                if (this.fire_button.contains(x, y)) {
                     Shot shot = new Shot(context, screen_width, screen_height, this.spaceship.position.x, this.spaceship.position.y,
                             this.spaceship.spaceship_angle);
                     this.scene_game.spaceship_shots.add(shot);
+                    this.laser_shot.start();
                 }
                 break;
         }
+
     }
 
 }

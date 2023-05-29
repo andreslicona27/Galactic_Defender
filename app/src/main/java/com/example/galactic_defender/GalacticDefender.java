@@ -208,6 +208,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         this.playing = false;
         background_music.stop();
+        background_music.release();
         try {
             game_thread.join();
         } catch (InterruptedException e) {
@@ -281,6 +282,23 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         android.content.res.Configuration conf=res.getConfiguration();
         conf.locale=new Locale(cod_language.toLowerCase());
         res.updateConfiguration(conf, dm);
+    }
+
+    public void changeSettings(boolean sound, boolean music, String language){
+        soundEnabled = sound;
+        if(music){
+            background_music.start();
+        } else {
+            background_music.stop();
+        }
+        GalacticDefender.language = language;
+        changeLanguage(language);
+
+        SharedPreferences.Editor editor = shared_preferences.edit();
+        editor.putBoolean("soundEnabled", sound);
+        editor.putBoolean("musicEnabled", music);
+        editor.putString("language", language);
+        editor.apply();
     }
 
     //////////////////////////// THREAD CLASS ////////////////////////////

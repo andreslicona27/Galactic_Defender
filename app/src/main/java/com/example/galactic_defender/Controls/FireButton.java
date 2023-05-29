@@ -94,7 +94,9 @@ public class FireButton extends Control {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
                 if (this.fire_button.contains(x, y)) {
-                    Shot shot = new Shot(context, screen_width, screen_height, this.spaceship.position.x, this.spaceship.position.y,
+                    Shot shot = new Shot(context, screen_width, screen_height,
+                            this.spaceship.position.x + this.spaceship.getWidth()/2,
+                            this.spaceship.position.y + this.spaceship.getHeight()/2,
                             this.spaceship.spaceship_angle);
                     this.scene_game.spaceship_shots.add(shot);
                     this.laser_shot.start();

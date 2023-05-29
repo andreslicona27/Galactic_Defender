@@ -64,7 +64,7 @@ public class Character {
 
         // Border paint for the hide box of the characters
         this.border_paint = new Paint();
-        this.border_paint.setColor(Color.RED);
+        this.border_paint.setColor(Color.TRANSPARENT);
         this.border_paint.setStyle(Paint.Style.STROKE);
         this.border_paint.setStrokeWidth(5);
     }

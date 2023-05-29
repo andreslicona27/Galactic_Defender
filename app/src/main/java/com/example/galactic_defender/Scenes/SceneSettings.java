@@ -220,9 +220,12 @@ public class SceneSettings extends Scene {
                 screen_width / 13 * 9, screen_height / 6 * 4);
 
         // Buttons images
-        this.sounds_button_image = this.sound_effects ? this.sounds_on_icon : this.sounds_off_icon;
-        this.music_button_image = this.music ? this.music_on_icon : this.music_off_icon;
-        this.language_button_image = this.language.equals("en") ? this.english_icon : spanish_icon;
+        this.sounds_button_image = this.sounds_on_icon;
+        this.music_button_image = this.music_on_icon;
+        this.language_button_image = this.english_icon;
+//        this.sounds_button_image = this.sound_effects ? this.sounds_on_icon : this.sounds_off_icon;
+//        this.music_button_image = this.music ? this.music_on_icon : this.music_off_icon;
+//        this.language_button_image = this.language.equals("en") ? this.english_icon : spanish_icon;
     }
 
     /**
@@ -237,9 +240,9 @@ public class SceneSettings extends Scene {
                 (float) screen_height / 6,
                 title_paint);
 
-        canvas.drawBitmap(this.sounds_button_image, null, sounds_button, null);
-        canvas.drawBitmap(this.music_button_image, null, music_button, null);
-        canvas.drawBitmap(this.language_button_image, null, language_button, null);
+        canvas.drawBitmap(this.sounds_button_image, null, this.sounds_button, null);
+        canvas.drawBitmap(this.music_button_image, null, this.music_button, null);
+        canvas.drawBitmap(this.language_button_image, null, this.language_button, null);
     }
 
 
@@ -260,43 +263,22 @@ public class SceneSettings extends Scene {
             return aux;
         }
 
-        SharedPreferences.Editor editor = GalacticDefender.shared_preferences.edit();
-        if (sounds_button.contains(x, y)) {
-            this.sounds_button_image = GalacticDefender.soundEnabled ? sounds_on_icon : sounds_off_icon;
-            GalacticDefender.soundEnabled = !GalacticDefender.soundEnabled;
-            editor.putBoolean("soundEnable", GalacticDefender.soundEnabled);
-            editor.apply();
+        if (this.sounds_button.contains(x, y)) {
+//            this.sounds_button_image = this.sounds_button_image == this.sounds_on_icon ? this.sounds_off_icon : this.sounds_on_icon;
+
+            if(this.sounds_button_image == this.sounds_on_icon){
+                this.sounds_button_image = this.sounds_off_icon;
+            } else {
+                this.sounds_button_image = this.sounds_on_icon;
+            }
         }
 
-        if (music_button.contains(x, y)) {
-            if (GalacticDefender.musicEnabled) {
-                this.music_button_image = this.music_off_icon;
-                editor.putBoolean("musicEnable", false);
-
-                GalacticDefender.background_music.stop();
-                GalacticDefender.musicEnabled = false;
-            } else {
-                this.music_button_image = this.music_on_icon;
-                editor.putBoolean("musicEnable", true);
-
-                GalacticDefender.background_music.start();
-                GalacticDefender.musicEnabled = true;
-            }
-            editor.apply();
+        if (this.music_button.contains(x, y)) {
+            this.music_button_image = this.music_button_image == this.music_on_icon ? this.music_off_icon : this.music_on_icon;
         }
 
-        if (language_button.contains(x, y)) {
-            if (this.language.equals("en")) {
-                gd_manager.changeLanguage("es");
-                this.language_button_image = english_icon;
-                editor.putString("language", "es");
-            } else {
-                gd_manager.changeLanguage("en");
-                this.language_button_image = spanish_icon;
-                this.language = GalacticDefender.configuration.locale.getLanguage();
-                editor.putString("language", "en");
-            }
-            editor.apply();
+        if (this.language_button.contains(x, y)) {
+            this.language_button_image = this.language_button_image == this.spanish_icon ? this.english_icon : this.spanish_icon;
         }
         return this.scene_number;
     }

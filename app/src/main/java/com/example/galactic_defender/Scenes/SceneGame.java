@@ -62,7 +62,7 @@ public class SceneGame extends Scene {
     /**
      * An array of Explosion objects representing the ongoing explosions in the game.
      */
-    Explosion[] explosions;
+    Explosion explosion;
 
     /**
      * The JoyStick object for controlling the spaceship's movement.
@@ -129,7 +129,6 @@ public class SceneGame extends Scene {
         // Controls
         this.joystick = new JoyStick(this.spaceship, context, screen_width, screen_height);
         this.fire_button = new FireButton(this, this.spaceship, context, screen_width, screen_height);
-        this.explosions = new Explosion[5];
 
         // Timer Properties
         this.time_per_enemy = 3000;
@@ -171,9 +170,9 @@ public class SceneGame extends Scene {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         // Characters
-        this.spaceship.draw(canvas);
-//        drawEnemies(canvas);
         drawShots(canvas);
+        drawEnemies(canvas);
+        this.spaceship.draw(canvas);
 
         // Controls
         this.joystick.draw(canvas);
@@ -191,13 +190,12 @@ public class SceneGame extends Scene {
         }
         // Manage the game over
         if (game_over) {
-            for (Explosion value : explosions) {
-                value.drawExplosion(canvas);
-                if (value.explosion_frame == 8) {
-                    gameOverWindow(canvas);
-                    releaseResources();
-                }
+            explosion.drawExplosion(canvas);
+            if (explosion.explosion_frame == 8) {
+                gameOverWindow(canvas);
+                releaseResources();
             }
+
         }
     }
 
@@ -212,12 +210,9 @@ public class SceneGame extends Scene {
         if (!pause && !game_over) {
             for (int i = enemies.size() - 1; i >= 0; i--) {
                 if (this.spaceship.collision(enemies.get(i).getHideBox())) {
-//                    this.explosions[0] = new Explosion(context, this.spaceship.position.x, this.spaceship.position.y);
-//                    this.explosions[1] = new Explosion(context, this.spaceship.position.x + 50, this.spaceship.position.y + 50);
-//                    this.explosions[2] = new Explosion(context, this.spaceship.position.x + 60, this.spaceship.position.y + 100);
-//                    this.explosions[3] = new Explosion(context, this.spaceship.position.x, this.spaceship.position.y + 75);
-//                    this.explosions[4] = new Explosion(context, this.spaceship.position.x + 75, this.spaceship.position.y);
-//                    this.game_over = true;
+                    this.explosion = new Explosion(context, this.spaceship.position.x,
+                            this.spaceship.position.y);
+                    this.game_over = true;
 //                    if (GalacticDefender.soundEnabled) {
 //                        this.hardware.vibrate();
 //                        this.spaceship_explosion.start();
@@ -358,9 +353,7 @@ public class SceneGame extends Scene {
                 enemy.updateAnimation();
             }
             if (game_over) {
-                for (Explosion value : explosions) {
-                    value.updateAnimation();
-                }
+                explosion.updateAnimation();
             }
         }
     }

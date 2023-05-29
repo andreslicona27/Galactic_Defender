@@ -150,18 +150,35 @@ public class Spaceship extends Character {
         this.spaceship3_image = Bitmap.createBitmap(this.spaceship3_asset, 0, 0, this.spaceship3_asset.getWidth(), this.spaceship3_asset.getHeight());
         this.spaceship4_image = Bitmap.createBitmap(this.spaceship4_asset, 0, 0, this.spaceship4_asset.getWidth(), this.spaceship4_asset.getHeight());
 
-        this.spaceship[0] = Bitmap.createScaledBitmap(this.spaceship1_image, screen_height/5, screen_height/3, true);
-        this.spaceship[1] = Bitmap.createScaledBitmap(this.spaceship2_image, screen_height/5,
-                screen_height/3, true);
-        this.spaceship[2] = Bitmap.createScaledBitmap(this.spaceship3_image, screen_height/5,
-                screen_height/3, true);
-        this.spaceship[3] = Bitmap.createScaledBitmap(this.spaceship4_image, screen_height/5,
-                screen_height/3, true);
+        this.spaceship[0] = Bitmap.createScaledBitmap(this.spaceship1_image, screen_height/8, screen_height/8, true);
+        this.spaceship[1] = Bitmap.createScaledBitmap(this.spaceship2_image, screen_height/8, screen_height/8, true);
+        this.spaceship[2] = Bitmap.createScaledBitmap(this.spaceship3_image, screen_height/8, screen_height/8, true);
+        this.spaceship[3] = Bitmap.createScaledBitmap(this.spaceship4_image, screen_height/8, screen_height/8, true);
 
 
         this.position = new Point(screen_width / 2 - this.spaceship[current_frame].getWidth() / 2,
                 screen_height / 2 - this.spaceship[current_frame].getHeight() / 2);
+
         updateHideBox();
+    }
+
+
+    /**
+     * Returns the width of the current frame of the spaceship.
+     *
+     * @return The width of the current frame of the spaceship.
+     */
+    public int getWidth() {
+        return this.spaceship[current_frame].getWidth();
+    }
+
+    /**
+     * Returns the height of the current frame of the spaceship.
+     *
+     * @return The height of the current frame of the spaceship.
+     */
+    public int getHeight() {
+        return this.spaceship[current_frame].getHeight();
     }
 
     /**

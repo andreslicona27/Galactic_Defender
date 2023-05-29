@@ -91,7 +91,7 @@ public class Explosion {
      * @param canvas       The canvas on which to draw the explosion.
      */
     public void drawExplosion(Canvas canvas){
-        canvas.drawBitmap(this.explosion[explosion_frame], position.x, position.y, null);
+        canvas.drawBitmap(this.explosion[explosion_frame], this.position.x, this.position.y, null);
     }
 
     /**

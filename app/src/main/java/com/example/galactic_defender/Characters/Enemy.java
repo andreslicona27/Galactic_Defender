@@ -126,7 +126,7 @@ public class Enemy extends Character {
         super(context, screen_width, screen_height);
         this.random = new Random();
         this.current_frame = 0;
-        this.speed = screen_height / 100;
+        this.speed = screen_height / 150;
         this.direction_x = generateRandomDirection();
         this.direction_y = generateRandomDirection();
         this.enemy = new Bitmap[4];
@@ -153,15 +153,10 @@ public class Enemy extends Character {
         this.enemy4_image = Bitmap.createBitmap(this.enemy4_asset, 0, 0, this.enemy4_asset.getWidth(), this.enemy4_asset.getHeight());
 
         // Fill of the images array
-        this.enemy[0] = Bitmap.createScaledBitmap(this.enemy1_image, screen_height/5,
-                screen_height/3, true);
-        this.enemy[1] = Bitmap.createScaledBitmap(this.enemy2_image, screen_height/5,
-                screen_height/3, true);
-        this.enemy[2] = Bitmap.createScaledBitmap(this.enemy3_image, screen_height/5,
-                screen_height/3, true);
-        this.enemy[3] = Bitmap.createScaledBitmap(this.enemy4_image, screen_height/5,
-                screen_height/3, true);
-
+        this.enemy[0] = Bitmap.createScaledBitmap(this.enemy1_image, screen_height/8, screen_height/8, true);
+        this.enemy[1] = Bitmap.createScaledBitmap(this.enemy2_image, screen_height/8, screen_height/8, true);
+        this.enemy[2] = Bitmap.createScaledBitmap(this.enemy3_image, screen_height/8, screen_height/8, true);
+        this.enemy[3] = Bitmap.createScaledBitmap(this.enemy4_image, screen_height/8, screen_height/8, true);
 
         generateRandomPosition();
         updateHideBox();
@@ -256,26 +251,19 @@ public class Enemy extends Character {
     }
 
     /**
-     * Generates a random position for the enemy between the borders of the screen
+     * Generates a random position for the enemy between the side borders of the screen
      */
     private void generateRandomPosition() {
-        int side = random.nextInt(4);
+        int side = random.nextInt(2);
         int MARGIN = 1;
 
         switch (side) {
-            case 0: // UP
-                this.pos_x = random.nextInt(screen_width - this.enemy[current_frame].getWidth() - MARGIN);
-                this.pos_y = this.enemy[current_frame].getHeight() - MARGIN;
-                break;
-            case 1: // RIGHT
+            case 0: // RIGHT
                 this.pos_x = screen_width - this.enemy[current_frame].getWidth() - MARGIN;
                 this.pos_y = random.nextInt(screen_height - this.enemy[current_frame].getHeight() - MARGIN);
                 break;
-            case 2: // DOWN
-                this.pos_x = random.nextInt(screen_width - this.enemy[current_frame].getWidth() - MARGIN);
-                this.pos_y = screen_height - this.enemy[current_frame].getHeight() - MARGIN;
-                break;
-            case 3: // LEFT
+
+            case 1: // LEFT
                 this.pos_x = this.enemy[current_frame].getWidth() - MARGIN;
                 this.pos_y = random.nextInt(screen_height - this.enemy[current_frame].getHeight() - MARGIN);
                 break;

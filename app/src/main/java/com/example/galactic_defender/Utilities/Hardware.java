@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -110,7 +111,7 @@ public class Hardware extends AppCompatActivity implements SensorEventListener{
                                 linear_acceleration[2] * linear_acceleration[2]);
 
 
-                double threshold = 10.0;
+                double threshold = 8.0;
                 if (magnitude > threshold) {
                     scene_game.removeEnemies();
                 }

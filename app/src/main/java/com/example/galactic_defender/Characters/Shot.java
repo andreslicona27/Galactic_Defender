@@ -73,7 +73,7 @@ public class Shot extends Character{
         super(context, screen_width, screen_height);
         this.position = new Point(spaceship_x, spaceship_y);
         this.angle = spaceship_angle;
-        this.displacement = screen_height / 100;
+        this.displacement = screen_height / 50;
         this.assets_manager = context.getAssets();
 
         // Assets
@@ -87,7 +87,7 @@ public class Shot extends Character{
         }
 
         this.shot_image = Bitmap.createBitmap(this.shot_asset, 0, 0, this.shot_asset.getWidth(), this.shot_asset.getHeight());
-        this.scale_shot_image = Bitmap.createScaledBitmap(this.shot_image, screen_height/20, screen_height/20, true);
+        this.scale_shot_image = Bitmap.createScaledBitmap(this.shot_image, screen_height/35, screen_height/35, true);
 
         updateHideBox();
     }
@@ -109,7 +109,7 @@ public class Shot extends Character{
      */
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(this.scale_shot_image, this.position.x, this.position.y, null);
+        canvas.drawBitmap(this.scale_shot_image, this.position.x - (float)this.scale_shot_image.getWidth()/2, this.position.y, null);
         canvas.drawRect(this.hide_box, this.border_paint);
     }
 
@@ -118,50 +118,12 @@ public class Shot extends Character{
      */
     @Override
     public void move(){
-//        if (this.angle >= 0 && this.angle <= 22) {
-//            this.position.x = this.position.x + this.displacement;
-//        }
-//        if(this.angle > 22 && this.angle <= 67){
-//            this.position.x = this.position.x + this.displacement;
-//            this.position.y = this.position.y + this.displacement;
-//        }
-//        if(this.angle > 67 && this.angle <= 112){
-//            this.position.y = this.position.y + this.displacement;
-//        }
-//        if(this.angle > 112 && this.angle <= 157){
-//            this.position.x = this.position.x - this.displacement;
-//            this.position.y = this.position.y + this.displacement;
-//        }
-//        if(this.angle > 157 && this.angle <= 202){
-//            this.position.x = this.position.x - this.displacement;
-//        }
-//        if(this.angle > 202 && this.angle <= 247){
-//            this.position.x = this.position.x - this.displacement;
-//            this.position.y = this.position.y - this.displacement;
-//        }
-//        if(this.angle > 247 && this.angle <= 292){
-//            this.position.y = this.position.y - this.displacement;
-//        }
-//        if (this.angle > 292 && this.angle <= 337){
-//            this.position.x = this.position.x + this.displacement;
-//        }
+        float angleInRadians = (float) Math.toRadians(angle);
+        float deltaX = displacement * (float) Math.sin(angleInRadians);
+        float deltaY = -displacement * (float) Math.cos(angleInRadians);
 
-        if(this.angle > 0 && this.angle <= 90){
-            this.position.x = this.position.x + this.displacement;
-            Log.i("test", "" + this.angle);
-        }
-        if(this.angle > 180 && this.angle <= 270){
-            this.position.x = this.position.x - this.displacement;
-            Log.i("test", "" + this.angle);
-        }
-        if(this.angle > 90 && this.angle <= 180){
-            this.position.y = this.position.y + this.displacement;
-            Log.i("test", "" + this.angle);
-        }
-        if(this.angle > 270 && this.angle <= 359){
-            this.position.y = this.position.y - this.displacement;
-            Log.i("test", "" + this.angle);
-        }
+        this.position.x += deltaX;
+        this.position.y += deltaY;
         updateHideBox();
     }
 
@@ -172,7 +134,9 @@ public class Shot extends Character{
      */
     @Override
     public void updateHideBox(){
-        this.hide_box = new Rect(this.position.x, this.position.y, this.position.x + this.scale_shot_image.getWidth(),
+        this.hide_box = new Rect(this.position.x - this.scale_shot_image.getWidth()/2,
+                this.position.y,
+                this.position.x + this.scale_shot_image.getWidth()/2,
                 this.position.y + this.scale_shot_image.getHeight());
     }
 

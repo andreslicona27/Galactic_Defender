@@ -2,17 +2,13 @@ package com.example.galactic_defender;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -27,10 +23,15 @@ import com.example.galactic_defender.Scenes.SceneMenu;
 import com.example.galactic_defender.Scenes.SceneRecords;
 import com.example.galactic_defender.Scenes.SceneSettings;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Locale;
 
+/**
+ * The main class representing the Galactic Defender game.
+ *
+ * @author [Andres Licona]
+ * @version [1.0]
+ * @since [05-04-2023]
+ */
 public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callback {
 
     /**
@@ -96,24 +97,19 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
     public static MediaPlayer background_music;
 
     /**
-     * The Configuration object for managing game configuration settings.
-     */
-    public static Configuration configuration;
-
-    /**
      * Flag indicating whether sound effects are enabled.
      */
-    public static boolean soundEnabled = true;
+    public static boolean sound_enabled = true;
 
     /**
      * Flag indicating whether background music is enabled.
      */
-    public static boolean musicEnabled = true;
+    boolean music_enabled = true;
 
     /**
      * The selected language for the game.
      */
-    public static String language;
+    String language;
 
     /**
      * The current score in the game.
@@ -142,21 +138,21 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
 
         // Shared values
         shared_preferences = context.getApplicationContext().getSharedPreferences("SettingsValues", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = GalacticDefender.shared_preferences.edit();
-        editor.putBoolean("soundEnabled", true);
-        editor.putBoolean("musicEnabled", true);
-        editor.putString("language", "en");
-        editor.apply();
+        sound_enabled = shared_preferences.getBoolean("sound_enabled", true);
+        music_enabled = shared_preferences.getBoolean("music_enabled", true);
+        this.language = shared_preferences.getString("language","en");
 
         // Background Music
         background_music = MediaPlayer.create(this.getContext(), R.raw.background_music);
         background_music.setLooping(true);
-        background_music.start();
+        if(music_enabled){
+            background_music.start();
+        } else {
+            background_music.stop();
+        }
 
         // Language
-        changeLanguage("en");
-        configuration = getResources().getConfiguration();
-        language = configuration.locale.getLanguage();
+        changeLanguage(language);
     }
 
 
@@ -169,8 +165,8 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
      */
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-        soundEnabled = shared_preferences.getBoolean("soundEnabled", true);
-        musicEnabled = shared_preferences.getBoolean("musicEnabled", true);
+        sound_enabled = shared_preferences.getBoolean("soundEnabled", true);
+        music_enabled = shared_preferences.getBoolean("musicEnabled", true);
         language = shared_preferences.getString("language", "en");
     }
 
@@ -284,22 +280,6 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         res.updateConfiguration(conf, dm);
     }
 
-    public void changeSettings(boolean sound, boolean music, String language){
-        soundEnabled = sound;
-        if(music){
-            background_music.start();
-        } else {
-            background_music.stop();
-        }
-        GalacticDefender.language = language;
-        changeLanguage(language);
-
-        SharedPreferences.Editor editor = shared_preferences.edit();
-        editor.putBoolean("soundEnabled", sound);
-        editor.putBoolean("musicEnabled", music);
-        editor.putString("language", language);
-        editor.apply();
-    }
 
     //////////////////////////// THREAD CLASS ////////////////////////////
 
@@ -315,6 +295,13 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         @Override
         public void run() {
             super.run();
+            long time_sleep = 0; // Time that the thread sleeps
+            final int FPS = 50; // Our objective
+            final int TPS = 1000000000; // Ticks per second for the function nanoTime()
+            final int TEMPORAL_FRAGMENT = TPS / FPS; // Space in which we would do all the repeated stuff
+
+            long reference_time = System.nanoTime();
+
             Canvas canvas = null;
             while (playing) {
                 canvas = null;
@@ -338,8 +325,22 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
                         e.printStackTrace();
                     }
                 }
+                reference_time += TEMPORAL_FRAGMENT;
+                // The time that sleeps would be the next one menus the current (Finish to draw and update)
+                time_sleep = reference_time - System.nanoTime();
+
+                // If it take a lot of time, we sleep
+                if (time_sleep > 0) {
+                    try {
+                        Thread.sleep(time_sleep / 1000000); // Conversion to ms
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
         }
+
         /**
          * Sets the working flag of the thread.
          *

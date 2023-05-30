@@ -141,6 +141,7 @@ public class SceneRecords extends Scene{
 
         if (this.remove_info_button.contains(x, y)) {
             MainActivity.record_data_base.deleteAllRecords();
+            this.high_scores = MainActivity.record_data_base.getTopScores();
         }
         return this.scene_number;
     }

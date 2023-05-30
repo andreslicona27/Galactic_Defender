@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.galactic_defender.Characters.Shot;
 import com.example.galactic_defender.Characters.Spaceship;
+import com.example.galactic_defender.GalacticDefender;
 import com.example.galactic_defender.R;
 import com.example.galactic_defender.Scenes.SceneGame;
 
@@ -99,7 +100,9 @@ public class FireButton extends Control {
                             this.spaceship.position.y + this.spaceship.getHeight()/2,
                             this.spaceship.spaceship_angle);
                     this.scene_game.spaceship_shots.add(shot);
-                    this.laser_shot.start();
+                    if(GalacticDefender.sound_enabled){
+                        this.laser_shot.start();
+                    }
                 }
                 break;
         }

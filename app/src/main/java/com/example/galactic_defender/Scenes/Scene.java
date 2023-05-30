@@ -2,6 +2,7 @@ package com.example.galactic_defender.Scenes;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -100,6 +101,17 @@ public class Scene {
     Bitmap scale_button_image;
 
     /**
+     * The Configuration object for managing game configuration settings.
+     */
+    Configuration configuration;
+
+    /**
+     * The selected language for the game.
+     */
+    String language;
+
+
+    /**
      * Represents the scene number of the class.
      */
     public int scene_number = -1;
@@ -162,6 +174,9 @@ public class Scene {
                 screen_width / 8, screen_width / 8, true);
         this.back_button = new Rect(screen_width / 20, screen_height / 12, screen_width / 20 + 50
                 , screen_height / 12 + 50);
+
+        configuration = context.getResources().getConfiguration();
+        language = configuration.locale.getLanguage();
 
 
     }

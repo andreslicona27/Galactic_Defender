@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.widget.GridLayout;
 
 import com.example.galactic_defender.GalacticDefender;
 import com.example.galactic_defender.R;
@@ -45,21 +44,6 @@ public class SceneSettings extends Scene {
      * Rectangle area that represents the language button.
      */
     Rect language_button;
-
-    /**
-     * Current image in the sound button.
-     */
-    Bitmap sounds_button_image;
-
-    /**
-     * Current image in the music button.
-     */
-    Bitmap music_button_image;
-
-    /**
-     * Current image in the language button.
-     */
-    Bitmap language_button_image;
 
     /**
      * Sound on asset.
@@ -167,11 +151,6 @@ public class SceneSettings extends Scene {
         this.screen_width = screen_width;
         this.gd_manager = new GalacticDefender(context);
 
-        // Shared Values
-        this.sound_effects = GalacticDefender.shared_preferences.getBoolean("soundEnable", true);
-        this.music = GalacticDefender.shared_preferences.getBoolean("musicEnable", true);
-        this.language = GalacticDefender.shared_preferences.getString("language", "en");
-
         // Button Images
         try {
             this.input_stream = assets_manager.open("button_icons/sound_on_icon.png");
@@ -219,13 +198,11 @@ public class SceneSettings extends Scene {
         this.language_button = new Rect(screen_width / 13 * 8, screen_height / 6 * 3,
                 screen_width / 13 * 9, screen_height / 6 * 4);
 
-        // Buttons images
-        this.sounds_button_image = this.sounds_on_icon;
-        this.music_button_image = this.music_on_icon;
-        this.language_button_image = this.english_icon;
-//        this.sounds_button_image = this.sound_effects ? this.sounds_on_icon : this.sounds_off_icon;
-//        this.music_button_image = this.music ? this.music_on_icon : this.music_off_icon;
-//        this.language_button_image = this.language.equals("en") ? this.english_icon : spanish_icon;
+        // Shared Values
+        this.sound_effects = GalacticDefender.shared_preferences.getBoolean("sound_enabled", true);
+        this.music = GalacticDefender.shared_preferences.getBoolean("music_enabled", true);
+        this.language = GalacticDefender.shared_preferences.getString("language","en");
+
     }
 
     /**
@@ -240,9 +217,23 @@ public class SceneSettings extends Scene {
                 (float) screen_height / 6,
                 title_paint);
 
-        canvas.drawBitmap(this.sounds_button_image, null, this.sounds_button, null);
-        canvas.drawBitmap(this.music_button_image, null, this.music_button, null);
-        canvas.drawBitmap(this.language_button_image, null, this.language_button, null);
+        if(this.sound_effects){
+            canvas.drawBitmap(this.sounds_on_icon, null, this.sounds_button, null);
+        } else {
+            canvas.drawBitmap(this.sounds_off_icon, null, this.sounds_button, null);
+        }
+
+        if(this.music){
+            canvas.drawBitmap(this.music_on_icon, null, this.music_button, null);
+        } else {
+            canvas.drawBitmap(this.music_off_icon, null, this.music_button, null);
+        }
+
+        if(language.equals("en")){
+            canvas.drawBitmap(this.spanish_icon, null, this.language_button, null);
+        } else {
+            canvas.drawBitmap(this.english_icon, null, this.language_button, null);
+        }
     }
 
 
@@ -263,22 +254,34 @@ public class SceneSettings extends Scene {
             return aux;
         }
 
-        if (this.sounds_button.contains(x, y)) {
-//            this.sounds_button_image = this.sounds_button_image == this.sounds_on_icon ? this.sounds_off_icon : this.sounds_on_icon;
-
-            if(this.sounds_button_image == this.sounds_on_icon){
-                this.sounds_button_image = this.sounds_off_icon;
-            } else {
-                this.sounds_button_image = this.sounds_on_icon;
+        if(event.getAction() == MotionEvent.ACTION_DOWN){
+            SharedPreferences.Editor editor = GalacticDefender.shared_preferences.edit();
+            if (this.sounds_button.contains(x, y)) {
+                this.sound_effects = !this.sound_effects;
+                editor.putBoolean("sound_enabled", this.sound_effects);
             }
-        }
 
-        if (this.music_button.contains(x, y)) {
-            this.music_button_image = this.music_button_image == this.music_on_icon ? this.music_off_icon : this.music_on_icon;
-        }
+            if (this.music_button.contains(x, y)) {
+                this.music = !this.music;
+                editor.putBoolean("music_enabled", this.music);
+                if(this.music){
+                    GalacticDefender.background_music.start();
+                } else {
+                    GalacticDefender.background_music.stop();
+                }
+            }
 
-        if (this.language_button.contains(x, y)) {
-            this.language_button_image = this.language_button_image == this.spanish_icon ? this.english_icon : this.spanish_icon;
+            if (this.language_button.contains(x, y)) {
+                if(language.equals("en")){
+                    this.language = "es";
+                    gd_manager.changeLanguage("es");
+                } else {
+                    this.language = "en";
+                    gd_manager.changeLanguage("en");
+                }
+                editor.putString("language", language);
+            }
+            editor.apply();
         }
         return this.scene_number;
     }

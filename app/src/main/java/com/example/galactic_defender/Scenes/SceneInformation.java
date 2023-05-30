@@ -87,7 +87,7 @@ public class SceneInformation extends Scene {
                 (float)screen_width/2 - (title_paint.measureText((String)context.getString(R.string.information_title))/2),
                 (float) screen_height / 6, title_paint);
 
-        if(GalacticDefender.language.equals("en")){
+        if(language.equals("en")){
             canvas.drawBitmap(this.information_english, null,
                     new Rect(canvas.getWidth()/10, canvas.getHeight()/5,
                     canvas.getWidth() - canvas.getWidth()/10,

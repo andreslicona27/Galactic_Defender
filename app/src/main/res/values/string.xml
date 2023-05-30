@@ -10,6 +10,6 @@
     <string name="home_button">Menú</string>
     <string name="resume_button">Reanudar</string>
     <string name="play_button">Jugar</string>
-    <string name="remove_info_button">Reestablecer Registros</string>
+    <string name="remove_info_button">Restablecer Registros</string>
     <string name="no_records_message">Aún no hay puntuaciones</string>
 </resources>

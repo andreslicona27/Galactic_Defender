@@ -112,7 +112,7 @@ public class Enemy extends Character {
     /**
      * Represents the speed of the enemy around the game
      */
-    int speed;
+    public int speed;
 
     /**
      * Constructs an instance of the Enemy class.
@@ -126,7 +126,7 @@ public class Enemy extends Character {
         super(context, screen_width, screen_height);
         this.random = new Random();
         this.current_frame = 0;
-        this.speed = screen_height / 150;
+        this.speed = screen_height / 125;
         this.direction_x = generateRandomDirection();
         this.direction_y = generateRandomDirection();
         this.enemy = new Bitmap[4];
@@ -235,6 +235,7 @@ public class Enemy extends Character {
         }
         updateHideBox();
     }
+
 
     /**
      * Generates random direction

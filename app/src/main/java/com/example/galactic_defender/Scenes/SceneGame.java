@@ -17,6 +17,7 @@ import com.example.galactic_defender.Characters.Enemy;
 import com.example.galactic_defender.Characters.Shot;
 import com.example.galactic_defender.Characters.Spaceship;
 import com.example.galactic_defender.GalacticDefender;
+import com.example.galactic_defender.MainActivity;
 import com.example.galactic_defender.R;
 import com.example.galactic_defender.Utilities.Explosion;
 import com.example.galactic_defender.Utilities.Hardware;
@@ -104,6 +105,11 @@ public class SceneGame extends Scene {
      */
     boolean game_over = false;
 
+    /**
+     * Current score of the player in the game
+     */
+    int current_score;
+
 
     /**
      * Constructs an instance of the SceneGame class.
@@ -117,9 +123,10 @@ public class SceneGame extends Scene {
     public SceneGame(Context context, int screen_height, int screen_width, int scene_number) {
         super(context, screen_height, screen_width, scene_number);
         GalacticDefender.score = 0;
+        this.current_score = 0;
 
         // Hardware
-        this.hardware = new Hardware(context);
+        this.hardware = new Hardware(context, this);
 
         // Characters
         this.spaceship_shots = new ArrayList<>();
@@ -131,11 +138,11 @@ public class SceneGame extends Scene {
         this.fire_button = new FireButton(this, this.spaceship, context, screen_width, screen_height);
 
         // Timer Properties
-        this.time_per_enemy = 3000;
+        this.time_per_enemy = 2500;
         this.timer = new Timer();
         this.timer.schedule(new EnemyAdditionTask(), 500, time_per_enemy);
         this.timer.schedule(new AnimationsTask(), 300, 300);
-        this.timer.schedule(new FireButtonChange(), 10000, 10000);
+        this.timer.schedule(new FireButtonChange(), 10000, 15000);
 
         // Sound Effects
         this.enemy_dies = MediaPlayer.create(context.getApplicationContext(), R.raw.alien_dead);
@@ -156,10 +163,12 @@ public class SceneGame extends Scene {
 
 
         // Pause and game over buttons
-        home_button1 = new RectF((float) screen_width / 9 * 2, (float) screen_height / 7 * 4, (float) screen_width / 9 * 4, (float) screen_height / 7 * 5);
-        resume_button = new RectF((float) screen_width / 9 * 5, (float) screen_height / 7 * 4, (float) screen_width / 9 * 7, (float) screen_height / 7 * 5);
-        home_button2 = new RectF((float) screen_width / 10 * 3, (float) screen_height / 7 * 4,
-                (float) screen_width / 10 * 7, (float) screen_height / 7 * 5);
+        this.home_button1 = new RectF((float) screen_width / 9 * 2, (float) screen_height / 7 * 4, (float) screen_width / 9 * 4,
+                (float) screen_height / 7 * 5);
+        this.resume_button = new RectF((float) screen_width / 9 * 5, (float) screen_height / 7 * 4, (float) screen_width / 9 * 7,
+                (float) screen_height / 7 * 5);
+        this.home_button2 = new RectF((float) screen_width / 10 * 3, (float) screen_height / 7 * 4, (float) screen_width / 10 * 7,
+                (float) screen_height / 7 * 5);
     }
 
     /**
@@ -180,9 +189,7 @@ public class SceneGame extends Scene {
         canvas.drawBitmap(pause_button_image, null, pause_button, null);
 
         // Score
-        canvas.drawText(GalacticDefender.score + "", (float) screen_width / 10,
-                (float) screen_height / 10 + 50,
-                title_paint);
+        canvas.drawText(current_score + "", (float) screen_width / 10, (float) screen_height / 10 + 50, title_paint);
 
         // Manage the pause
         if (pause) {
@@ -190,8 +197,10 @@ public class SceneGame extends Scene {
         }
         // Manage the game over
         if (game_over) {
-            explosion.drawExplosion(canvas);
+            this.home_button2 = new RectF((float) screen_width / 10 * 3, (float) screen_height / 7 * 4, (float) screen_width / 10 * 7, (float) screen_height / 7 * 5);
+            this.explosion.drawExplosion(canvas);
             if (explosion.explosion_frame == 8) {
+                GalacticDefender.score = this.current_score;
                 gameOverWindow(canvas);
                 releaseResources();
             }
@@ -210,23 +219,22 @@ public class SceneGame extends Scene {
         if (!pause && !game_over) {
             for (int i = enemies.size() - 1; i >= 0; i--) {
                 if (this.spaceship.collision(enemies.get(i).getHideBox())) {
-                    this.explosion = new Explosion(context, this.spaceship.position.x,
-                            this.spaceship.position.y);
+                    this.explosion = new Explosion(context, this.spaceship.position.x, this.spaceship.position.y);
                     this.game_over = true;
-//                    if (GalacticDefender.soundEnabled) {
-//                        this.hardware.vibrate();
-//                        this.spaceship_explosion.start();
-//                    }
-//                    if(GalacticDefender.score > 0){
-//                        MainActivity.record_data_base.insertScore(GalacticDefender.score);
-//                    }
+                    if (GalacticDefender.sound_enabled) {
+                        this.hardware.vibrate();
+                        this.spaceship_explosion.start();
+                    }
+                    if(this.current_score > 0){
+                        MainActivity.record_data_base.insertScore(this.current_score);
+                    }
                 }
                 for (int j = spaceship_shots.size() - 1; j >= 0; j--) {
                     if (enemies.get(i).collision(spaceship_shots.get(j).getHideBox())) {
                         this.enemies.remove(i);
                         this.spaceship_shots.remove(j);
-                        GalacticDefender.score += 10;
-                        if (GalacticDefender.soundEnabled) {
+                        this.current_score += 10;
+                        if (GalacticDefender.sound_enabled) {
                             this.enemy_dies.start();
                             this.hardware.vibrate();
                         }
@@ -237,7 +245,6 @@ public class SceneGame extends Scene {
                 }
             }
             this.spaceship.move();
-            this.hardware.verifiedMovement(this);
         }
     }
 
@@ -261,13 +268,19 @@ public class SceneGame extends Scene {
         if (this.pause_button.contains((int) x, (int) y)) {
             this.pause = true;
         }
-        if (this.pause || this.game_over) {
+        if(this.pause){
+            this.home_button2 = new RectF(0,0,0,0);
             if (this.resume_button.contains((int) x, (int) y)) {
                 this.pause = false;
             }
-            if (this.home_button1.contains((int) x, (int) y) || this.home_button2.contains((int) x, (int) y)) {
+            if(this.home_button1.contains((int) x, (int) y) ){
                 releaseResources();
-                enemies.clear();
+                return 1;
+            }
+        }
+        if (this.game_over) {
+            if (this.home_button2.contains((int) x, (int) y)) {
+                releaseResources();
                 return 1;
             }
         }
@@ -277,18 +290,30 @@ public class SceneGame extends Scene {
     //////////////////////////// GENERAL FUNCTIONS ////////////////////////////
 
     /**
-     * Draws the enemies on the given canvas.
+     * Draws the enemies on the given canvas and manage their speed depending of the players score.
      *
      * @param canvas The canvas to draw on.
      */
     public void drawEnemies(Canvas canvas) {
         for (Enemy enemy : enemies) {
             enemy.draw(canvas);
+
+            if(this.current_score == 200){
+                enemy.speed = screen_height/100;
+            } else if(this.current_score == 400){
+                enemy.speed = screen_height/75;
+            } else if(this.current_score == 600){
+                enemy.speed = screen_height/50;
+            } else if(this.current_score == 800){
+                enemy.speed = screen_height/25;
+            }
+
             if (!pause && !game_over) {
                 enemy.move();
             }
         }
     }
+
 
     /**
      * Draws the shots fired by the spaceship on the given canvas.
@@ -319,6 +344,9 @@ public class SceneGame extends Scene {
 
         // Stop timer
         this.timer.cancel();
+
+        // Hardware
+        this.hardware.pause();
     }
 
     /**
@@ -329,8 +357,8 @@ public class SceneGame extends Scene {
      */
     public void removeEnemies() {
         if (this.fire_button.fire_button_paint.getColor() == Color.WHITE) {
-            GalacticDefender.score += enemies.size() * 10;
-            enemies.clear();
+            this.current_score += enemies.size() * 10;
+            this.enemies.clear();
             this.fire_button.fire_button_paint.setColor(ContextCompat.getColor(context, R.color.main_yellow));
         }
     }

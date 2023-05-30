@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -104,7 +105,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
     /**
      * Flag indicating whether background music is enabled.
      */
-    boolean music_enabled = true;
+    boolean music_enabled;
 
     /**
      * The selected language for the game.
@@ -115,7 +116,6 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
      * The current score in the game.
      */
     public static int score = 0;
-
 
 
     /**
@@ -144,12 +144,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
 
         // Background Music
         background_music = MediaPlayer.create(this.getContext(), R.raw.background_music);
-        background_music.setLooping(true);
-        if(music_enabled){
-            background_music.start();
-        } else {
-            background_music.stop();
-        }
+        music();
 
         // Language
         changeLanguage(language);
@@ -165,9 +160,6 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
      */
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) {
-        sound_enabled = shared_preferences.getBoolean("soundEnabled", true);
-        music_enabled = shared_preferences.getBoolean("musicEnabled", true);
-        language = shared_preferences.getString("language", "en");
     }
 
     /**
@@ -183,7 +175,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
         this.screen_width = width;
         this.screen_height = height;
-        current_scene = new SceneMenu(context, screen_height, screen_width, 1);
+        this.current_scene = new SceneMenu(context, screen_height, screen_width, 1);
 
         if (game_thread.getState() == Thread.State.NEW) {
             game_thread.start();
@@ -204,7 +196,6 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
         this.playing = false;
         background_music.stop();
-        background_music.release();
         try {
             game_thread.join();
         } catch (InterruptedException e) {
@@ -257,7 +248,7 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
                     current_scene = new SceneCredits(context, screen_height, screen_width, 4);
                     break;
                 case 5:
-                    current_scene = new SceneSettings(context, screen_height, screen_width, 5);
+                    current_scene = new SceneSettings(context, screen_height, screen_width, 5, this);
                     break;
                 case 6:
                 case 7:
@@ -278,6 +269,40 @@ public class GalacticDefender extends SurfaceView implements SurfaceHolder.Callb
         android.content.res.Configuration conf=res.getConfiguration();
         conf.locale=new Locale(cod_language.toLowerCase());
         res.updateConfiguration(conf, dm);
+    }
+
+    /**
+     * Controls the music playback based on the current state of the 'music_enabled' flag.
+     * If music is enabled and the background music is not currently playing, it will start playing.
+     * If music is disabled or the background music is already playing, it will be paused.
+     */
+    public void music(){
+        if(music_enabled){
+            if(!background_music.isPlaying()){
+                background_music.start();
+            }
+        } else {
+            background_music.pause();
+        }
+    }
+
+    /**
+     * Sets the music flag to the specified value and calls the 'music()' function to control the music playback accordingly.
+     *
+     * @param music The boolean value indicating whether the music should be enabled (true) or disabled (false).
+     */
+    public void setMusic(boolean music){
+        music_enabled = music;
+        music();
+    }
+
+    /**
+     * Sets the sound effects state.
+     *
+     * @param set_sounds true to enable sound effects, false to disable them
+     */
+    public void setSoundEffects(boolean set_sounds){
+        sound_enabled = set_sounds;
     }
 
 

@@ -125,31 +125,20 @@ public class SceneSettings extends Scene {
      */
     int scene_number = 5;
 
-    /**
-     * Represents the screen height.
-     */
-    int screen_height;
-
-    /**
-     * Represents the screen width.
-     */
-    int screen_width;
 
     /**
      * Constructs an instance of the SceneSettings class.
      *
-     * @param context       The context of the application.
-     * @param screen_height The height of the screen.
-     * @param screen_width  The width of the screen.
-     * @param scene_number  The number identifying the scene.
+     * @param context           The context of the application.
+     * @param screen_height     The height of the screen.
+     * @param screen_width      The width of the screen.
+     * @param scene_number      The number identifying the scene.
+     * @param galactic_defender Class which would manage the functions for the music
      * @throws RuntimeException If there is a problem obtaining the assets
      */
-    public SceneSettings(Context context, int screen_height, int screen_width, int scene_number) {
+    public SceneSettings(Context context, int screen_height, int screen_width, int scene_number, GalacticDefender galactic_defender) {
         super(context, screen_height, screen_width, scene_number);
-        this.scene_number = scene_number;
-        this.screen_height = screen_height;
-        this.screen_width = screen_width;
-        this.gd_manager = new GalacticDefender(context);
+        this.gd_manager = galactic_defender;
 
         // Button Images
         try {
@@ -212,10 +201,7 @@ public class SceneSettings extends Scene {
      */
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        canvas.drawText(context.getString(R.string.settings_title),
-                (float) screen_width / 2 - title_paint.measureText((String) context.getString(R.string.settings_title)) / 2,
-                (float) screen_height / 6,
-                title_paint);
+        canvas.drawText(context.getString(R.string.settings_title), (float) screen_width / 2 - title_paint.measureText((String) context.getString(R.string.settings_title)) / 2, (float) screen_height / 6, title_paint);
 
         if(this.sound_effects){
             canvas.drawBitmap(this.sounds_on_icon, null, this.sounds_button, null);
@@ -259,16 +245,13 @@ public class SceneSettings extends Scene {
             if (this.sounds_button.contains(x, y)) {
                 this.sound_effects = !this.sound_effects;
                 editor.putBoolean("sound_enabled", this.sound_effects);
+                gd_manager.setSoundEffects(this.sound_effects);
             }
 
             if (this.music_button.contains(x, y)) {
                 this.music = !this.music;
                 editor.putBoolean("music_enabled", this.music);
-                if(this.music){
-                    GalacticDefender.background_music.start();
-                } else {
-                    GalacticDefender.background_music.stop();
-                }
+                gd_manager.setMusic(this.music);
             }
 
             if (this.language_button.contains(x, y)) {

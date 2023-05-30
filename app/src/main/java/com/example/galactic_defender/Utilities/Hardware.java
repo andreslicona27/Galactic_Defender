@@ -26,6 +26,7 @@ public class Hardware extends AppCompatActivity implements SensorEventListener{
      * Represents a vibrator that can generate haptic feedback.
      */
     Vibrator vibrator;
+
     /**
      * Manages sensor-related operations, such as registering and listening for sensor events.
      */
@@ -35,11 +36,13 @@ public class Hardware extends AppCompatActivity implements SensorEventListener{
      * Represents an accelerometer sensor that measures acceleration forces applied to the device.
      */
     public Sensor accelerometer;
+
     /**
      * An array to store the gravity components (x, y, z) measured by the accelerometer sensor.
      * The gravity values represent the force applied to the device due to gravity.
      */
     float[] gravity;
+
     /**
      * An array to store the linear acceleration components (x, y, z) calculated by subtracting the gravity components
      * from the accelerometer readings. Linear acceleration values represent the actual acceleration experienced by the device,
@@ -47,6 +50,9 @@ public class Hardware extends AppCompatActivity implements SensorEventListener{
      */
     float[] linear_acceleration;
 
+    /**
+     * Represents the scene class for it to access a function
+     */
     SceneGame scene_game;
 
     /**
@@ -91,13 +97,9 @@ public class Hardware extends AppCompatActivity implements SensorEventListener{
 
         double threshold = 7.0;
         if (magnitude >= threshold) {
-            Log.i("tttt", "" + magnitude);
             scene_game.removeEnemies();
-        } else {
-            Log.i("tttt", "sin funcionar " + magnitude);
         }
     }
-
     /**
      * Called when the accuracy of a sensor has changed.
      *

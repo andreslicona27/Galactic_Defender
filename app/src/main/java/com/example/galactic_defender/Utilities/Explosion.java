@@ -23,22 +23,27 @@ public class Explosion {
      * Represents the attribute of context in the character class
      */
     Context context;
+
     /**
      * Represents the input stream for it to read data from a concrete source
      */
     InputStream input_stream;
+
     /**
      * Represents the asset manager.for it to manage the assets
      */
     AssetManager assets_manager;
+
     /**
      * Bitmap array that would manage all the explosions images
      */
     Bitmap[] explosion;
+
     /**
      * Represents the position of the explosion
      */
     Point position;
+
     /**
      * Integer that would represent the current image of the explosion
      */

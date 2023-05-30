@@ -28,6 +28,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 
+/**
+ * The SceneGame class represents the game scene in the Galactic Defender game.
+ * It handles the gameplay mechanics, including player input, character movement, collision detection,
+ * score tracking, and rendering.
+ *
+ * @author [Andres Licona]
+ * @version [1.0]
+ * @since [05-04-2023]
+ */
 public class SceneGame extends Scene {
 
     /**
@@ -191,10 +200,6 @@ public class SceneGame extends Scene {
         // Score
         canvas.drawText(current_score + "", (float) screen_width / 10, (float) screen_height / 10 + 50, title_paint);
 
-        // Manage the pause
-        if (pause) {
-            pauseWindow(canvas);
-        }
         // Manage the game over
         if (game_over) {
             this.home_button2 = new RectF((float) screen_width / 10 * 3, (float) screen_height / 7 * 4, (float) screen_width / 10 * 7, (float) screen_height / 7 * 5);
@@ -204,7 +209,11 @@ public class SceneGame extends Scene {
                 gameOverWindow(canvas);
                 releaseResources();
             }
+        }
 
+        // Manage the pause
+        if (pause) {
+            pauseWindow(canvas);
         }
     }
 
@@ -298,14 +307,17 @@ public class SceneGame extends Scene {
         for (Enemy enemy : enemies) {
             enemy.draw(canvas);
 
-            if(this.current_score == 200){
+            // Increase the speed depending on the score of the player
+            if(this.current_score <= 200){
                 enemy.speed = screen_height/100;
-            } else if(this.current_score == 400){
+            } else if (this.current_score <= 400){
                 enemy.speed = screen_height/75;
-            } else if(this.current_score == 600){
+            } else if(this.current_score <= 600){
                 enemy.speed = screen_height/50;
-            } else if(this.current_score == 800){
+            } else if(this.current_score <= 800){
                 enemy.speed = screen_height/25;
+            } else{
+                enemy.speed = screen_height/10;
             }
 
             if (!pause && !game_over) {

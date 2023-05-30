@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.WindowManager;
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
             record_data_base.onCreate(this.data_base);
         }
 
+
         if (Build.VERSION.SDK_INT < 16) { // previous versions of Jelly Bean
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else { // equal or superior versions of Jelly Bean
@@ -100,5 +102,16 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide(); // Hides the action bar
         galactic_defender.setKeepScreenOn(true);
         setContentView(galactic_defender);
+    }
+
+    /**
+     * Called when the activity is being destroyed.
+     * Performs necessary cleanup operations before the activity is destroyed.
+     * It releases the MediaPlayer resource used for background music playback.
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GalacticDefender.background_music.release();
     }
 }

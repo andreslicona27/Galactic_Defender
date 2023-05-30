@@ -121,16 +121,6 @@ public class SceneMenu extends Scene{
     int scene_number = 1;
 
     /**
-     * Represents the screen height
-     */
-    int screen_height;
-
-    /**
-     * Represents the screen width
-     */
-    int screen_width;
-
-    /**
      * Constructs an instance of the SceneMenu class.
      *
      * @param context The context of the application.
@@ -141,9 +131,6 @@ public class SceneMenu extends Scene{
      */
     public SceneMenu(Context context, int screen_height, int screen_width, int scene_number) {
         super(context, screen_height, screen_width, scene_number);
-        this.scene_number = scene_number;
-        this.screen_height = screen_height;
-        this.screen_width = screen_width;
 
         // Logo
         this.logo = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo_icon);
@@ -207,7 +194,6 @@ public class SceneMenu extends Scene{
      */
     public void draw(Canvas canvas){
         super.draw(canvas);
-
         // Logo
         canvas.drawBitmap(scale_logo, null, logo_rect, null);
         title_paint.setTextSize((float) screen_height/6);

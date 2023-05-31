@@ -1,0 +1,18 @@
+Memoria de Creación de Videojuego: "Galactic Defender"
+
+Fecha: 31 de mayo de 2023
+
+Proyecto: Desarrollo de un videojuego sobre un defensor galactico que enfrenta los enemigos de la galaxia.
+
+Objetivos del Proyecto:
+Crear una experiencia asombrosa al permitir a los jugadores defender la galaxia.
+
+En general, fue una experiencia llena de desafíos. Tuve que aprender a usar la herramienta de Surface View y hacer mucha investigación para poder implementarla adecuadamente.
+Además integrar el resto de tecnologías como la base de datos, el poder compartir valores con el shared preferences y programar el código que haría funcionar el juego.
+ 
+Pero a pesar de las dificultades, considero que esta experiencia me fue de gran ayuda para comprender mejor el desarrollo de videojuegos y familiarizarme con las dinámicas que lo rodean.
+
+Crear un juego no es algo que se pueda tomar a la ligera, sino que requiere una cuidadosa planificación, pruebas, diseño, esfuerzo y, sobre todo, tiempo. 
+Esto lo hizo extremadamente desafiante, pero también me llenó de una gran satisfacción poder completar un proyecto como este.
+
+
